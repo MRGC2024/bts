@@ -193,9 +193,87 @@ export function buildQuantumTransactionPayload(order, unitMode) {
   return { ...base, amount, items };
 }
 
+/** Erro da Quantum costuma vir em data.error como objeto, ex.: { postbackUrl: "..." } */
+function isPostbackRelatedQuantumError(data, rawText) {
+  const err = data?.error;
+  const blob = `${JSON.stringify(err || {})} ${data?.message || ''} ${rawText || ''}`.toLowerCase();
+  if (blob.includes('postback')) return true;
+  if (err && typeof err === 'object' && !Array.isArray(err)) {
+    if ('postbackUrl' in err || 'postback' in err) return true;
+  }
+  return false;
+}
+
+/**
+ * Só tenta reais↔centavos quando há sinal claro de valor; a mensagem genérica
+ * "Requisição com valores inválidos" também cobre postbackUrl inválida — não pode disparar retry.
+ */
 function isLikelyInvalidAmountError(data, rawText) {
-  const msg = `${data?.message || ''} ${data?.error || ''} ${rawText || ''}`.toLowerCase();
-  return msg.includes('inválid') || msg.includes('invalid') || msg.includes('valor');
+  if (isPostbackRelatedQuantumError(data, rawText)) return false;
+  const err = data?.error;
+  if (err && typeof err === 'object' && err !== null && !Array.isArray(err)) {
+    const keys = Object.keys(err).join(' ').toLowerCase();
+    if (keys.includes('amount') || keys.includes('unitprice') || keys.includes('items') || keys.includes('price')) {
+      return true;
+    }
+  }
+  const errStr = typeof err === 'string' ? err : '';
+  const msg = `${errStr} ${data?.message || ''} ${rawText || ''}`.toLowerCase();
+  if (msg.includes('postback')) return false;
+  if (msg.includes('valores inválidos') || msg.includes('valores invalidos')) return false;
+  return (
+    ((msg.includes('valor') || msg.includes('amount')) &&
+      (msg.includes('inválid') || msg.includes('invalid'))) ||
+    msg.includes('unitprice') ||
+    msg.includes('unit price') ||
+    msg.includes('preço')
+  );
+}
+
+/**
+ * Monta a URL do webhook Quantum e valida (HTTPS + host público).
+ * A API rejeita postback em localhost e costuma exigir HTTPS em produção.
+ */
+export function buildQuantumPostbackUrl(publicBaseUrl) {
+  const raw = String(publicBaseUrl || '').trim();
+  if (!raw) {
+    const e = new Error(
+      'Configure a URL pública do site (painel Utmify/URL ou variável PUBLIC_BASE_URL no servidor). É obrigatória para o postback do PIX.'
+    );
+    e.code = 'quantum_postback_url';
+    throw e;
+  }
+  let u;
+  try {
+    u = new URL(raw.includes('://') ? raw : `https://${raw}`);
+  } catch {
+    const e = new Error(
+      'URL pública inválida. Informe o endereço completo do site, ex.: https://seu-app.up.railway.app'
+    );
+    e.code = 'quantum_postback_url';
+    throw e;
+  }
+  const host = u.hostname.toLowerCase();
+  if (host === 'localhost' || host === '127.0.0.1' || host === '[::1]' || host.endsWith('.local')) {
+    const e = new Error(
+      'A Quantum não aceita URL de postback em localhost. No painel, coloque a URL HTTPS do deploy (ex.: Railway) ou defina PUBLIC_BASE_URL.'
+    );
+    e.code = 'quantum_postback_url';
+    throw e;
+  }
+  if (u.protocol !== 'http:' && u.protocol !== 'https:') {
+    const e = new Error('A URL pública deve ser http ou https.');
+    e.code = 'quantum_postback_url';
+    throw e;
+  }
+  if (u.protocol === 'http:') {
+    u = new URL(u.href.replace(/^http:\/\//i, 'https://'));
+  }
+  let base = u.origin;
+  if (u.pathname && u.pathname !== '/') {
+    base = u.origin + u.pathname.replace(/\/$/, '');
+  }
+  return `${base}/api/webhook/quantum`;
 }
 
 export function extractPixPayload(quantumData) {
@@ -263,7 +341,15 @@ export async function createQuantumPix(cfg, order, publicBaseUrl, logRid = '') {
 
   const base = (cfg.quantumApiBase || 'https://api.quantumpayments.com.br/v1').replace(/\/$/, '');
   const auth = 'Basic ' + Buffer.from(`${pub}:${sec}`).toString('base64');
-  const postbackUrl = `${publicBaseUrl.replace(/\/$/, '')}/api/webhook/quantum`;
+  let postbackUrl;
+  try {
+    postbackUrl = buildQuantumPostbackUrl(publicBaseUrl);
+  } catch (e) {
+    if (e.code === 'quantum_postback_url') throw e;
+    const err = new Error(e?.message || 'URL de postback inválida.');
+    err.code = 'quantum_postback_url';
+    throw err;
+  }
 
   const primaryUnit = (cfg.quantumAmountUnit || 'reais').toLowerCase() === 'cents' ? 'cents' : 'reais';
   const alternateUnit = primaryUnit === 'cents' ? 'reais' : 'cents';
@@ -326,7 +412,7 @@ export async function createQuantumPix(cfg, order, publicBaseUrl, logRid = '') {
       return data;
     }
 
-    const msg =
+    let msg =
       (typeof data.message === 'string' && data.message) ||
       (typeof data.error === 'string' && data.error) ||
       (Array.isArray(data.errors) ? JSON.stringify(data.errors).slice(0, 400) : null) ||
@@ -338,12 +424,27 @@ export async function createQuantumPix(cfg, order, publicBaseUrl, logRid = '') {
       httpStatus: res.status,
       responseKeys: topKeys,
       bodySnippet: text?.slice(0, 1800),
+      postbackUrl,
     });
 
     const err = new Error(msg);
     err.details = data;
     err.status = res.status;
     err.code = 'quantum_upstream';
+
+    if (isPostbackRelatedQuantumError(data, text)) {
+      err.code = 'quantum_postback_url';
+      const nested = data?.error;
+      const reason =
+        nested && typeof nested === 'object' && nested.postbackUrl
+          ? String(nested.postbackUrl)
+          : typeof nested === 'string'
+            ? nested
+            : '';
+      err.message = reason
+        ? `${reason} URL enviada: ${postbackUrl}`
+        : `URL de postback recusada pela Quantum. Verifique URL pública (HTTPS, domínio liberado no painel Quantum). Enviada: ${postbackUrl}`;
+    }
 
     const shouldRetry =
       i === 0 &&

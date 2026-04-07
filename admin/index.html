@@ -239,7 +239,7 @@
       <section class="adm-panel" id="p-utm" role="tabpanel">
         <div class="adm-panel-head">
           <h2>Utmify e URL pública</h2>
-          <p>Webhook do PIX usa a URL base configurada aqui (deve ser a mesma que o cliente abre no navegador, ex. Railway).</p>
+          <p>Webhook do PIX e postback do gateway Quantum usam esta base (mesma URL HTTPS que o cliente abre, ex. Railway). Sem isso a Quantum recusa com “URL de postback inválida”.</p>
         </div>
         <div class="adm-card">
           <h2>Credenciais e URL</h2>
@@ -248,8 +248,9 @@
           <input id="utmifyApiToken" type="password" autocomplete="off" placeholder="********">
           <label for="platformName">Nome da plataforma (campo platform na Utmify)</label>
           <input id="platformName" placeholder="BTSIngressos">
-          <label for="publicBaseUrl">URL pública do site (webhook)</label>
-          <input id="publicBaseUrl" placeholder="https://...">
+          <label for="publicBaseUrl">URL pública do site (webhook / postback Quantum)</label>
+          <input id="publicBaseUrl" placeholder="https://seu-app.up.railway.app">
+          <p class="hint" style="margin-top:8px">Obrigatório <strong>HTTPS</strong> e domínio público (não localhost). Deve bater com o que está cadastrado/liberado no painel da Quantum, se houver whitelist.</p>
         </div>
       </section>
 

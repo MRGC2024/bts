@@ -44,10 +44,28 @@ app.use(express.json({ limit: '2mb' }));
 /** URL pública para webhooks (Quantum). Ordem: painel > PUBLIC_BASE_URL > host da requisição. */
 function getPublicBaseUrl(req, cfg) {
   const clean = (u) => String(u || '').replace(/\/$/, '');
+  const forceHttpsIfNeeded = (url) => {
+    const s = String(url || '');
+    if (!s.startsWith('http://')) return s;
+    try {
+      const h = new URL(s).hostname.toLowerCase();
+      if (
+        h.endsWith('.railway.app') ||
+        h.endsWith('.up.railway.app') ||
+        h.endsWith('.vercel.app') ||
+        h.endsWith('.netlify.app')
+      ) {
+        return s.replace(/^http:\/\//i, 'https://');
+      }
+    } catch {
+      /* ignore */
+    }
+    return s;
+  };
   const fromCfg = clean(cfg.publicBaseUrl);
-  if (fromCfg) return fromCfg;
+  if (fromCfg) return forceHttpsIfNeeded(fromCfg);
   const fromEnv = clean(process.env.PUBLIC_BASE_URL);
-  if (fromEnv) return fromEnv;
+  if (fromEnv) return forceHttpsIfNeeded(fromEnv);
   const railDom = clean(process.env.RAILWAY_PUBLIC_DOMAIN);
   if (railDom) return `https://${railDom}`;
   const host = req.get('host');
@@ -56,7 +74,7 @@ function getPublicBaseUrl(req, cfg) {
       req.get('x-forwarded-proto')?.split(',')[0]?.trim() ||
       req.protocol ||
       'https';
-    return `${proto}://${host}`;
+    return forceHttpsIfNeeded(`${proto}://${host}`);
   }
   return `http://localhost:${PORT}`;
 }
@@ -300,8 +318,11 @@ app.post('/api/checkout/create', async (req, res) => {
                 ? ' Verifique rede/DNS do servidor ou tente de novo.'
                 : e.code === 'quantum_validation'
                   ? ' Verifique CPF (11 dígitos).'
-                  : ' O servidor já tentou reais e centavos automaticamente; se persistir, confira o painel Quantum e os logs abaixo.';
-          const errStatus = e.code === 'quantum_validation' ? 400 : 424;
+                  : e.code === 'quantum_postback_url'
+                    ? ' Ajuste a URL pública no painel (Utmify e URL) para o mesmo HTTPS que o cliente usa; no painel da Quantum, libere/valide o domínio do postback se exigido.'
+                    : ' Se o erro for de valor, o servidor tenta reais e centavos; se for de postback, confira a URL pública e o painel Quantum.';
+          const errStatus =
+            e.code === 'quantum_validation' || e.code === 'quantum_postback_url' ? 400 : 424;
           return res.status(errStatus).json({
             error:
               'Falha ao gerar PIX no gateway.' +
