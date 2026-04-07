@@ -23,6 +23,7 @@ import {
 } from './integrations.js';
 import { btsTrace, btsTraceErr } from './bts-log.js';
 import { appendGatewayPixLog, loadGatewayPixLogs } from './gateway-log.js';
+import { normalizeAttendees } from './attendees.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -239,6 +240,11 @@ app.post('/api/checkout/create', async (req, res) => {
           return res.status(400).json({ error: 'CPF deve ter 11 dígitos (somente números).' });
         }
 
+        const att = normalizeAttendees(q, req.body);
+        if (!att.ok) {
+          return res.status(400).json({ error: att.error });
+        }
+
         const baseUrl = getPublicBaseUrl(req, cfg);
 
         btsTrace(`checkout:${rid}`, 'validated', {
@@ -272,6 +278,7 @@ app.post('/api/checkout/create', async (req, res) => {
           customerDocument: String(customerDocument).replace(/\D/g, ''),
           customerIp: clientIp(req),
           tracking: tracking || {},
+          attendees: att.attendees || undefined,
           quantumTransactionId: null,
           pixQrCode: null,
           pixExpiresAt: null,
@@ -402,7 +409,9 @@ app.post('/api/checkout/create', async (req, res) => {
 app.get('/api/order/:publicToken', (req, res) => {
   const o = findOrderByPublicToken(req.params.publicToken);
   if (!o) return res.status(404).json({ error: 'Pedido não encontrado' });
-  res.json({
+  const paid = o.status === 'paid' || o.status === 'approved';
+
+  const payload = {
     id: o.id,
     publicToken: o.publicToken,
     fakePurchaseId: o.fakePurchaseId || null,
@@ -416,10 +425,22 @@ app.get('/api/order/:publicToken', (req, res) => {
     totalCents: o.totalCents,
     customerName: o.customerName,
     customerEmail: o.customerEmail,
-    paidAt: o.paidAt,
+    paidAt: o.paidAt || null,
     createdAt: o.createdAt,
-    pixQrCode: o.pixQrCode,
-  });
+    ticketReady: paid,
+  };
+
+  if (paid) {
+    payload.pixQrCode = o.pixQrCode || null;
+    payload.attendees = o.attendees || null;
+  } else {
+    payload.pixQrCode = null;
+    payload.attendees = null;
+    payload.message =
+      'O ingresso (QR e dados completos) só ficam disponíveis após a confirmação do pagamento.';
+  }
+
+  res.json(payload);
 });
 
 app.post('/api/webhook/quantum', express.json({ type: '*/*' }), async (req, res) => {

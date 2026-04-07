@@ -93,6 +93,64 @@ function bts_sectors(): array
     ];
 }
 
+function bts_age_from_birth(string $iso): ?int
+{
+    if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $iso)) {
+        return null;
+    }
+    $b = DateTime::createFromFormat('Y-m-d', $iso);
+    if ($b === false) {
+        return null;
+    }
+    $now = new DateTime('now');
+    return (int) $now->diff($b)->y;
+}
+
+/**
+ * @param array<string,mixed> $body
+ * @return array{ok:bool,error?:string,attendees?:list<array{fullName:string,document:string,birthDate:string}>|null}
+ */
+function bts_normalize_attendees(int $quantity, array $body): array
+{
+    if ($quantity <= 1) {
+        return ['ok' => true, 'attendees' => null];
+    }
+    $raw = $body['attendees'] ?? null;
+    if (!is_array($raw) || count($raw) !== $quantity) {
+        return ['ok' => false, 'error' => 'Para ' . $quantity . ' ingressos, preencha nome completo, CPF e data de nascimento de cada titular.'];
+    }
+    $seen = [];
+    $out = [];
+    foreach ($raw as $i => $a) {
+        if (!is_array($a)) {
+            return ['ok' => false, 'error' => 'Dados de titular inválidos.'];
+        }
+        $fullName = trim((string) ($a['fullName'] ?? $a['name'] ?? ''));
+        $document = preg_replace('/\D/', '', (string) ($a['document'] ?? $a['cpf'] ?? ''));
+        $birthDate = trim((string) ($a['birthDate'] ?? ''));
+        if (mb_strlen($fullName) < 3) {
+            return ['ok' => false, 'error' => 'Nome completo inválido (titular ' . ($i + 1) . ').'];
+        }
+        if (strlen($document) !== 11) {
+            return ['ok' => false, 'error' => 'CPF inválido (titular ' . ($i + 1) . ').'];
+        }
+        if (isset($seen[$document])) {
+            return ['ok' => false, 'error' => 'Cada ingresso deve ter um CPF diferente.'];
+        }
+        $seen[$document] = true;
+        if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $birthDate)) {
+            return ['ok' => false, 'error' => 'Data de nascimento inválida (titular ' . ($i + 1) . ').'];
+        }
+        $age = bts_age_from_birth($birthDate);
+        if ($age === null || $age < 16) {
+            return ['ok' => false, 'error' => 'Cada titular deve ter no mínimo 16 anos (titular ' . ($i + 1) . ').'];
+        }
+        $out[] = ['fullName' => $fullName, 'document' => $document, 'birthDate' => $birthDate];
+    }
+
+    return ['ok' => true, 'attendees' => $out];
+}
+
 function bts_bearer_token(): string
 {
     $h = $_SERVER['HTTP_AUTHORIZATION'] ?? $_SERVER['REDIRECT_HTTP_AUTHORIZATION'] ?? '';
@@ -245,6 +303,14 @@ if ($route === 'checkout/create' && $method === 'POST') {
         if ($customerName === '' || $customerEmail === '' || $customerDocument === '') {
             bts_json(400, ['error' => 'Preencha nome, e-mail e CPF']);
         }
+        if (strlen($customerDocument) !== 11) {
+            bts_json(400, ['error' => 'CPF deve ter 11 dígitos (somente números).']);
+        }
+
+        $att = bts_normalize_attendees($quantity, $body);
+        if (!$att['ok']) {
+            bts_json(400, ['error' => (string) ($att['error'] ?? 'Titulares inválidos')]);
+        }
 
         $publicBase = (string) ($cfg['publicBaseUrl'] ?? '');
         if ($publicBase === '') {
@@ -277,6 +343,7 @@ if ($route === 'checkout/create' && $method === 'POST') {
             'customerDocument' => $customerDocument,
             'customerIp' => bts_client_ip(),
             'tracking' => is_array($body['tracking'] ?? null) ? $body['tracking'] : [],
+            'attendees' => $att['attendees'],
             'quantumTransactionId' => null,
             'pixQrCode' => null,
             'pixExpiresAt' => null,
@@ -377,7 +444,8 @@ if (preg_match('#^order/([^/]+)$#', $route, $m) && $method === 'GET') {
     if ($o === null) {
         bts_json(404, ['error' => 'Pedido não encontrado']);
     }
-    bts_json(200, [
+    $paid = (($o['status'] ?? '') === 'paid' || ($o['status'] ?? '') === 'approved');
+    $payload = [
         'id' => $o['id'],
         'publicToken' => $o['publicToken'],
         'fakePurchaseId' => $o['fakePurchaseId'] ?? null,
@@ -393,8 +461,17 @@ if (preg_match('#^order/([^/]+)$#', $route, $m) && $method === 'GET') {
         'customerEmail' => $o['customerEmail'],
         'paidAt' => $o['paidAt'] ?? null,
         'createdAt' => $o['createdAt'],
-        'pixQrCode' => $o['pixQrCode'] ?? null,
-    ]);
+        'ticketReady' => $paid,
+    ];
+    if ($paid) {
+        $payload['pixQrCode'] = $o['pixQrCode'] ?? null;
+        $payload['attendees'] = $o['attendees'] ?? null;
+    } else {
+        $payload['pixQrCode'] = null;
+        $payload['attendees'] = null;
+        $payload['message'] = 'O ingresso (QR e dados completos) só ficam disponíveis após a confirmação do pagamento.';
+    }
+    bts_json(200, $payload);
 }
 
 if ($route === 'webhook/quantum' && $method === 'POST') {

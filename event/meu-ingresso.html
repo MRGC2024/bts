@@ -23,6 +23,20 @@
     .mi-qr { text-align: center; margin: 24px 0; }
     .mi-qr img { border: 8px solid #fff; box-shadow: 0 4px 16px rgba(0,0,0,.12); border-radius: 8px; }
     nav.navbar { background: #024ddf; border: 0; }
+    .mi-pending-box { background: #fff8e1; border: 1px solid #ffe082; border-radius: 10px; padding: 16px; color: #5d4037; font-size: 15px; line-height: 1.5; }
+    .mi-actions { display: flex; flex-wrap: wrap; gap: 10px; margin: 20px 0 8px; justify-content: center; }
+    .mi-actions button {
+      padding: 12px 18px; border-radius: 10px; border: 1px solid #cfd8e3; background: #fff;
+      font-weight: 700; font-size: 14px; cursor: pointer; color: #024ddf;
+    }
+    .mi-actions button:hover { background: #f0f5ff; border-color: #024ddf; }
+    .mi-att-block { margin-top: 16px; padding: 14px; background: #f8fafc; border-radius: 10px; border: 1px solid #e8ecf0; }
+    .mi-att-block h3 { margin: 0 0 10px; font-size: 15px; color: #024ddf; }
+    @media print {
+      .mi-no-print, footer, header { display: none !important; }
+      .mi-wrap { padding: 0 !important; max-width: 100% !important; }
+      .mi-card { border: none !important; box-shadow: none !important; }
+    }
   </style>
 </head>
 <body class="tm-shell-body">
@@ -43,12 +57,21 @@
 
 <main class="mi-wrap">
   <div class="mi-card" id="card">
-    <h1>Detalhes da compra</h1>
+    <h1 id="miTitle">Detalhes da compra</h1>
     <p id="miStatus"></p>
-    <div id="miBody"></div>
-    <div class="mi-qr" id="miQr" style="display:none;">
-      <p style="font-size:14px;color:#555;">Apresente este QR na entrada (referência do pedido).</p>
-      <img id="miQrImg" alt="QR" width="200" height="200" />
+    <div id="miPendingBlock" style="display:none;" class="mi-pending-box"></div>
+    <div id="miPaidBlock" style="display:none;">
+      <div id="miBody"></div>
+      <div id="miAttendees"></div>
+      <div class="mi-actions mi-no-print" id="miActions" style="display:none;">
+        <button type="button" id="miBtnShare">Compartilhar</button>
+        <button type="button" id="miBtnDownload">Baixar QR</button>
+        <button type="button" id="miBtnPrint">Imprimir ingresso</button>
+      </div>
+      <div class="mi-qr" id="miQr" style="display:none;">
+        <p style="font-size:14px;color:#555;">Apresente este QR na entrada (referência do pedido).</p>
+        <img id="miQrImg" alt="QR Code do ingresso" width="200" height="200" />
+      </div>
     </div>
   </div>
 </main>
@@ -112,6 +135,7 @@
 (function () {
   const token = new URLSearchParams(window.location.search).get('token');
   const card = document.getElementById('card');
+  let actionsWired = false;
 
   fetch(apiUrl('/api/public-config'))
     .then((r) => r.json())
@@ -135,55 +159,162 @@
     return 'R$ ' + (cents / 100).toLocaleString('pt-BR', { minimumFractionDigits: 2 });
   }
 
+  function maskCpf(d) {
+    const x = String(d || '').replace(/\D/g, '');
+    if (x.length !== 11) return '—';
+    return '***.***.' + x.slice(6, 9) + '-' + x.slice(9);
+  }
+
+  function fmtBrDate(iso) {
+    if (!iso || !/^\d{4}-\d{2}-\d{2}$/.test(iso)) return iso || '—';
+    const p = iso.split('-');
+    return p[2] + '/' + p[1] + '/' + p[0];
+  }
+
+  function wireTicketActions() {
+    if (actionsWired) return;
+    actionsWired = true;
+    document.getElementById('miBtnShare').onclick = async function () {
+      const url = window.location.href;
+      const title = 'Ingresso BTS WORLD TOUR ARIRANG';
+      try {
+        if (navigator.share) {
+          await navigator.share({ title: title, text: 'Meu ingresso', url: url });
+        } else if (navigator.clipboard && navigator.clipboard.writeText) {
+          await navigator.clipboard.writeText(url);
+          alert('Link copiado. Cole onde quiser compartilhar.');
+        }
+      } catch (e) {
+        if (e && e.name !== 'AbortError') prompt('Copie o link:', url);
+      }
+    };
+    document.getElementById('miBtnDownload').onclick = async function () {
+      const img = document.getElementById('miQrImg');
+      const src = img.src;
+      try {
+        const r = await fetch(src);
+        const blob = await r.blob();
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'ingresso-qr-bts.png';
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(a.href);
+      } catch (_) {
+        window.open(src, '_blank', 'noopener,noreferrer');
+      }
+    };
+    document.getElementById('miBtnPrint').onclick = function () {
+      window.print();
+    };
+  }
+
   function render(o) {
-    const paid = o.status === 'paid';
+    const paid = o.status === 'paid' || o.status === 'approved';
     document.getElementById('miStatus').innerHTML =
       '<span class="mi-badge ' + (paid ? 'paid' : 'wait') + '">' +
       (paid ? 'Pago' : 'Aguardando pagamento') + '</span>';
 
+    if (!paid) {
+      document.getElementById('miTitle').textContent = 'Pedido';
+      document.getElementById('miPendingBlock').style.display = 'block';
+      document.getElementById('miPaidBlock').style.display = 'none';
+      document.getElementById('miPendingBlock').innerHTML =
+        '<p><strong>O ingresso (QR e titulares) só ficam disponíveis após a confirmação do pagamento pelo PIX.</strong></p>' +
+        '<p style="margin:12px 0 0;font-size:14px">Guarde este link ou volte quando o pagamento for confirmado. Esta página atualiza sozinha.</p>' +
+        '<p style="margin-top:14px;font-size:14px"><strong>Resumo:</strong> ' +
+        (o.sectorLabel || '') +
+        ' · ' +
+        (o.ticketType === 'meia' ? 'Meia-entrada' : 'Inteira') +
+        ' · ' +
+        (o.quantity || 1) +
+        ' ingresso(s) · ' +
+        fmtMoney(o.totalCents) +
+        '</p>';
+      return;
+    }
+
+    document.getElementById('miTitle').textContent = 'Seu ingresso';
+    document.getElementById('miPendingBlock').style.display = 'none';
+    document.getElementById('miPaidBlock').style.display = 'block';
+
     const rows = [
       ['ID da solicitação', o.requestId || '—'],
       ['ID da compra', o.fakePurchaseId || '—'],
-      ['Pedido interno', o.id],
       ['Lote / evento', o.lote],
       ['Setor', o.sectorLabel],
       ['Tipo', o.ticketType === 'meia' ? 'Meia-entrada' : 'Inteira'],
       ['Quantidade', String(o.quantity)],
       ['Unitário', fmtMoney(o.unitPriceCents)],
       ['Total', fmtMoney(o.totalCents)],
-      ['Nome', o.customerName],
+      ['Comprador', o.customerName],
       ['E-mail', o.customerEmail],
     ];
     if (o.paidAt) rows.push(['Confirmado em', new Date(o.paidAt).toLocaleString('pt-BR')]);
 
     document.getElementById('miBody').innerHTML = rows
-      .map(([k, v]) => '<div class="mi-row"><span>' + k + '</span><strong>' + v + '</strong></div>')
+      .map(function (kv) {
+        return '<div class="mi-row"><span>' + kv[0] + '</span><strong>' + kv[1] + '</strong></div>';
+      })
       .join('');
 
-    const payload = 'BTS-ARIRANG|' + o.id + '|' + o.publicToken + '|' + (o.fakePurchaseId || '');
-    const qrUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=' + encodeURIComponent(payload);
+    var attEl = document.getElementById('miAttendees');
+    if (o.attendees && o.attendees.length) {
+      attEl.innerHTML =
+        '<div class="mi-att-block"><h3>Titulares</h3>' +
+        o.attendees
+          .map(function (a, i) {
+            return (
+              '<div class="mi-row" style="flex-direction:column;align-items:flex-start;gap:4px;border-bottom:1px solid #eee;padding:10px 0">' +
+              '<strong>Ingresso ' +
+              (i + 1) +
+              '</strong><span>' +
+              (a.fullName || '') +
+              '</span><span>CPF ' +
+              maskCpf(a.document) +
+              '</span><span>Nasc. ' +
+              fmtBrDate(a.birthDate) +
+              '</span></div>'
+            );
+          })
+          .join('') +
+        '</div>';
+    } else {
+      attEl.innerHTML = '';
+    }
+
+    var payload = 'BTS-ARIRANG|' + o.id + '|' + o.publicToken + '|' + (o.fakePurchaseId || '');
+    var qrUrl =
+      'https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=' + encodeURIComponent(payload);
     document.getElementById('miQrImg').src = qrUrl;
     document.getElementById('miQr').style.display = 'block';
+    document.getElementById('miActions').style.display = 'flex';
+    wireTicketActions();
   }
 
   if (!token) {
     card.innerHTML = '<h1>Pedido não encontrado</h1><p>Verifique o link enviado por e-mail.</p>';
   } else {
     fetch(apiUrl('/api/order/' + encodeURIComponent(token)))
-      .then((r) => {
+      .then(function (r) {
         if (!r.ok) throw new Error('404');
         return r.json();
       })
       .then(render)
-      .catch(() => {
+      .catch(function () {
         card.innerHTML = '<h1>Pedido não encontrado</h1>';
       });
 
-    setInterval(() => {
+    setInterval(function () {
       fetch(apiUrl('/api/order/' + encodeURIComponent(token)))
-        .then((r) => r.ok ? r.json() : null)
-        .then((o) => { if (o) render(o); })
-        .catch(() => {});
+        .then(function (r) {
+          return r.ok ? r.json() : null;
+        })
+        .then(function (o) {
+          if (o) render(o);
+        })
+        .catch(function () {});
     }, 5000);
   }
 })();
