@@ -1,0 +1,2065 @@
+<!doctype html>
+<html xmlns:fb="http://ogp.me/ns/fb#" lang="pt">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="bts-api-base" content="">
+		<script src="../api-base.js"></script>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+			<link rel="icon" sizes="196x196" href="../images/c1ade2d9-b2d1-484a-b163-0e5509e00144-favicon-32x32.png?w=196">
+		<meta name="Robots" content="INDEX,FOLLOW">
+		<meta name="MobileOptimized" content="width">
+		<meta name="mobile-web-app-capable" content="yes">
+		<meta name="HandheldFriendly" content="true">
+
+
+
+
+		<!-- OneTrust  -->
+		<script src="../scripttemplates/otSDKStub.js" type="text/javascript" charset="UTF-8" data-domain-script="335c8215-96b5-4b4c-91b1-4f1dd9016a7b"></script>
+		<script type="text/javascript">
+		function OptanonWrapper() {
+			// Get initial OnetrustActiveGroups ids
+			if(typeof OptanonWrapperCount == "undefined"){
+				otGetInitialGrps();
+			}
+			//Delete cookies
+			otDeleteCookie(otIniGrps);
+			// Assign OnetrustActiveGroups to custom variable
+			function otGetInitialGrps(){
+				OptanonWrapperCount = '';
+				otIniGrps =  OnetrustActiveGroups;
+				// console.log("otGetInitialGrps", otIniGrps)
+			}
+			function otDeleteCookie(iniOptGrpId)
+			{
+				var otDomainGrps = JSON.parse(JSON.stringify(Optanon.GetDomainData().Groups));
+				var otDeletedGrpIds = otGetInactiveId(iniOptGrpId, OnetrustActiveGroups);
+				if(otDeletedGrpIds.length != 0 && otDomainGrps.length !=0){
+					for(var i=0; i < otDomainGrps.length; i++){
+						//Check if CustomGroupId matches
+					if(otDomainGrps[i]['CustomGroupId'] != '' && otDeletedGrpIds.includes(otDomainGrps[i]['CustomGroupId'])){
+							for(var j=0; j < otDomainGrps[i]['Cookies'].length; j++){
+								// console.log("otDeleteCookie",otDomainGrps[i]['Cookies'][j]['Name'])
+								//Delete cookie
+								eraseCookie(otDomainGrps[i]['Cookies'][j]['Name']);
+							}
+						}
+						//Check if Hostid matches
+						if(otDomainGrps[i]['Hosts'].length != 0){
+							for(var j=0; j < otDomainGrps[i]['Hosts'].length; j++){
+								//Check if HostId presents in the deleted list and cookie array is not blank
+								if(otDeletedGrpIds.includes(otDomainGrps[i]['Hosts'][j]['HostId']) && otDomainGrps[i]['Hosts'][j]['Cookies'].length !=0){
+									for(var k=0; k < otDomainGrps[i]['Hosts'][j]['Cookies'].length; k++){
+										//Delete cookie
+										eraseCookie(otDomainGrps[i]['Hosts'][j]['Cookies'][k]['Name']);
+									}
+								}
+							}
+						}
+					}
+				}
+				otGetInitialGrps(); //Reassign new group ids
+			}
+			//Get inactive ids
+			function otGetInactiveId(customIniId, otActiveGrp){
+				//Initial OnetrustActiveGroups
+				// console.log("otGetInactiveId",customIniId)
+				customIniId = customIniId.split(",");
+				customIniId = customIniId.filter(Boolean);
+				//After action OnetrustActiveGroups
+				otActiveGrp = otActiveGrp.split(",");
+				otActiveGrp = otActiveGrp.filter(Boolean);
+				var result=[];
+				for (var i=0; i < customIniId.length; i++){
+					if ( otActiveGrp.indexOf(customIniId[i]) <= -1 ){
+						result.push(customIniId[i]);
+					}
+				}
+				return result;
+			}
+			//Delete cookie
+			function eraseCookie(name) {
+				//Delete root path cookies
+				domainName = window.location.hostname.substring(3);
+				document.cookie = name+'=; Max-Age=-99999999; Path=/;Domain='+ domainName;
+				document.cookie = name+'=; Max-Age=-99999999; Path=/;';
+				//Delete LSO incase LSO being used, cna be commented out.
+				localStorage.removeItem(name);
+				//Check for the current path of the page
+				pathArray = window.location.pathname.split('/');
+				//Loop through path hierarchy and delete potential cookies at each path.
+				for (var i=0; i < pathArray.length; i++){
+					if (pathArray[i]){
+						//Build the path string from the Path Array e.g /site/login
+						var currentPath = pathArray.slice(0,i+1).join('/');
+					document.cookie = name+'=; Max-Age=-99999999; Path=' + currentPath + ';Domain='+ domainName;
+						document.cookie = name+'=; Max-Age=-99999999; Path=' + currentPath + ';';
+						//Maybe path has a trailing slash!
+						document.cookie = name+'=; Max-Age=-99999999; Path=' + currentPath + '/;Domain='+ domainName;
+						document.cookie = name+'=; Max-Age=-99999999; Path=' + currentPath + '/;';
+
+
+					}
+				}
+			}
+		}
+		</script>
+		<link rel="canonical" href="bts-world-tour-arirang.html">
+			<meta name="twitter:card" content="summary_large_image">
+			<meta name="twitter:title" content="BTS WORLD TOUR ARIRANG">
+			<meta name="twitter:description" content="28, 30 e 31 de Outubro de 2026">
+			<meta name="twitter:img:src" content="">
+			<meta name="description" content="28, 30 e 31 de Outubro de 2026">
+			<meta name="keywords" content="entradas,evento,undefined,,BTS WORLD TOUR ARIRANG | BTS | BTS WORLD TOUR | ARIRANG | Jungkook | V | Jimin | RM | Suga | Jin | j-hope | ARMY">
+			<meta property="og:image" content="https://cdn.getcrowder.com/images/03316baa-fac1-4f23-b152-b36a5dd1e52c-bts640x640.gif">
+			<meta property="og:title" content="BTS WORLD TOUR ARIRANG">
+			<meta property="og:url" content="https://www.ticketmaster.com.br/event/bts-world-tour-arirang">
+			<meta property="og:site_name" content="Ticketmaster Brasil">
+			<meta property="og:type" content="website">
+			<meta property="og:description" content="28, 30 e 31 de Outubro de 2026">
+			<meta property="description" content="28, 30 e 31 de Outubro de 2026">
+			<meta property="fb:app_id" content="">
+		<title>BTS WORLD TOUR ARIRANG</title>
+		<!--[if lt IE 9]>
+	      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+	      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+	    <![endif]-->
+
+	    <script type="application/ld+json">
+	        {"location":{"address":{"streetAddress":"Praça Roberto Gomes Pedrosa","addressLocality":"São Paulo","postalCode":"05653-070"},"@type":"Place","name":"MorumBis"},"offers":[],"performer":[],"@context":"http://schema.org/","@type":"Event","name":"BTS WORLD TOUR ARIRANG","description":"28, 30 e 31 de Outubro de 2026","image":null,"url":"https://www.ticketmaster.com.br/event/bts-world-tour-arirang"}
+	    </script>
+
+		<!-- Source origin data
+				ConfigParams -> WEB
+				Event -> WEB
+	    -->
+
+		<link href="../content/css/styles.295508835c.css" rel="stylesheet" type="text/css">
+
+			<link rel="preload" as="font" crossorigin="anonymous" type="font/woff2" href="../fonts/Averta-Regular.woff2">
+<link rel="preload" as="font" crossorigin="anonymous" type="font/woff2" href="../fonts/Averta-Semibold.woff2">
+<link rel="preload" as="font" crossorigin="anonymous" type="font/woff2" href="../fonts/Averta-Bold.woff2">
+
+	    <style type="text/css">
+		 .skip-link{position:absolute;top:-40px;left:0;background-color:#0057b4;color:#fff;padding:10px;z-index:100;text-decoration:none;transition:top .3s}.skip-link:focus,.skip-link:hover{top:0}
+			.footer {
+					--footer-bg: #1f262d;
+					--footer-link-color: #ffffff;
+			}
+
+
+			body {
+					--main-color:#024ddf;
+					--main-gradient-color-1: #024ddf;
+  					--main-gradient-color-2: #024ddf;
+					--header-color: #024ddf;
+
+
+					font-family: Averta, "Helvetica Neue", Helvetica, Arial, sans-serif;
+
+			}
+
+				nav img.logo-dark {
+    display: none;
+}
+
+nav img.logo-light {
+    display: block;
+}
+
+.event-picker .dropdown .btn {
+    overflow: hidden;
+}
+
+.event-picker .dropdown .dropdown-menu li.agotado div {
+    padding: 15px 20px;
+    clear: both;
+    font-weight: 600;
+    line-height: 1.42857143;
+    color: #333;
+    white-space: nowrap;
+    border-bottom: solid 1px #d7d7d773;
+    display: flex !important;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    text-wrap: balance;
+    text-decoration: none;
+}
+
+
+#eventList .home-events .col-md-12 { width:100%}
+#eventList .home-events .col-md-8  , #eventList .home-events .col-md-4 { width:50%}
+@media screen and (max-width: 1024px) {#eventList .home-events .col-md-12 { width:100%}}
+.ticket-shop .btn-primary { cursor:pointer !important}
+
+.event_thumb_info .event_venue { display:none}
+
+img.banner-town {
+width: 100%;
+    border-radius: 5px;
+    height: 380px;
+    object-fit: cover;
+}
+.event-thumb .title-container {
+    z-index: 1;
+}
+.va-container:hover img {
+    transform: scale(1.05) !important;
+}
+.event-thumb img {
+    transition: 0.4s;
+}
+
+.title-container { opacity:0; transition:0.3s ease-in-out}
+.title-conttainer .event_thumb_info, .title-container .thumb-title {margin-left: 20px; transition:0.4s ease-in-out}
+
+.va-container:hover .title-container { opacity:1}
+.va-container:hover title-conttainer .event_thumb_info, .va-container:hover .title-container .thumb-title {margin-left: 0px; }
+
+@media screen and (max-width: 768px) {
+img.banner-town {
+    height: 300px;
+}
+}
+@media screen and (max-width: 1024px) {
+.home-events .col-md-8, .home-events .col-md-4 {
+    width: 100% !important;
+}
+}
+
+.title-container {
+    display: flex;
+    padding: 40px;
+    position: absolute;
+    width: 100%;
+    align-items: flex-start;
+    justify-content: flex-end;
+    background: rgb(0,0,0);
+    background: linear-gradient(51deg, rgb(3 95 196) 0%, rgb(0 101 210 / 42%) 100%);
+    flex-direction: column;
+}
+
+.title-container .thumb-title {
+font-size: 1.6em;
+font-weight: 600;
+}
+
+.va-container:hover {
+    transform: scale(1);
+}
+
+.event-thumb {
+    background-color: var(--main-color);
+    box-shadow: none !important;
+}
+
+.event_thumb_info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    color: #fff;
+    font-size: 1em;
+    font-weight: 500;
+gap:2px;
+}
+
+.event_thumb_info span.event_venue { opacity:0.6}
+
+
+@media screen and (max-width: 768px) {
+.title-container { text-align:left !important; padding:20px !important;}
+.title-container .thumb-title {
+    font-size: 1.3em;
+    font-weight: 600;
+    margin: 0 0 10px 0;
+    line-height: 1.4em;
+    text-align: initial;
+}
+}
+
+.container .content ul {padding:0 0 0 20px !important;}
+.container .content table {width:100%; border:solid 1px #f1f1f1}
+.container .content table td {border:solid 1px #f1f1f1; padding:10px;}
+
+.carousel-inner .item {
+    height: 300px !important;
+}
+
+.carousel-indicators {
+    bottom: 10px !important;
+    opacity: 1;
+}
+
+.carousel-indicators li , .carousel-indicators li.active  {
+    width: 10px ;
+    height: 10px;
+    margin: 0 1px;
+}
+
+
+.search_box_home h1 {
+    text-transform: none;
+}
+
+body {
+     padding-top: 50px;
+     letter-spacing: 0.3px;
+}
+ .footer-tm ul li a {
+     color: #fff;
+     margin: 0 !important;
+}
+ .home-categories , .home-events {
+     width:90%;
+     max-width: 1260px;
+     margin: 0 auto;
+}
+ .home-events .col-md-8, .home-events .col-md-4 {
+     width:50%;
+}
+ @font-face {
+     font-family: "Averta";
+     src: url("../fonts/Averta-Light.woff2") format("woff2");
+     font-weight: 300;
+}
+ @font-face {
+     font-family: "Averta";
+     src: url("../fonts/Averta-Regular.woff2") format("woff2");
+     font-weight: 400;
+}
+ @font-face {
+     font-family: "Averta";
+     src: url("../fonts/Averta-Semibold.woff2") format("woff2");
+     font-weight: 600;
+}
+ @font-face {
+     font-family: "Averta";
+     src: url("../fonts/Averta-Bold.woff2") format("woff2");
+     font-weight: 700;
+}
+ @font-face {
+     font-family: "Averta";
+     src: url("../fonts/Averta-Black.woff2") format("woff2");
+     font-weight: 900;
+}
+ @font-face {
+     font-family: "Averta";
+     src: url("../fonts/Averta-RegularItalic.woff2") format("woff2");
+     font-style: italic;
+}
+ @media (min-width: 780px) {
+     .event-header .ticket-shop #buyButton {
+         margin-left: 30px;
+    }
+}
+ .event-header .ticket-shop {
+     position: relative;
+     background: rgba(251,252,255);
+     border: solid 2px #F1F2F5;
+}
+ .event-header .ticket-shop #show-button, .event-header .ticket-shop #quantity-button {
+     border: solid 1px rgba(0, 0, 0, 0.15);
+}
+ .navbar ul.user-menu {
+     padding: 15px 0 0 0;
+}
+ .navbar-brand {
+     line-height: normal;
+}
+ .event-header .ticket-shop.affix{
+     top: 60px;
+}
+ .main {
+     height: 180px;
+     background: #024DDF !important;
+}
+ .main h1 { display: none;}
+ .navbar .btn {
+     margin-top: 0px;
+     background: transparent;
+     font-size: 1.1em;
+}
+ #login_button #ingresar {
+     color: #353C42 !important;
+}
+ .navbar a {
+     font-size:1em;
+}
+ .navbar .logo {
+     padding: 20px 0;
+}
+ .navbar-menu a:hover {
+     background-color: rgb(230, 230, 230);
+}
+ .navbar-menu a:hover::after {
+     width:0px;
+}
+ @media (min-width: 1600px){
+     .container {
+         width: 1260px;
+    }
+}
+ .footer-tm {
+    color:#ffffff;
+}
+ .footer-tm h5,  .footer-tm h3 {
+    font-size:1em;
+    font-weight:bold;
+    margin-bottom:15px;
+}
+ .footer-tm ul {
+     padding:0;
+     margin:0 0 40px 0
+}
+ .footer-tm ul li {
+     list-style:none;
+     display:block;
+     margin-bottom:10px;
+}
+ .footer-tm ul li a {
+     color:#fff
+}
+ .footer-tm img.logo {
+     margin:0 0 40px 0;
+     height:25px
+}
+ .footer-tm .foo-copy {
+     text-align:right;
+     font-size:0.8em;
+}
+ .footer-tm .foo-social a {
+     margin-right:20px
+}
+ .footer {
+    border: none
+}
+ @media (max-width: 768px){
+     .footer-tm .foo-social {
+         margin-bottom:40px
+    }
+     .footer-tm .foo-copy {
+         text-align:left;
+    }
+}
+ #eventList.container {
+     width:100%;
+     padding:0;
+}
+ .tm-main {
+     height: 92vh;
+     background: #024DDF;
+     background-image: url(../images/1669406310174-null-main-br.jpg);
+     background-size: cover;
+     animation: bgAnimate 15s ease-in-out infinite alternate;
+     overflow:hidden;
+     text-align: center;
+border-top: solid 30px #0262cf;
+}
+ @keyframes bgAnimate {
+     0% {
+         background-position: 2% 0;
+    }
+     100% {
+         background-position: 100% 0;
+    }
+}
+ .tm-main .tm-t {
+     margin-bottom: 10vh;
+}
+ .tm-main .tm-t img {
+     height:35vh;
+     animation: tAnimate 2s ease-in-out;
+}
+ @keyframes tAnimate {
+     0% {
+         transform: scale(2.5);
+         opacity:0;
+    }
+     100% {
+         transform: scale(1);
+         opacity:1;
+    }
+}
+ .tm-main .tm-overlay {
+     display: flex;
+     flex-direction: column;
+     justify-content: center;
+     align-items: center;
+     flex-wrap: nowrap;
+     align-content:center ;
+     height: 100%;
+     background: linear-gradient(0deg, rgba(2,108,223,1) 0%, rgb(0 69 145 / 50%) 49%, rgba(2,108,223,0) 100%);
+}
+ .tm-main h2 {
+     margin: 0;
+     font-size: 2em;
+     color: #fff;
+     font-weight: 400;
+     animation: h2Animate 1s ease-in-out;
+}
+ .tm-main h2 span {
+     color: #00FFFF;
+}
+ @keyframes h2Animate {
+     0% {
+         transform: scale(0.5);
+         opacity:0;
+    }
+     100% {
+         transform: scale(1);
+         opacity:1;
+    }
+}
+ .tm-main i {
+     display: block;
+     width: 14px;
+     height: 14px;
+     border: solid 2px #ffffff70;
+     border-left: none;
+     border-top: none;
+     transform: rotate(45deg);
+     border-radius: 3px;
+     bottom: 8vh;
+     position: absolute;
+}
+ .tm-suscribe {
+     background: #024DDF;
+     padding: 80px 20px 100px;
+     text-align: center;
+}
+ .tm-suscribe h6 {
+     margin: 0;
+     font-size: 1.8em;
+     color: #fff;
+     font-weight: 400;
+}
+ .tm-social {
+     display: block;
+     position: relative;
+     height: 300px;
+     color: #fff;
+     text-decoration: none;
+}
+ .tm-social .tm-s {
+     width: 100%;
+     position: relative;
+     float: left;
+     height: 300px;
+     display: flex;
+     flex-direction: column;
+     flex-wrap: nowrap;
+     justify-content: center;
+     align-items: center;
+     align-content: center;
+     text-align: center;
+     background: #000;
+}
+ .tm-social .tm-s h3 {
+     font-size:1.8em;
+     color: #fff;
+     margin: 0 0 10px 0;
+     font-weight: normal;
+}
+ .tm-social .tm-s {
+     color: #fff;
+     text-decoration: none;
+     opacity: 0.95;
+     transition: 0.2s;
+}
+ .tm-social .tm-s:hover{
+     opacity:1;
+}
+ .tm-social .tm-s span {
+     color: #00FFFF;
+}
+.tm-social .tm-instagram {
+background: url(../images/1683576764155-null-TM_Banner_Instagram.jpeg) no-repeat center center;
+background-size: cover;
+}
+.tm-social .tm-facebook {
+background: url(../images/1683576746022-null-TM_Banner_Facebook.jpg) no-repeat center center;
+background-size: cover;
+}
+.tm-social .tm-linkedin {
+background: url(../images/1683576712789-null-TM_Banner_LinkedIn.jpg) no-repeat center center;
+background-size: cover;
+}
+.tm-social .tm-twitter{
+background: url(../images/1669823412469-null-twitter.jpg) no-repeat center center;
+background-size: cover;
+}
+.tm-social .tm-blog{
+background: url(../images/1683576726535-null-TM_Banner_Blog.jpg) no-repeat center center;
+background-size: cover;
+}
+.tm-social .tm-tiktok {
+background: url(../images/1691588419752-null-tiktok.jpeg) no-repeat center center;
+background-size: cover;
+}
+
+.tm-social .tm-overlay img {
+width:40px;
+}
+
+ .tm-business {
+     background:#1F262D;
+     padding: 100px 20px;
+     text-align: center;
+     border-bottom: solid 1px #363636;
+}
+ .tm-business h2 {
+     margin: 0;
+     font-size: 1.8em;
+     color: #fff;
+     font-weight: 400;
+     margin: 0 0 60px 0;
+}
+ .tm-business a {
+     border: solid 1px #fff;
+     text-decoration: none;
+     padding: 18px 30px;
+     font-size:1.1em;
+     color: #fff;
+}
+ @media (max-width: 768px){
+     .tm-main {
+         height: 70vh;
+         background-image: url(../images/1669406540752-null-main-m.jpg);
+         animation: bgAnimate 25s ease-in infinite alternate;
+    }
+     .tm-main .tm-overlay {
+         padding: 0 30px;
+         background: linear-gradient(0deg, #024DDF 0%, #024DDFb0 49%, #024DDF94 100%);
+    }
+     .tm-main .tm-t img {
+         height:150px;
+    }
+     .tm-social {
+         display: block;
+         position: relative;
+         height: 300px;
+    }
+}
+ .navbar {
+     height: 60px;
+     background-color:#024DDF;
+     box-shadow: none !important;
+}
+
+ .navbar-menu a {
+     color: #fff;
+     font-size: 1.1em !important;
+}
+ .navbar-menu a:hover {
+     background-image: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.176));
+     background-color: #0000 !important;
+}
+ #login_button #ingresar {
+     color: #fff !important;
+}
+ a.btn-togle span {
+     background:#fff;
+}
+ .navbar a {
+     font-size: 1em;
+}
+ .navbar-collapse ul li:first-child a {
+     border-top:none !important
+}
+ .quentro-modal .modal-body {
+    padding: 20px !important;
+}
+ .quentro-modal .modal-header a.quentro-logo img {
+    width: 120px;
+}
+ .quentro-modal .modal-body img {
+    width: 80px !important;
+}
+ .quentro-modal .close-quentro-modal {
+    width: 25px;
+     float: right !important;
+}
+ #ot-sdk-btn.ot-sdk-show-settings.cookie-settings-btn {
+     color: white;
+     padding: 0;
+     border: 0;
+     font-size:0.9em;
+}
+ #ot-sdk-btn.ot-sdk-show-settings.cookie-settings-btn:hover {
+     color: white;
+     background: none;
+}
+ .tm-grid {
+}
+ .tm-grid .tm-grid-event {
+     color: #fff;
+     background-size: cover;
+     background-position: center ;
+     height: 100%;
+}
+ .tm-grid .tm-grid-event .tm-grid-event-overlay {
+    background: linear-gradient(90deg, rgba(6,25,46,0.95) 0%, rgba(8,30,54,0.65) 40%, rgba(13,32,52,0.15) 100%);
+     height: 100%;
+     display: flex;
+     align-items: flex-end
+}
+ .tm-grid .event-title {
+     font-size:2em;
+     font-weight: 600;
+}
+ .tm-grid .event-info {
+     font-size:1em;
+     margin-bottom: 20px;
+     font-weight:600
+}
+ .tm-grid .event-info span {
+     opacity: 0.7;
+     display: block;
+     font-size:1em;
+     font-weight: normal;
+}
+ .tm-grid a.btn-event {
+     font-size:1.1em;
+     color: #fff;
+     font-weight: 500;
+     background: var(--main-color);
+     padding: 12px 20px;
+     text-decoration: none;
+     display: inline-block;
+     border-radius:2px
+}
+ .tm-grid .event-info-content {
+     padding: 70px;
+}
+
+
+.grid-1 { grid-area: 1 / 1 / 2 / 3; }
+.grid-2 { grid-area: 2 / 1 / 3 / 2; }
+.grid-3 { grid-area: 2 / 2 / 3 / 3; }
+.grid-4 { grid-area: 3 / 1 / 4 / 2; }
+.grid-5 { grid-area: 3 / 2 / 4 / 3; }
+.grid-6 { grid-area: 4 / 1 / 5 / 3; }
+.grid-1 , .grid-2 , .grid-3, .grid-4 , .grid-5, .grid-6, .grid-7, .grid-8 { height: 60vh; }
+
+.grid-1 { width:50%; position: relative;float: left;}
+.grid-2 { width:100% ; position: relative;float: left;}
+
+.grid-1, .grid-2 {
+    height: 55vh;
+    min-height: 400px;
+}
+ 
+ @media (max-width: 1440px){
+     .tm-grid .event-title {
+         font-size: 1.6em;
+    }
+     .tm-grid .event-info {
+         font-size: 1em;
+    }
+     .tm-grid .event-info-content {
+         padding: 4em;
+    }
+     .tm-grid a.btn-event {
+         font-size: 1em;
+        padding: 10px 15px;
+    }
+}
+ @media (max-width: 768px){
+
+     .parent-grid {
+        display: flex;
+        flex-direction: column;
+         height: auto;
+    }
+
+    .grid-1 , .grid-2 , .grid-3, .grid-4 , .grid-5, .grid-6, .grid-7, .grid-8 { height: 50vh; }
+
+
+     .tm-grid .event-info-content {
+         padding:30px 20px;
+    }
+     .tm-grid .event-info span {
+         margin: 0;
+         display: block;
+    }
+}
+ body {
+     --order-top-bg: #0046cb;
+     --order-top-color: #fff;
+     --header-height: 60px;
+     padding-top:60px;
+}
+ .pg_content .pg_sidebar {
+     display:none !important
+}
+ .pg_content .col-sm-8 {
+     margin: 0px auto;
+     width:100%;
+     padding: 0 200px;
+     float: inherit;
+}
+ @media (max-width: 1280px){
+    .pg_content .col-sm-8 {
+        padding: 0px 100px;
+    }
+ }
+ 
+ @media (max-width: 768px){
+    .pg_content .col-sm-8 {
+        padding: 0px 20px;
+    }
+    .grid-1, .grid-2 {
+        height: 40vh;
+        width: 100%;
+        min-height: 350px;
+    }
+}
+
+
+div.accesibility {
+    bottom: 30% !important;
+}
+
+
+.event_blocks .grid-label {
+    position: sticky !important;
+    color: #fff;
+    background: var(--main-color);
+    font-weight: normal;
+    font-size: 0.8em;
+    border-radius: 2px;
+    top: 3px;
+    right: 20px;
+    display: block;
+    z-index: 1;
+    margin: 0;
+    padding: 4px 8px;
+}
+
+	    </style>
+
+
+		<!-- Global site tag (gtag.js) - Google Analytics -->
+		<script type="text/plain" class="optanon-category-C0002">
+			window.dataLayer = window.dataLayer || [];
+			function gtagV2(value){dataLayer.push(value);}
+			function gtag(){dataLayer.push(arguments);}
+		</script>
+
+
+
+		<!-- Google Tag Manager -->
+		<script type="text/plain" class="optanon-category-C0004">(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+		new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+		j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+		})(window,document,'script','dataLayer','GTM-WBGSPNM');</script>
+		<!-- End Google Tag Manager -->
+
+			<style>.embed-container {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  gap: 20px;
+}
+
+.embed-box {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.embed-box h2 {
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #000000;
+  text-decoration: underline #024ddf 4px;
+  font-family: 'Averta', sans-serif;
+}
+
+.embed-box iframe {
+  width: 100%;
+  height: 400px;
+  border: none;
+}
+
+@media (max-width: 768px) {
+  .embed-container {
+    flex-direction: column;
+  }
+
+  .embed-box iframe {
+    height: 160px;
+  }
+}
+</style>
+
+
+		<style>
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+		</style>
+	</head>
+	<!-- <body class="" id="Event"> -->
+
+
+	<body class="  accesible" id="Event">
+<a href="#container" class="skip-link">Skip to Main Content</a>
+<h1 class='hidden'>BTS WORLD TOUR ARIRANG</h1>
+
+
+		<div id="page-loader" class="loader_process" style="display:none">
+			<div class="loader-ring"><div></div><div></div><div></div><div></div></div>
+		     <div style="font-weight:600; font-size:1.2em">Aguarde um momento</div>
+		    <p id="loader_message"></p>
+		</div>
+
+
+		<div id="page-captcha" class="loader_process" style="display:none">
+		<div style="font-weight:600; font-size:1.2em">Disculpa, detectamos actividad sospechosa</div>
+		<div id="request-captcha-container"></div>
+		</div>
+
+		<!-- HEADER -->
+		<!--[if lt IE 7]>
+		<p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+		<![endif]-->
+
+		<!-- HEADER -->
+
+		<div id="queue-view"></div>
+
+		<div data-view="header/header_view"><!-- HEADER  -->
+  <div class='accesibility'>
+    <a title='Decrease text size' id='decreaseFontSize' role='button'>A-</a>
+    <a title='Increase text size' id='increaseFontSize' role='button'>A+</a>
+  </div>
+<header>
+  <nav class='navbar navbar-fixed-top' role='navigation'>
+    <div class='horizontal-container navbar-container'>
+      <div class='horizontal-container'>
+        <a class='' style='height:100%' href='../../'>
+          <img class='logo logo-dark' style='height:100%' src='../images/1664925447950-null-ticketmaster-logo-azurewithoutr.png?w=300' alt='Ticketmaster Brasil logo'>
+
+          <img class='logo logo-light' style='height:100%' src='../images/46b77c52-6acd-425b-985f-c036a9dcbf90-ticketmaster.svg?w=300' alt='Ticketmaster Brasil logo'>
+        </a>
+
+
+      </div>
+
+      <div id='user_data' class='hidden-xs' style='flex-shrink:0; height:100%;display:flex'>
+        <div id='login_button' class='hidden-xs' style='display: flex; align-items:center'></div>
+      </div>
+
+      <div class='visible-xs'>
+        <a class='btn btn-togle visible-xs' data-toggle='collapse' role='button' data-target='#navy-collapse' aria-label='show menu'>
+          <span></span>
+          <span></span>
+          <span></span>
+        </a>
+      </div>
+    </div>
+
+    <div class='collapse navbar-collapse' id='navy-collapse'>
+      <div class='visible-xs' id='user_data_mobile'>
+      </div>
+    </div>
+  </nav>
+</header></div>
+		<div id="userLogin">
+		</div>
+
+
+		<!-- FIN HEADER -->
+		<main id="container">
+			<div data-view="event/event" data-fetch_summary="{&quot;model&quot;:{&quot;model&quot;:&quot;Event&quot;,&quot;id&quot;:&quot;15726&quot;}}">
+
+<div class="main_content event_15726 channel_55736">
+
+
+		<div class="event_container">
+			<div id="order_bar_container" class="order-top" style="display:none;"></div>
+			<div id="notification_modal"> </div>
+			<div id="detail_container" class="detail-container">
+				<div id="event_content">
+
+
+				    <div id='event_header' class='event-header header-v2'>
+   						 <div data-view="cms/cms_header/cms_header" data-fetch_summary="{&quot;model&quot;:{&quot;model&quot;:&quot;Event&quot;,&quot;id&quot;:&quot;15726&quot;}}">    <div id='component-e4f2312a-d7de-4db3-a931-9ae4315a63a8'>
+      <img class='hidden-xs' data-type='desktop' src='../images/1cc6881c-8a6d-4c11-9b42-d0122e737e45-bts1920x720landing.gif' width='100%' loading='lazy' alt='Event image'>
+      <img class='visible-xs' data-type='mobile' src='../images/dff8e041-b489-44d5-bbad-49411dbba93a-bts768x768.gif' width='100%' loading='lazy' alt='Event image'>
+    </div>
+</div>
+					</div>
+					
+					<div id="sentinel"></div>
+					<div id="picker"></div>
+     				<div class='event_blocks'>
+                           <section class='block  full-width ' id='component-9b2c036f-bc08-4c3b-a9de-3904a44393aa' style=" background-image: url(''); background-color:; ">
+                              <div data-view="cms/cms_component/cms_component" data-fetch_summary="{&quot;model&quot;:{&quot;model&quot;:&quot;Event&quot;,&quot;id&quot;:&quot;15726&quot;}}">  <div class="block_image">
+  <div class="block_content">
+   
+
+  <div class="image">
+        <a href="https://www.ticketmaster.com.br/event/bts-boxoffice-reservation">
+          <img data-type="desktop" src='../images/4fcc7e0c-3fad-48e0-92d9-d7d3e72cc8f8-btsprereserva.png' width='100%' alt='' loading='lazy' class='hidden-xs' width='100%' aria-label="banner">
+                <img data-type="mobile" src='../images/2823b735-c0c0-49db-993f-1cab1e6969c5-btsprereservamobile.png' alt='' loading='lazy' class='visible-xs' width='100%'>
+        </a>
+      </div>
+
+  </div>
+  </div></div>
+                          </section>
+                           <section class='block  centered ' id='component-69deda28-0b5b-4e19-9cbc-c98f5303454e' style=" background-image: url(''); background-color:; ">
+                              <div data-view="cms/cms_component/cms_component" data-fetch_summary="{&quot;model&quot;:{&quot;model&quot;:&quot;Event&quot;,&quot;id&quot;:&quot;15726&quot;}}"><div class='block_html'>
+  <div class='block_content'>
+    
+    <div>
+  <style>
+    /* CSS Reset básico */
+.tmpe-container * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Averta', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+.tmpe-container {
+  width: 1200px !important;
+  max-width: 1200px !important;
+  margin: 0 auto !important;
+  background: #FAFBFC;
+  position: relative;
+  z-index: 1;
+  box-sizing: border-box !important;
+  overflow: hidden !important;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.15) !important;
+}
+
+@media (max-width: 800px) {
+  .tmpe-container {
+    width: 100% !important;
+  }
+}
+
+/* Default state - Desktop first */
+.tmpe-desktop-view {
+  display: block;
+}
+
+.tmpe-mobile-view {
+  display: none;
+}
+
+/* Tarjetas de ticket - Desktop */
+.tmpe-ticket-item {
+  display: flex;
+  align-items: center;
+  padding: 20px 24px;
+  background: #fff;
+  border-bottom: 1px solid #D6D6D6;
+  position: relative;
+  justify-content: space-between;
+  gap: 24px;
+  transition: background-color 0.2s ease;
+}
+
+.tmpe-logo-container {
+  width: 56px;
+  height: 56px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  overflow: hidden;
+  background: #FFFFFF !important;
+  transform: translateZ(0);
+  will-change: transform;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.tmpe-logo-interbank {
+  background: #1A1A1A;
+}
+
+.tmpe-logo-ticketmaster {
+  background: #FFFFFF;
+}
+
+.tmpe-logo-bcp {
+  background: #FFFFFF;
+}
+
+.tmpe-logo-comercio {
+  background: #FFFFFF;
+}
+
+.tmpe-logo-bbva {
+  background: #FFFFFF;
+}
+
+.tmpe-logo-custom {
+  background: #FFFFFF;
+}
+
+.tmpe-logo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  padding: 0;
+  margin: 0;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+  -ms-interpolation-mode: nearest-neighbor;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+.tmpe-info-container {
+  flex: 1;
+}
+
+/* Tipografía directamente aplicada con alta especificidad */
+.tmpe-container .tmpe-ticket-title {
+  font-family: 'Averta', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: #262626;
+  letter-spacing: 0.4px;
+  line-height: 20px;
+}
+
+.tmpe-container .tmpe-date-text {
+  font-family: 'Averta', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  color: #7D7D7D;
+  font-size: 16px;
+  font-weight: 400;
+  letter-spacing: 0.32px;
+  line-height: 20px;
+}
+
+.tmpe-status-container {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tmpe-container .tmpe-status-badge {
+  font-family: 'Averta', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  border: 1px solid #D6D6D6;
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  height: 22px;
+  letter-spacing: 0.24px;
+  line-height: 20px;
+}
+
+/* Regla de alta especificidad para sobrescribir .ticketmaster global */
+.tmpe-container .tmpe-status-badge span {
+  color: #121212 !important;
+  font-weight: 600 !important;
+}
+
+.tmpe-status-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.tmpe-dot-available {
+  background: #048851;
+}
+
+.tmpe-dot-soon {
+  background: #646464;
+}
+
+.tmpe-dot-avend {
+  background: #048851;
+  box-shadow: 0 0 0 0 rgba(4, 136, 81, 0.7);
+  animation: tmpe-dot-pulse 1.6s ease-out infinite;
+}
+
+@keyframes tmpe-dot-pulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(4, 136, 81, 0.55);
+  }
+  70% {
+    transform: scale(1.05);
+    box-shadow: 0 0 0 8px rgba(4, 136, 81, 0);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(4, 136, 81, 0);
+  }
+}
+
+.tmpe-dot-soldout {
+  background: #DD2C00;
+}
+
+.tmpe-dot-canceled {
+  background: #646464;
+}
+
+/* Estilo de enlace según diseño */
+.tmpe-container .tmpe-link-details {
+  font-family: 'Averta', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  background: #024DDF;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 16px 40px;
+  font-size: 16px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  margin-left: auto;
+  text-decoration: none;
+  letter-spacing: 0.32px;
+  line-height: 24px;
+  height: 48px;
+  min-width: 150px;
+  justify-content: center;
+  transition: background-color 0.2s ease;
+}
+
+.tmpe-link-reminder {
+  background: #FFFFFF;
+  color: #646464;
+  border: 1px solid #D6D6D6;
+  border-radius: 23px;
+  padding: 6px 12px;
+  font-size: 14px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  margin-left: auto;
+  text-decoration: none;
+  box-shadow: 0px 6px 12px 0px rgba(0, 0, 0, 0.06);
+  height: 39px;
+  min-width: auto;
+  justify-content: center;
+  font-family: 'Averta', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+.tmpe-link-mobile {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #024DDF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+  color: white;
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .tmpe-desktop-view {
+    display: none;
+  }
+  
+  .tmpe-mobile-view {
+    display: block;
+    box-shadow: 0px 1px 4px 0px rgba(18, 18, 18, 0.15);
+  }
+  
+  .tmpe-ticket-item {
+    padding: 0;
+    gap: 0;
+    align-items: stretch;
+  }
+  
+  .tmpe-ticket-link {
+    display: flex;
+    width: 100%;
+    padding: 20px 12px;
+    gap: 16px;
+    align-items: flex-start;
+    text-decoration: none !important;
+    color: inherit;
+    cursor: pointer;
+  }
+  
+  .tmpe-logo-container {
+    width: 42px;
+    height: 40px;
+    margin-right: 0;
+    border-radius: 2.68px;
+    margin-top: 0;
+    align-self: flex-start;
+    overflow: hidden;
+    background: #FFFFFF !important;
+    transform: translateZ(0);
+    will-change: transform;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
+  .tmpe-container .tmpe-ticket-title {
+    font-size: 18px;
+    line-height: 20px;
+    letter-spacing: 0.32px;
+    color: #121212;
+    margin-bottom: 2px;
+  }
+
+  .tmpe-container .tmpe-date-text {
+    font-size: 14px;
+    margin-left: 0;
+    line-height: 20px;
+    letter-spacing: 0.28px;
+    color: #828282;
+  }
+  
+  .tmpe-status-container {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+
+  .tmpe-container .tmpe-status-badge {
+    font-size: 12px;
+    letter-spacing: 0.24px;
+    line-height: 20px;
+    color: #121212;
+  }
+
+  .tmpe-link-mobile {
+    width: 36px;
+    height: 36px;
+    background: #024DDF;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    align-self: flex-start;
+    margin-top: 0;
+  }
+}
+
+/* Desktop hover effect */
+@media (min-width: 769px) {
+  .tmpe-ticket-item:hover {
+    background-color: #F6F6F6;
+  }
+  
+  .tmpe-link-details:hover {
+    background-color: #0035A0;
+  }
+}
+
+/* Mobile hover/active effects */
+@media (max-width: 768px) {
+  .tmpe-ticket-link:hover, 
+  .tmpe-ticket-link:active {
+    background-color: #F6F6F6;
+  }
+  
+  .tmpe-ticket-link:hover .tmpe-link-mobile, 
+  .tmpe-ticket-link:active .tmpe-link-mobile {
+    background-color: #0035A0;
+  }
+}
+  </style>
+
+<div class="tmpe-container">
+  <!-- Vista Desktop -->
+  <div class="tmpe-desktop-view">
+
+    <!-- PRÉ-VENDA ARMY MEMBERSHIP -->
+    <div class="tmpe-ticket-item">
+      <div class="tmpe-logo-container tmpe-logo-ticketmaster">
+        <img class="tmpe-logo-img" src="../Tk_general_c73b9c007f.svg" alt="Logo" onerror="this.src='https://prod-assets.tmlat.com/Property_1_visa_f8a51aef4b.png'">
+      </div>
+      <div class="tmpe-info-container">
+        <h2 class="tmpe-ticket-title">PRÉ-VENDA ARMY MEMBERSHIP</h2>
+        <div class="tmpe-status-container">
+          <div class="tmpe-status-badge">
+            <span class="tmpe-status-dot tmpe-dot-avend"></span>
+            <span style="color: #121212 !important; font-weight: 600 !important;">À VENDA</span>
+          </div>
+          <span class="tmpe-date-text">31/10 • Estádio MorumBIS</span>
+        </div>
+      </div>
+      <a href="ingressos.html?lote=pre-army-31-10" class="tmpe-link-details">
+            INGRESSOS
+            <svg width="20" height="20" viewbox="0 0 20 20">
+              <polyline points="7 5 13 10 7 15" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></polyline>
+            </svg>
+          </a>
+    </div>
+    <!-- VENDA GERAL -->
+    <div class="tmpe-ticket-item">
+      <div class="tmpe-logo-container tmpe-logo-ticketmaster">
+        <img class="tmpe-logo-img" src="../Tk_general_c73b9c007f.svg" alt="Logo" onerror="this.src='https://prod-assets.tmlat.com/Property_1_visa_f8a51aef4b.png'">
+      </div>
+      <div class="tmpe-info-container">
+        <h2 class="tmpe-ticket-title">VENDA GERAL</h2>
+        <div class="tmpe-status-container">
+          <div class="tmpe-status-badge">
+            <span class="tmpe-status-dot tmpe-dot-avend"></span>
+            <span style="color: #121212 !important; font-weight: 600 !important;">À VENDA</span>
+          </div>
+          <span class="tmpe-date-text">28/10 • Estádio MorumBIS</span>
+        </div>
+      </div>
+      <a href="ingressos.html?lote=vg-28-10" class="tmpe-link-details">
+            INGRESSOS
+            <svg width="20" height="20" viewbox="0 0 20 20">
+              <polyline points="7 5 13 10 7 15" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></polyline>
+            </svg>
+          </a>
+    </div>
+    <!-- VENDA GERAL -->
+    <div class="tmpe-ticket-item">
+      <div class="tmpe-logo-container tmpe-logo-ticketmaster">
+        <img class="tmpe-logo-img" src="../Tk_general_c73b9c007f.svg" alt="Logo" onerror="this.src='https://prod-assets.tmlat.com/Property_1_visa_f8a51aef4b.png'">
+      </div>
+      <div class="tmpe-info-container">
+        <h2 class="tmpe-ticket-title">VENDA GERAL</h2>
+        <div class="tmpe-status-container">
+          <div class="tmpe-status-badge">
+            <span class="tmpe-status-dot tmpe-dot-avend"></span>
+            <span style="color: #121212 !important; font-weight: 600 !important;">À VENDA</span>
+          </div>
+          <span class="tmpe-date-text">30/10 • Estádio MorumBIS</span>
+        </div>
+      </div>
+      <a href="ingressos.html?lote=vg-30-10" class="tmpe-link-details">
+            INGRESSOS
+            <svg width="20" height="20" viewbox="0 0 20 20">
+              <polyline points="7 5 13 10 7 15" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></polyline>
+            </svg>
+          </a>
+    </div>
+    <!-- VENDA GERAL -->
+    <div class="tmpe-ticket-item">
+      <div class="tmpe-logo-container tmpe-logo-ticketmaster">
+        <img class="tmpe-logo-img" src="../Tk_general_c73b9c007f.svg" alt="Logo" onerror="this.src='https://prod-assets.tmlat.com/Property_1_visa_f8a51aef4b.png'">
+      </div>
+      <div class="tmpe-info-container">
+        <h2 class="tmpe-ticket-title">VENDA GERAL</h2>
+        <div class="tmpe-status-container">
+          <div class="tmpe-status-badge">
+            <span class="tmpe-status-dot tmpe-dot-avend"></span>
+            <span style="color: #121212 !important; font-weight: 600 !important;">À VENDA</span>
+          </div>
+          <span class="tmpe-date-text">31/10 • Estádio MorumBIS</span>
+        </div>
+      </div>
+      <a href="ingressos.html?lote=vg-31-10" class="tmpe-link-details">
+            INGRESSOS
+            <svg width="20" height="20" viewbox="0 0 20 20">
+              <polyline points="7 5 13 10 7 15" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></polyline>
+            </svg>
+          </a>
+    </div>
+    <!-- PRÉ-VENDA ARMY MEMBERSHIP -->
+    <div class="tmpe-ticket-item">
+      <div class="tmpe-logo-container tmpe-logo-ticketmaster">
+        <img class="tmpe-logo-img" src="../Tk_general_c73b9c007f.svg" alt="Logo" onerror="this.src='https://prod-assets.tmlat.com/Property_1_visa_f8a51aef4b.png'">
+      </div>
+      <div class="tmpe-info-container">
+        <h2 class="tmpe-ticket-title">PRÉ-VENDA ARMY MEMBERSHIP</h2>
+        <div class="tmpe-status-container">
+          <div class="tmpe-status-badge">
+            <span class="tmpe-status-dot tmpe-dot-soldout"></span>
+            <span style="color: #121212 !important; font-weight: 600 !important;">Esgotado</span>
+          </div>
+          <span class="tmpe-date-text">28/10 • Estádio MorumBIS</span>
+        </div>
+      </div>
+      <a href="https://www.ticketmaster.com.br/event/pre-venda-army-membership-bts-world-tour-arirang-28-10" class="tmpe-link-details">
+            ESGOTADO
+            <svg width="20" height="20" viewbox="0 0 20 20">
+              <polyline points="7 5 13 10 7 15" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></polyline>
+            </svg>
+          </a>
+    </div>
+    <!-- PRÉ-VENDA ARMY MEMBERSHIP -->
+    <div class="tmpe-ticket-item">
+      <div class="tmpe-logo-container tmpe-logo-ticketmaster">
+        <img class="tmpe-logo-img" src="../Tk_general_c73b9c007f.svg" alt="Logo" onerror="this.src='https://prod-assets.tmlat.com/Property_1_visa_f8a51aef4b.png'">
+      </div>
+      <div class="tmpe-info-container">
+        <h2 class="tmpe-ticket-title">PRÉ-VENDA ARMY MEMBERSHIP</h2>
+        <div class="tmpe-status-container">
+          <div class="tmpe-status-badge">
+            <span class="tmpe-status-dot tmpe-dot-soldout"></span>
+            <span style="color: #121212 !important; font-weight: 600 !important;">Esgotado</span>
+          </div>
+          <span class="tmpe-date-text"> 30/10 • Estádio MorumBIS</span>
+        </div>
+      </div>
+      <a href="https://www.ticketmaster.com.br/event/pre-venda-army-membership-bts-world-tour-arirang-30-10" class="tmpe-link-details">
+            ESGOTADO
+            <svg width="20" height="20" viewbox="0 0 20 20">
+              <polyline points="7 5 13 10 7 15" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></polyline>
+            </svg>
+          </a>
+    </div>
+  </div>
+  
+  <!-- Vista Mobile -->
+  <div class="tmpe-mobile-view">
+
+    <!-- PRÉ-VENDA ARMY MEMBERSHIP -->
+    <div class="tmpe-ticket-item">
+      <a href="ingressos.html?lote=pre-army-31-10" class="tmpe-ticket-link">
+        <div class="tmpe-logo-container tmpe-logo-ticketmaster">
+          <img class="tmpe-logo-img" src="../Tk_general_c73b9c007f.svg" alt="Logo" onerror="this.src='https://prod-assets.tmlat.com/Property_1_visa_f8a51aef4b.png'">
+        </div>
+        <div class="tmpe-info-container">
+          <h2 class="tmpe-ticket-title">PRÉ-VENDA ARMY MEMBERSHIP</h2>
+          <div class="tmpe-status-container">
+            <span class="tmpe-date-text">31/10 • Estádio MorumBIS</span>
+            <div class="tmpe-status-badge">
+              <span class="tmpe-status-dot tmpe-dot-avend"></span>
+              <span style="color: #121212 !important; font-weight: 600 !important;">À VENDA</span>
+            </div>
+          </div>
+        </div>
+        <div class="tmpe-link-mobile">
+            <svg width="24" height="24" viewbox="0 0 24 24" fill="none">
+              <path d="M9 6L15 12L9 18" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+          </div>
+      </a>
+    </div>
+    <!-- VENDA GERAL -->
+    <div class="tmpe-ticket-item">
+      <a href="ingressos.html?lote=vg-28-10" class="tmpe-ticket-link">
+        <div class="tmpe-logo-container tmpe-logo-ticketmaster">
+          <img class="tmpe-logo-img" src="../Tk_general_c73b9c007f.svg" alt="Logo" onerror="this.src='https://prod-assets.tmlat.com/Property_1_visa_f8a51aef4b.png'">
+        </div>
+        <div class="tmpe-info-container">
+          <h2 class="tmpe-ticket-title">VENDA GERAL</h2>
+          <div class="tmpe-status-container">
+            <span class="tmpe-date-text">28/10 • Estádio MorumBIS</span>
+            <div class="tmpe-status-badge">
+              <span class="tmpe-status-dot tmpe-dot-avend"></span>
+              <span style="color: #121212 !important; font-weight: 600 !important;">À VENDA</span>
+            </div>
+          </div>
+        </div>
+        <div class="tmpe-link-mobile">
+            <svg width="24" height="24" viewbox="0 0 24 24" fill="none">
+              <path d="M9 6L15 12L9 18" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+          </div>
+      </a>
+    </div>
+    <!-- VENDA GERAL -->
+    <div class="tmpe-ticket-item">
+      <a href="ingressos.html?lote=vg-30-10" class="tmpe-ticket-link">
+        <div class="tmpe-logo-container tmpe-logo-ticketmaster">
+          <img class="tmpe-logo-img" src="../Tk_general_c73b9c007f.svg" alt="Logo" onerror="this.src='https://prod-assets.tmlat.com/Property_1_visa_f8a51aef4b.png'">
+        </div>
+        <div class="tmpe-info-container">
+          <h2 class="tmpe-ticket-title">VENDA GERAL</h2>
+          <div class="tmpe-status-container">
+            <span class="tmpe-date-text">30/10 • Estádio MorumBIS</span>
+            <div class="tmpe-status-badge">
+              <span class="tmpe-status-dot tmpe-dot-avend"></span>
+              <span style="color: #121212 !important; font-weight: 600 !important;">À VENDA</span>
+            </div>
+          </div>
+        </div>
+        <div class="tmpe-link-mobile">
+            <svg width="24" height="24" viewbox="0 0 24 24" fill="none">
+              <path d="M9 6L15 12L9 18" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+          </div>
+      </a>
+    </div>
+    <!-- VENDA GERAL -->
+    <div class="tmpe-ticket-item">
+      <a href="ingressos.html?lote=vg-31-10" class="tmpe-ticket-link">
+        <div class="tmpe-logo-container tmpe-logo-ticketmaster">
+          <img class="tmpe-logo-img" src="../Tk_general_c73b9c007f.svg" alt="Logo" onerror="this.src='https://prod-assets.tmlat.com/Property_1_visa_f8a51aef4b.png'">
+        </div>
+        <div class="tmpe-info-container">
+          <h2 class="tmpe-ticket-title">VENDA GERAL</h2>
+          <div class="tmpe-status-container">
+            <span class="tmpe-date-text">31/10 • Estádio MorumBIS</span>
+            <div class="tmpe-status-badge">
+              <span class="tmpe-status-dot tmpe-dot-avend"></span>
+              <span style="color: #121212 !important; font-weight: 600 !important;">À VENDA</span>
+            </div>
+          </div>
+        </div>
+        <div class="tmpe-link-mobile">
+            <svg width="24" height="24" viewbox="0 0 24 24" fill="none">
+              <path d="M9 6L15 12L9 18" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+          </div>
+      </a>
+    </div>
+    <!-- PRÉ-VENDA ARMY MEMBERSHIP -->
+    <div class="tmpe-ticket-item">
+      <a href="https://www.ticketmaster.com.br/event/pre-venda-army-membership-bts-world-tour-arirang-28-10" class="tmpe-ticket-link">
+        <div class="tmpe-logo-container tmpe-logo-ticketmaster">
+          <img class="tmpe-logo-img" src="../Tk_general_c73b9c007f.svg" alt="Logo" onerror="this.src='https://prod-assets.tmlat.com/Property_1_visa_f8a51aef4b.png'">
+        </div>
+        <div class="tmpe-info-container">
+          <h2 class="tmpe-ticket-title">PRÉ-VENDA ARMY MEMBERSHIP</h2>
+          <div class="tmpe-status-container">
+            <span class="tmpe-date-text">28/10 • Estádio MorumBIS</span>
+            <div class="tmpe-status-badge">
+              <span class="tmpe-status-dot tmpe-dot-soldout"></span>
+              <span style="color: #121212 !important; font-weight: 600 !important;">Esgotado</span>
+            </div>
+          </div>
+        </div>
+        <div class="tmpe-link-mobile">
+            <svg width="24" height="24" viewbox="0 0 24 24" fill="none">
+              <path d="M9 6L15 12L9 18" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+          </div>
+      </a>
+    </div>
+    <!-- PRÉ-VENDA ARMY MEMBERSHIP -->
+    <div class="tmpe-ticket-item">
+      <a href="https://www.ticketmaster.com.br/event/pre-venda-army-membership-bts-world-tour-arirang-30-10" class="tmpe-ticket-link">
+        <div class="tmpe-logo-container tmpe-logo-ticketmaster">
+          <img class="tmpe-logo-img" src="../Tk_general_c73b9c007f.svg" alt="Logo" onerror="this.src='https://prod-assets.tmlat.com/Property_1_visa_f8a51aef4b.png'">
+        </div>
+        <div class="tmpe-info-container">
+          <h2 class="tmpe-ticket-title">PRÉ-VENDA ARMY MEMBERSHIP</h2>
+          <div class="tmpe-status-container">
+            <span class="tmpe-date-text"> 30/10 • Estádio MorumBIS</span>
+            <div class="tmpe-status-badge">
+              <span class="tmpe-status-dot tmpe-dot-soldout"></span>
+              <span style="color: #121212 !important; font-weight: 600 !important;">Esgotado</span>
+            </div>
+          </div>
+        </div>
+        <div class="tmpe-link-mobile">
+            <svg width="24" height="24" viewbox="0 0 24 24" fill="none">
+              <path d="M9 6L15 12L9 18" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+          </div>
+      </a>
+    </div>
+  </div>
+</div>
+    </div>
+  </div>
+</div></div>
+                          </section>
+                           <section class='block  centered ' id='component-6d1c48d7-a313-47d5-806e-f905d7b3ffb6' style=" background-image: url(''); background-color:; ">
+                              <div data-view="cms/cms_component/cms_component" data-fetch_summary="{&quot;model&quot;:{&quot;model&quot;:&quot;Event&quot;,&quot;id&quot;:&quot;15726&quot;}}">  <div class="block_image">
+  <div class="block_content">
+   
+
+  <div class="image">
+          <img data-type="desktop" src='../images/b9865031-e0ec-42c0-8fd3-08d3c72d817d-btsdesktop.png' width='100%' alt='' loading='lazy' class='hidden-xs' width='100%' aria-label="banner">
+                <img data-type="mobile" src='../images/f943d2cc-4b9e-4939-835b-0176908ae260-btsmobile.png' alt='' loading='lazy' class='visible-xs' width='100%'>
+      </div>
+
+  </div>
+  </div></div>
+                          </section>
+                           <section class='block  centered ' id='component-595dd5db-5b36-493d-b9b4-e00a35b7d835' style=" background-image: url(''); background-color:; ">
+                              <div data-view="cms/cms_component/cms_component" data-fetch_summary="{&quot;model&quot;:{&quot;model&quot;:&quot;Event&quot;,&quot;id&quot;:&quot;15726&quot;}}"><div class='block_text'>
+  <div class='block_content'>
+    
+      <div><p>O BTS, acrônimo de Bangtan Sonyeondan ou “Beyond the Scene”, é uma boyband sul-coreana indicada ao GRAMMY que vem conquistando os corações de milhões de fãs ao redor do mundo desde sua estreia, em junho de 2013. Os integrantes do BTS são RM, Jin, SUGA, j-hope, Jimin, V e Jung Kook. Reconhecido por sua música autêntica e autoral, performances de altíssimo nível e pela forma como se conectam com seus fãs, o grupo se consolidou como um ícone pop do século XXI, quebrando inúmeros recordes globais.</p>
+<p>Ao mesmo tempo em que promove uma influência positiva por meio de iniciativas como a campanha LOVE MYSELF e o discurso “Speak Yourself” na ONU, o grupo mobilizou milhões de fãs ao redor do mundo (conhecidos como ARMY), conquistou seis singles em 1º lugar na Billboard Hot 100 desde 2020 e realizou diversas apresentações em estádios esgotados globalmente. Em 2020, também foram nomeados “Entertainer of the Year” pela TIME.</p>
+<p>O BTS possui cinco indicações ao GRAMMY (da 63ª à 65ª edição) e já foi reconhecido com diversos prêmios de prestígio, como o Billboard Music Awards, o American Music Awards (Artista do Ano de 2021) e o MTV Video Music Awards. O grupo lançou seu quinto álbum de estúdio, ARIRANG, em 20 de março de 2026, seguido de uma grande turnê mundial — marcando um retorno que promete ficar para a história da cultura pop.</p>
+<p><strong>Acompanhe o BTS:</strong> <a href="https://ibighit.com/bts/eng/">Website</a> | <a href="https://www.instagram.com/bts.bighitofficial/">Instagram</a> | <a href="https://www.youtube.com/user/BANGTANTV">YouTube</a> | <a href="https://www.facebook.com/bangtan.official">Facebook</a> | <a href="https://x.com/BTS_bighit">X</a> | <a href="https://open.spotify.com/artist/3Nrfpe0tUJi4K4DXYWgMUX?si=fm_P_5yyQiu-08VqWRYfNQ">Spotify</a></p>
+<h3><strong>Datas da BTS 2026 Tour:</strong></h3>
+<p>2 &amp; 3 de Outubro, 2026 – Bogotá, CO – Estadio El Campín<br>
+9 &amp; 10 de Outubro, 2026 – Lima, PE – Estadio San Marcos<br>
+16 &amp; 17 de Outubro, 2026 – Santiago, CL – Estadio Nacional<br>
+28, 30 &amp; 31 de Outubro, 2026 – São Paulo, BR – Estádio do MorumBIS</p>
+</div>
+
+  </div>
+
+</div></div>
+                          </section>
+                           <section class='block  full-width ' id='component-53aa4770-ddf7-4e02-a091-c320c1c6aefc' style=" background-image: url(''); background-color:; ">
+                              <div data-view="cms/cms_component/cms_component" data-fetch_summary="{&quot;model&quot;:{&quot;model&quot;:&quot;Event&quot;,&quot;id&quot;:&quot;15726&quot;}}"><div class='block_video'>
+  <div class='block_content'>
+    <div class='video_responsive'>
+      <div id='video_player-component-53aa4770-ddf7-4e02-a091-c320c1c6aefc'></div>
+    </div>
+  </div>
+</div></div>
+                          </section>
+                           <section class='block  centered ' id='component-5bc8b8fc-cc87-4ea0-ab24-0498a47368a0' style=" background-image: url(''); background-color:; ">
+                              <div data-view="cms/cms_component/cms_component" data-fetch_summary="{&quot;model&quot;:{&quot;model&quot;:&quot;Event&quot;,&quot;id&quot;:&quot;15726&quot;}}"><div class='block_html'>
+  <div class='block_content'>
+    
+    <div>
+      <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3656.0928476179342!2d-46.722614323913!3d-23.60100286305125!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94ce56c31b1fe649%3A0x7d134f4dfc6618c2!2sEst%C3%A1dio%20MorumBIS!5e0!3m2!1spt-BR!2sbr!4v1774546682954!5m2!1spt-BR!2sbr" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    </div>
+  </div>
+</div></div>
+                          </section>
+                           <section class='block  centered ' id='component-4ef1df05-7333-4569-b054-b1ddc98ae9a7' style=" background-image: url(''); background-color:; ">
+                              <div data-view="cms/cms_component/cms_component" data-fetch_summary="{&quot;model&quot;:{&quot;model&quot;:&quot;Event&quot;,&quot;id&quot;:&quot;15726&quot;}}"><div class='block_faq'>
+  <div class='block_content'>
+    <h2 class='block_title'>PERGUNTAS FREQUENTES</h2>
+      <details>
+        <summary>Quando o BTS se apresenta na América Latina?</summary>
+          <div class='details_content'><p>O BTS iniciará a etapa latino-americana de sua turnê mundial 2026 em 2 de outubro de 2026, com um show em Bogotá, Colômbia. A turnê pela região será encerrada no fim do mês com três apresentações em São Paulo.</p>
+</div>
+      </details>
+      <details>
+        <summary> Haverão pacotes VIP para tour do BTS?</summary>
+          <div class='details_content'><p>Sim. Os ARMY terão a oportunidade de adquirir pacotes VIP mediante a disponibilidade para a tour do BTS. Os benefícios incluem:</p>
+<h3><strong>LATIN AMERICA SOUNDCHECK VIP PACKAGE</strong></h3>
+<p>O valor do Soundcheck Pacote VIP é composto por um ingresso do tipo inteira ou meia-entrada* do setor Pista e os Serviços VIP** oferecidos.</p>
+<p><strong>DESCRIÇÃO DOS SERVIÇOS DO VIP</strong></p>
+<ul>
+<li>
+<p>Entrada antecipada no local do evento</p>
+</li>
+<li>
+<p>Um ingresso de pista</p>
+</li>
+<li>
+<p>Acesso ao soundcheck pré-show do BTS</p>
+</li>
+<li>
+<p>Brinde VIP exclusivo</p>
+</li>
+<li>
+<p>Credencial VIP com cordão</p>
+</li>
+<li>
+<p>Oportunidade de comprar merchandising da turnê antes do show</p>
+</li>
+<li>
+<p>Check-in exclusivo e equipe dedicada de atendimento VIP no local</p>
+</li>
+</ul>
+<p><em>*O benefício da meia-entrada é aplicado exclusivamente sobre o valor do ingresso que dá acesso ao evento. De acordo com a legislação vigente, esse desconto não se estende aos valores correspondentes a serviços adicionais, como os que compõem os Pacotes VIP.</em></p>
+<p><em>**Para compras do show BTS WORLD TOUR ARIRANG através do site da Ticketmaster, a taxa de serviço do evento é aplicada sobre o valor do ingresso; verifique no ato da compra a taxa de serviço vigente, informada na página do evento. Para compras realizadas na Bilheteria Oficial, não haverá a cobrança da Taxa de Serviço. Poderão incidir outras taxas por ingresso de acordo com definições da promotora do evento sobre todos os ingressos comercializados, tanto no Marketplacequanto em pontos de venda físicos, com valores fixos, previamente informados e repassados integralmente à promotora do evento após as vendas, não havendo qualquer participação ou responsabilidade da Ticketmaster.</em></p>
+</div>
+      </details>
+      <details>
+        <summary>Como posso comprar ingressos para o BTS?</summary>
+          <div class='details_content'><p>Os ingressos para a BTS WORLD TOUR ‘ARIRANG’ na América Latina estarão disponíveis através do site da Ticketmaster. Membros do ARMY MEMBERSHIP (GLOBAL) podem se registrar para participar da pré-venda, que irá ocorrer na terça-feira, 7 de abril, e para alguns shows na quarta-feira, 8 de abril. Consulte a lista de eventos para verificar os horários exatos de cada etapa de venda. Lembre-se de que os ingressos serão colocados à venda no fuso-horário correspondente ao local do evento que você está realizando a compra, e não necessariamente o seu fuso-horário.</p>
+<p>Para acessar a ARMY MEMBERSHIP PRESALE, você precisa ser membro ativo do ARMY MEMBERSHIP (GLOBAL) e ter se registrado para a pré-venda no Weverse até quinta-feira, 2 de abril, às 4PM (BRT).</p>
+<p>O seu ARMY MEMBERSHIP NUMBER (o número do ARMY MEMBERSHIP possui 9 dígitos e começa com BA) irá funcionar como seu código de pré-venda somente se você tiver se cadastrado com sucesso para esta pré-venda no Weverse dentro do prazo estipulado. Certifique-se de que você possua uma conta ativa na Ticketmaster no país para o qual você pretende comprar ingressos. Se você ainda não possui uma conta, por favor acesse o site da Ticketmaster com antecedência e realize seu cadastro completo antes do início da pré-venda. Para Ticketmaster Brasil, clique <a href="https://www.ticketmaster.com.br/">aqui</a>; para Ticketmaster Chile, clique <a href="https://www.ticketmaster.cl/">aqui</a>; para Ticketmaster Colômbia, clique <a href="https://www.ticketmaster.co/">aqui</a>; e para Ticketmaster Perú, clique <a href="https://www.ticketmaster.pe/">aqui</a>.</p>
+<p>A VENDA GERAL de ingressos terá início na sexta-feira, 10 de abril. Verifique a lista de eventos para datas e horários exatos desta etapa de venda.</p>
+<p>Para mais informações, clique <strong><a href="https://help.ticketmaster.com.br/hc/pt-br/articles/45190189941265-BTS-Informa%C3%A7%C3%B5es-Gerais">AQUI</a></strong>.</p>
+</div>
+      </details>
+  </div>
+</div></div>
+                          </section>
+                    </div>
+				</div>
+      </div>
+	  				<div class='cart' id="checkoutCart" style="display: none;">
+					<div class='checkout-process'>
+						<div class='checkout-actions' id="checkout-actions"> </div>
+						<div class='checkout-resume' id="checkout-resume" style="display:none;">
+						</div>
+					</div>
+					<div class="cart_ads">
+          			</div>
+        		</div>
+    </div>
+    </div>
+</div>
+
+<div data-view="event/no_payments_available" data-fetch_summary="{&quot;model&quot;:{&quot;model&quot;:&quot;Event&quot;,&quot;id&quot;:&quot;15726&quot;}}"><div class="modal modal_new in" id="modalNoPaymentsAvailable" tabindex="-1" role="dialog" aria-hidden="false" data-backdrop="static" data-keyboard="false" style="display: none;">
+  <div class="modal_dialog">
+    <div class="modal_content">
+      <div class="modal_header">
+        <div class="title_header">
+          <span id="modalLimitRate_title">
+            Sem meios de pagamento para 
+          </span>
+        </div>
+      </div>
+      <div class="modal_body">
+        <p id="modalLimitRate_body">
+          Não há métodos de pagamento disponíveis em seu país de residência
+        </p>
+      </div>
+      <div class="modal_footer">
+        <a class="btn btn-primary" id="closeScopePayment">
+          OK
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+		</main>
+
+
+		<div id="process_notification" class="process_alert animated flipInX" style="display:none"></div>
+
+		<footer class="footer" style="display:block;" role="contentinfo">
+		  	<div class="container">
+		    <div class="row">
+                    <style type="text/css">.footer-pt,
+.footer-en,
+.footer-es {
+    display: none;
+}
+
+
+html[lang="pt"] .footer-pt {
+    display: block;
+}
+
+html[lang="es"] .footer-es {
+    display: block;
+}
+
+html[lang="en"] .footer-en {
+    display: block;
+}
+</style>
+<div class="footer-tm text-left">
+<div class="row footer-es">
+<div class="col-xs-12 col-sm-4">
+<h3>Acesso R&aacute;pido</h3>
+
+<ul>
+	<li><a href="../account/purchases">Mis compras</a></li>
+	<li><a href="../account/perfil">Perfil</a></li>
+	<li><a href="https://help.ticketmaster.com.br/hc/pt-br" target="_blank">Soporte</a></li>
+	<li><a href="https://www.ticketmaster.com.br/static/acessibilidade" target="_blank">Acessibilidad</a></li>
+</ul>
+</div>
+
+<div class="col-xs-12 col-sm-4">
+<h3>T&eacute;rminos y Pol&iacute;ticas</h3>
+
+<ul>
+	<li><a href="../static/termos-de-uso" target="_blank">T&eacute;rminos de uso</a></li>
+	<li><a href="../static/politica-de-compra" target="_blank">Pol&iacute;tica de Compra</a></li>
+	<li><a href="https://privacy.ticketmaster.com.br/pt/cookie-policy" target="_blank">Pol&iacute;tica de Cookies</a></li>
+	<li><a href="https://privacy.ticketmaster.com.br/pt/privacy-policy" target="_blank">Pol&iacute;tica de Privacidad</a></li>
+</ul>
+</div>
+
+<div class="col-xs-12 col-sm-4">
+<h3>Sobre a Ticketmaster</h3>
+
+<ul>
+	<li><a href="https://business.ticketmaster.com.br/pt/" target="_blank">Ticketmaster Brasil</a></li>
+	<li><a href="https://business.ticketmaster.com.br/pt/nossa-historia/" target="_blank">Ticketmaster Internacional</a></li>
+	<li><a href="https://www.linkedin.com/company/ticketmasterBR" target="_blank">Trabaje con nosotros</a></li>
+</ul>
+</div>
+</div>
+
+<div class="row footer-pt">
+<div class="col-xs-12 col-sm-4">
+<h3>Acesso R&aacute;pido</h3>
+
+<ul>
+	<li><a href="../account/purchases">Minhas Compras</a></li>
+	<li><a href="../account/perfil">Meu Perfil</a></li>
+	<li><a aria-label="Suporte ao Fã" href="https://help.ticketmaster.com.br/hc/pt-br" target="_blank">Suporte ao F&atilde;</a></li>
+	<li><a aria-label="Acessibilidade" href="https://www.ticketmaster.com.br/static/acessibilidade" target="_blank">Acessibilidade</a></li>
+</ul>
+</div>
+
+<div class="col-xs-12 col-sm-4">
+<h3>Termos e Pol&iacute;ticas</h3>
+
+<ul>
+	<li><a aria-label="Termos de Uso" href="../static/termos-de-uso" target="_blank">Termos de Uso</a></li>
+	<li><a aria-label="Política de Compra" href="../static/politica-de-compra" target="_blank">Pol&iacute;tica de Compra</a></li>
+	<li><a aria-label="Política de Cookies" href="https://privacy.ticketmaster.com.br/pt/cookie-policy" target="_blank">Pol&iacute;tica de Cookies</a></li>
+	<li><a aria-label="Política de Privacidade" href="https://privacy.ticketmaster.com.br/pt/privacy-policy" target="_blank">Pol&iacute;tica de Privacidade</a></li>
+</ul>
+</div>
+
+<div class="col-xs-12 col-sm-4">
+<h3>Sobre a Ticketmaster</h3>
+
+<ul>
+	<li><a aria-label="Ticketmaster Brasil" href="https://business.ticketmaster.com.br/pt/" target="_blank">Ticketmaster Brasil</a></li>
+	<li><a aria-label="Ticketmaster Internacional" href="https://business.ticketmaster.com.br/pt/nossa-historia/" target="_blank">Ticketmaster Internacional</a></li>
+	<li><a aria-label="Trabalhe com a gente" href="https://www.linkedin.com/company/ticketmasterBR" target="_blank">Trabalhe com a gente</a></li>
+</ul>
+</div>
+</div>
+
+<div class="row footer-en">
+<div class="col-xs-12 col-sm-4">
+<h3>Quick access</h3>
+
+<ul>
+	<li><a href="../account/purchases">My purchases</a></li>
+	<li><a href="../account/perfil">My profile</a></li>
+	<li><a aria-label="Suporte ao Fã" href="https://help.ticketmaster.com.br/hc/pt-br" target="_blank">Support</a></li>
+	<li><a aria-label="Acessibilidade" href="https://www.ticketmaster.com.br/static/acessibilidade" target="_blank">Acessibility</a></li>
+</ul>
+</div>
+
+<div class="col-xs-12 col-sm-4">
+<h3>Terms and Policies</h3>
+
+<ul>
+	<li><a aria-label="Termos de Uso" href="https://www.ticketmaster.com.br/static/terms-of-use" target="_blank">Terms of Use</a></li>
+	<li><a aria-label="Política de Compra" href="https://www.ticketmaster.com.br/static/purchase-policy" target="_blank">Purchase Policy</a></li>
+	<li><a aria-label="Política de Cookies" href="https://privacy.ticketmaster.com.br/en/cookie-policy" target="_blank">Cookies Policy</a></li>
+	<li><a aria-label="Política de Privacidade" href="https://privacy.ticketmaster.com.br/en/privacy-policy" target="_blank">Privacy Policy</a></li>
+</ul>
+</div>
+
+<div class="col-xs-12 col-sm-4">
+<h3>About Ticketmaster</h3>
+
+<ul>
+	<li><a aria-label="Ticketmaster Brasil" href="https://business.ticketmaster.com.br/pt/" target="_blank">Ticketmaster Brasil</a></li>
+	<li><a aria-label="Ticketmaster Internacional" href="https://business.ticketmaster.com.br/pt/nossa-historia/" target="_blank">Ticketmaster Internacional</a></li>
+	<li><a aria-label="Trabalhe com a gente" href="https://www.linkedin.com/company/ticketmasterBR" target="_blank">Work with us</a></li>
+</ul>
+</div>
+</div>
+
+<div class="row">
+<div class="col-xs-12"><img alt="Ticketmaster logo" class="logo" src="../ticketmaster/ticketmaster-logo_white.png"></div>
+</div>
+
+<div class="row">
+<div class="col-xs-12 col-sm-6 foo-social"><a aria-label="Instagram" href="https://www.instagram.com/ticketmasterBR/" target="_blank"><img alt="Instagram" src="../images/1643379600508-instagram.png" style="height: 16px;"></a> <a aria-label="Facebook" href="https://www.facebook.com/ticketmasterbr" target="_blank"><img alt="
+facebook" src="../images/1643379516372-facebook.png" style="height: 16px;"></a> <a aria-label="LindedIn" href="https://www.linkedin.com/company/ticketmasterBR" target="_blank"><img alt="Linkedin" src="../images/1643379625842-linkedin.png" style="height: 16px;"></a> <a href="https://www.tiktok.com/@ticketmasterbr" target="_blank"><img alt="Tiktok" aria-label="Tiktok" src="../images/1691588331940-null-l-tiktok.png" style="height: 16px;"></a> <a href="https://blog.ticketmaster.com.br" target="_blank"><img alt="Blog" aria-label="Blog Ticketmaster" src="../images/1683574125568-null-blog.png" style="height: 16px;"></a></div>
+
+<div class="col-xs-12 col-sm-6 foo-copy"><a class="ot-sdk-show-settings cookie-settings-btn" id="ot-sdk-btn">Cookie preferences&nbsp;&nbsp;</a>&copy; 2025&nbsp;Ticketmaster.</div>
+
+<div class="col-xs-12 col-sm-6 foo-copy">
+<ul>
+	<li>TICKETMASTER BRASIL LTDA - CNPJ 42.789.521/0001-10</li>
+	<li>R. Bacaetava, n&ordm; 401, 7&ordm; andar, Vila Gertrudes, S&atilde;o Paulo/SP, CEP 04705-010</li>
+</ul>
+</div>
+</div>
+</div>
+          </div>
+			</div>
+		</footer>
+		<div class="footer-crowder">
+			<div class="crowder-logo">
+			</div>
+
+			<div class="lang-select">
+				<span>
+					<svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 14.531 14.531">
+			<path id="Trazado_4" data-name="Trazado 4" d="M16.531,9.766a6.766,6.766,0,0,1-6.766,6.766m6.766-6.766A6.766,6.766,0,0,0,9.766,3m6.766,6.766H3m6.766,6.766A6.766,6.766,0,0,1,3,9.766m6.766,6.766c1.246,0,2.255-3.029,2.255-6.766S11.011,3,9.766,3m0,13.531C8.52,16.531,7.51,13.5,7.51,9.766S8.52,3,9.766,3M3,9.766A6.766,6.766,0,0,1,9.766,3" transform="translate(-2.5 -2.5)" fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1"></path>
+					</svg>
+				</span>
+				<a role="button" id="es" class="lang ">Español</a>
+				<a role="button" id="en" class="lang ">English</a>
+				<a role="button" id="pt" class="lang lang-active   ">Português</a>
+			</div>
+		</div>
+
+			<script>
+				// Configuración de dominios para WAF
+				window.awsWafCookieDomainList = [".public.getcrowder.com"];
+			</script>
+			<script type="text/javascript" src="../34189e193af8/jsapi.js"></script>
+			<script type="text/javascript" src="../34189e193af8/9a3d9d72875b/challenge.js"></script>
+
+		<script src="../content/js/mergedAssets.d99af53e95.js"></script>
+		<script src="../content/js/jquery.card.a9c4efaf33.js"></script>
+		<script src="../content/js/md5.983f472ede.js"></script>
+		<script src="../content/js/bootstrap-dialog.min.d31cd3b133.js"></script>
+		<script src="../content/js/libphonenumber-js.min.js"></script>
+      <script src="../turnstile/v0/b/625261456364/api.js?render=explicit&onload=captchaLoadedCallback" async="" defer=""></script>
+		<script src="../content/js/jquery.maskedinput.min.240c61253d.js"></script>
+
+
+		<script>
+			(function() {
+				 var App = window.App = new (require('app/app'))({"apiPath":"/api","loading":false,"templateAdapter":"rendr-handlebars","hostname":"www.ticketmaster.com.br","sources":[{"model":"ConfigParams","source":"WEB"},{"model":"Event","source":"WEB"}],"configParams":{"url":"www.ticketmaster.com.br","configurationUrl":"https://web-layout.s3.amazonaws.com/home/production/3521cff8-d154-486d-b31f-31cb89bda405","country":"BRASIL","cashlessURL":null,"featureEventReports":true,"logoClear":"https://cdn.getcrowder.com/images/46b77c52-6acd-425b-985f-c036a9dcbf90-ticketmaster.svg","analytics":{"facebook":{"pixelId":null},"mixpanel":{"id":null},"google":{"analyticsId":null,"gtmId":"GTM-WBGSPNM"}},"enableAccessibility":true,"countryData":{"streetTypes":[],"country":"BRASIL","defaultCurrency":"BRL"},"logo":"https://cdn.getcrowder.com/images/1664925447950-null-ticketmaster-logo-azurewithoutr.png","id":62,"showCaptchaOnRegister":true,"oneTrustId":"335c8215-96b5-4b4c-91b1-4f1dd9016a7b","homepageImage":"https://cdn.getcrowder.com/images/dd6080af-451e-47da-ac7f-dc0ec704b9d1-ticketmasterbr.png","useHomeCMS":true,"refundServiceEnabled":true,"sitefEnabled":true,"featurePartner":true,"comboName":"Pacote","featureQueueitV2":true,"featurePaymentVerification":true,"timeZone":"America/Argentina/Buenos_Aires","usePagesCMS":true,"homeLogo":"","shopUrl":"www.ticketmaster.com.br","useLandingComponents":true,"showCaptchaOnLogin":true,"userSessionsEnabled":true,"featureDeferred":true,"subtitle":"Ticketmaster","featureStreaming":false,"name":"Ticketmaster Brasil","posInfo":null,"styles":{"colors":{"main":"#024ddf","header":"#024ddf","headerLinks":"#024ddf","footer":"#1f262d","footerLinks":"#ffffff"},"font":{"source":"<link rel=\"preload\" as=\"font\" crossorigin=\"anonymous\" type=\"font/woff2\" href=\"https://cdn.boletius.com/fonts/Averta-Regular.woff2\">\n<link rel=\"preload\" as=\"font\" crossorigin=\"anonymous\" type=\"font/woff2\" href=\"https://cdn.boletius.com/fonts/Averta-Semibold.woff2\">\n<link rel=\"preload\" as=\"font\" crossorigin=\"anonymous\" type=\"font/woff2\" href=\"https://cdn.boletius.com/fonts/Averta-Bold.woff2\">","fontFamily":"Averta, \"Helvetica Neue\", Helvetica, Arial, sans-serif"},"custom":"nav img.logo-dark {\n    display: none;\n}\n\nnav img.logo-light {\n    display: block;\n}\n\n.event-picker .dropdown .btn {\n    overflow: hidden;\n}\n\n.event-picker .dropdown .dropdown-menu li.agotado div {\n    padding: 15px 20px;\n    clear: both;\n    font-weight: 600;\n    line-height: 1.42857143;\n    color: #333;\n    white-space: nowrap;\n    border-bottom: solid 1px #d7d7d773;\n    display: flex !important;\n    align-items: center;\n    justify-content: space-between;\n    gap: 10px;\n    text-wrap: balance;\n    text-decoration: none;\n}\n\n\n#eventList .home-events .col-md-12 { width:100%}\n#eventList .home-events .col-md-8  , #eventList .home-events .col-md-4 { width:50%}\n@media screen and (max-width: 1024px) {#eventList .home-events .col-md-12 { width:100%}}\n.ticket-shop .btn-primary { cursor:pointer !important}\n\n.event_thumb_info .event_venue { display:none}\n\nimg.banner-town {\nwidth: 100%;\n    border-radius: 5px;\n    height: 380px;\n    object-fit: cover;\n}\n.event-thumb .title-container {\n    z-index: 1;\n}\n.va-container:hover img {\n    transform: scale(1.05) !important;\n}\n.event-thumb img {\n    transition: 0.4s;\n}\n\n.title-container { opacity:0; transition:0.3s ease-in-out}\n.title-conttainer .event_thumb_info, .title-container .thumb-title {margin-left: 20px; transition:0.4s ease-in-out}\n\n.va-container:hover .title-container { opacity:1}\n.va-container:hover title-conttainer .event_thumb_info, .va-container:hover .title-container .thumb-title {margin-left: 0px; }\n\n@media screen and (max-width: 768px) {\nimg.banner-town {\n    height: 300px;\n}\n}\n@media screen and (max-width: 1024px) {\n.home-events .col-md-8, .home-events .col-md-4 {\n    width: 100% !important;\n}\n}\n\n.title-container {\n    display: flex;\n    padding: 40px;\n    position: absolute;\n    width: 100%;\n    align-items: flex-start;\n    justify-content: flex-end;\n    background: rgb(0,0,0);\n    background: linear-gradient(51deg, rgb(3 95 196) 0%, rgb(0 101 210 / 42%) 100%);\n    flex-direction: column;\n}\n\n.title-container .thumb-title {\nfont-size: 1.6em;\nfont-weight: 600;\n}\n\n.va-container:hover {\n    transform: scale(1);\n}\n\n.event-thumb {\n    background-color: var(--main-color);\n    box-shadow: none !important;\n}\n\n.event_thumb_info {\n    display: flex;\n    flex-direction: column;\n    align-items: flex-start;\n    color: #fff;\n    font-size: 1em;\n    font-weight: 500;\ngap:2px;\n}\n\n.event_thumb_info span.event_venue { opacity:0.6}\n\n\n@media screen and (max-width: 768px) {\n.title-container { text-align:left !important; padding:20px !important;}\n.title-container .thumb-title {\n    font-size: 1.3em;\n    font-weight: 600;\n    margin: 0 0 10px 0;\n    line-height: 1.4em;\n    text-align: initial;\n}\n}\n\n.container .content ul {padding:0 0 0 20px !important;}\n.container .content table {width:100%; border:solid 1px #f1f1f1}\n.container .content table td {border:solid 1px #f1f1f1; padding:10px;}\n\n.carousel-inner .item {\n    height: 300px !important;\n}\n\n.carousel-indicators {\n    bottom: 10px !important;\n    opacity: 1;\n}\n\n.carousel-indicators li , .carousel-indicators li.active  {\n    width: 10px ;\n    height: 10px;\n    margin: 0 1px;\n}\n\n\n.search_box_home h1 {\n    text-transform: none;\n}\n\nbody {\n     padding-top: 50px;\n     letter-spacing: 0.3px;\n}\n .footer-tm ul li a {\n     color: #fff;\n     margin: 0 !important;\n}\n .home-categories , .home-events {\n     width:90%;\n     max-width: 1260px;\n     margin: 0 auto;\n}\n .home-events .col-md-8, .home-events .col-md-4 {\n     width:50%;\n}\n @font-face {\n     font-family: \"Averta\";\n     src: url(\"https://cdn.boletius.com/fonts/Averta-Light.woff2\") format(\"woff2\");\n     font-weight: 300;\n}\n @font-face {\n     font-family: \"Averta\";\n     src: url(\"https://cdn.boletius.com/fonts/Averta-Regular.woff2\") format(\"woff2\");\n     font-weight: 400;\n}\n @font-face {\n     font-family: \"Averta\";\n     src: url(\"https://cdn.boletius.com/fonts/Averta-Semibold.woff2\") format(\"woff2\");\n     font-weight: 600;\n}\n @font-face {\n     font-family: \"Averta\";\n     src: url(\"https://cdn.boletius.com/fonts/Averta-Bold.woff2\") format(\"woff2\");\n     font-weight: 700;\n}\n @font-face {\n     font-family: \"Averta\";\n     src: url(\"https://cdn.boletius.com/fonts/Averta-Black.woff2\") format(\"woff2\");\n     font-weight: 900;\n}\n @font-face {\n     font-family: \"Averta\";\n     src: url(\"https://cdn.boletius.com/fonts/Averta-RegularItalic.woff2\") format(\"woff2\");\n     font-style: italic;\n}\n @media (min-width: 780px) {\n     .event-header .ticket-shop #buyButton {\n         margin-left: 30px;\n    }\n}\n .event-header .ticket-shop {\n     position: relative;\n     background: rgba(251,252,255);\n     border: solid 2px #F1F2F5;\n}\n .event-header .ticket-shop #show-button, .event-header .ticket-shop #quantity-button {\n     border: solid 1px rgba(0, 0, 0, 0.15);\n}\n .navbar ul.user-menu {\n     padding: 15px 0 0 0;\n}\n .navbar-brand {\n     line-height: normal;\n}\n .event-header .ticket-shop.affix{\n     top: 60px;\n}\n .main {\n     height: 180px;\n     background: #024DDF !important;\n}\n .main h1 { display: none;}\n .navbar .btn {\n     margin-top: 0px;\n     background: transparent;\n     font-size: 1.1em;\n}\n #login_button #ingresar {\n     color: #353C42 !important;\n}\n .navbar a {\n     font-size:1em;\n}\n .navbar .logo {\n     padding: 20px 0;\n}\n .navbar-menu a:hover {\n     background-color: rgb(230, 230, 230);\n}\n .navbar-menu a:hover::after {\n     width:0px;\n}\n @media (min-width: 1600px){\n     .container {\n         width: 1260px;\n    }\n}\n .footer-tm {\n    color:#ffffff;\n}\n .footer-tm h5,  .footer-tm h3 {\n    font-size:1em;\n    font-weight:bold;\n    margin-bottom:15px;\n}\n .footer-tm ul {\n     padding:0;\n     margin:0 0 40px 0\n}\n .footer-tm ul li {\n     list-style:none;\n     display:block;\n     margin-bottom:10px;\n}\n .footer-tm ul li a {\n     color:#fff\n}\n .footer-tm img.logo {\n     margin:0 0 40px 0;\n     height:25px\n}\n .footer-tm .foo-copy {\n     text-align:right;\n     font-size:0.8em;\n}\n .footer-tm .foo-social a {\n     margin-right:20px\n}\n .footer {\n    border: none\n}\n @media (max-width: 768px){\n     .footer-tm .foo-social {\n         margin-bottom:40px\n    }\n     .footer-tm .foo-copy {\n         text-align:left;\n    }\n}\n #eventList.container {\n     width:100%;\n     padding:0;\n}\n .tm-main {\n     height: 92vh;\n     background: #024DDF;\n     background-image: url(https://cdn.getcrowder.com/images/1669406310174-null-main-br.jpg);\n     background-size: cover;\n     animation: bgAnimate 15s ease-in-out infinite alternate;\n     overflow:hidden;\n     text-align: center;\nborder-top: solid 30px #0262cf;\n}\n @keyframes bgAnimate {\n     0% {\n         background-position: 2% 0;\n    }\n     100% {\n         background-position: 100% 0;\n    }\n}\n .tm-main .tm-t {\n     margin-bottom: 10vh;\n}\n .tm-main .tm-t img {\n     height:35vh;\n     animation: tAnimate 2s ease-in-out;\n}\n @keyframes tAnimate {\n     0% {\n         transform: scale(2.5);\n         opacity:0;\n    }\n     100% {\n         transform: scale(1);\n         opacity:1;\n    }\n}\n .tm-main .tm-overlay {\n     display: flex;\n     flex-direction: column;\n     justify-content: center;\n     align-items: center;\n     flex-wrap: nowrap;\n     align-content:center ;\n     height: 100%;\n     background: linear-gradient(0deg, rgba(2,108,223,1) 0%, rgb(0 69 145 / 50%) 49%, rgba(2,108,223,0) 100%);\n}\n .tm-main h2 {\n     margin: 0;\n     font-size: 2em;\n     color: #fff;\n     font-weight: 400;\n     animation: h2Animate 1s ease-in-out;\n}\n .tm-main h2 span {\n     color: #00FFFF;\n}\n @keyframes h2Animate {\n     0% {\n         transform: scale(0.5);\n         opacity:0;\n    }\n     100% {\n         transform: scale(1);\n         opacity:1;\n    }\n}\n .tm-main i {\n     display: block;\n     width: 14px;\n     height: 14px;\n     border: solid 2px #ffffff70;\n     border-left: none;\n     border-top: none;\n     transform: rotate(45deg);\n     border-radius: 3px;\n     bottom: 8vh;\n     position: absolute;\n}\n .tm-suscribe {\n     background: #024DDF;\n     padding: 80px 20px 100px;\n     text-align: center;\n}\n .tm-suscribe h6 {\n     margin: 0;\n     font-size: 1.8em;\n     color: #fff;\n     font-weight: 400;\n}\n .tm-social {\n     display: block;\n     position: relative;\n     height: 300px;\n     color: #fff;\n     text-decoration: none;\n}\n .tm-social .tm-s {\n     width: 100%;\n     position: relative;\n     float: left;\n     height: 300px;\n     display: flex;\n     flex-direction: column;\n     flex-wrap: nowrap;\n     justify-content: center;\n     align-items: center;\n     align-content: center;\n     text-align: center;\n     background: #000;\n}\n .tm-social .tm-s h3 {\n     font-size:1.8em;\n     color: #fff;\n     margin: 0 0 10px 0;\n     font-weight: normal;\n}\n .tm-social .tm-s {\n     color: #fff;\n     text-decoration: none;\n     opacity: 0.95;\n     transition: 0.2s;\n}\n .tm-social .tm-s:hover{\n     opacity:1;\n}\n .tm-social .tm-s span {\n     color: #00FFFF;\n}\n.tm-social .tm-instagram {\nbackground: url(https://cdn.getcrowder.com/images/1683576764155-null-TM_Banner_Instagram.jpeg) no-repeat center center;\nbackground-size: cover;\n}\n.tm-social .tm-facebook {\nbackground: url(https://cdn.getcrowder.com/images/1683576746022-null-TM_Banner_Facebook.jpg) no-repeat center center;\nbackground-size: cover;\n}\n.tm-social .tm-linkedin {\nbackground: url(https://cdn.getcrowder.com/images/1683576712789-null-TM_Banner_LinkedIn.jpg) no-repeat center center;\nbackground-size: cover;\n}\n.tm-social .tm-twitter{\nbackground: url(https://cdn.getcrowder.com/images/1669823412469-null-twitter.jpg) no-repeat center center;\nbackground-size: cover;\n}\n.tm-social .tm-blog{\nbackground: url(https://cdn.getcrowder.com/images/1683576726535-null-TM_Banner_Blog.jpg) no-repeat center center;\nbackground-size: cover;\n}\n.tm-social .tm-tiktok {\nbackground: url(https://cdn.getcrowder.com/images/1691588419752-null-tiktok.jpeg) no-repeat center center;\nbackground-size: cover;\n}\n\n.tm-social .tm-overlay img {\nwidth:40px;\n}\n\n .tm-business {\n     background:#1F262D;\n     padding: 100px 20px;\n     text-align: center;\n     border-bottom: solid 1px #363636;\n}\n .tm-business h2 {\n     margin: 0;\n     font-size: 1.8em;\n     color: #fff;\n     font-weight: 400;\n     margin: 0 0 60px 0;\n}\n .tm-business a {\n     border: solid 1px #fff;\n     text-decoration: none;\n     padding: 18px 30px;\n     font-size:1.1em;\n     color: #fff;\n}\n @media (max-width: 768px){\n     .tm-main {\n         height: 70vh;\n         background-image: url(https://cdn.getcrowder.com/images/1669406540752-null-main-m.jpg);\n         animation: bgAnimate 25s ease-in infinite alternate;\n    }\n     .tm-main .tm-overlay {\n         padding: 0 30px;\n         background: linear-gradient(0deg, #024DDF 0%, #024DDFb0 49%, #024DDF94 100%);\n    }\n     .tm-main .tm-t img {\n         height:150px;\n    }\n     .tm-social {\n         display: block;\n         position: relative;\n         height: 300px;\n    }\n}\n .navbar {\n     height: 60px;\n     background-color:#024DDF;\n     box-shadow: none !important;\n}\n\n .navbar-menu a {\n     color: #fff;\n     font-size: 1.1em !important;\n}\n .navbar-menu a:hover {\n     background-image: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.176));\n     background-color: #0000 !important;\n}\n #login_button #ingresar {\n     color: #fff !important;\n}\n a.btn-togle span {\n     background:#fff;\n}\n .navbar a {\n     font-size: 1em;\n}\n .navbar-collapse ul li:first-child a {\n     border-top:none !important\n}\n .quentro-modal .modal-body {\n    padding: 20px !important;\n}\n .quentro-modal .modal-header a.quentro-logo img {\n    width: 120px;\n}\n .quentro-modal .modal-body img {\n    width: 80px !important;\n}\n .quentro-modal .close-quentro-modal {\n    width: 25px;\n     float: right !important;\n}\n #ot-sdk-btn.ot-sdk-show-settings.cookie-settings-btn {\n     color: white;\n     padding: 0;\n     border: 0;\n     font-size:0.9em;\n}\n #ot-sdk-btn.ot-sdk-show-settings.cookie-settings-btn:hover {\n     color: white;\n     background: none;\n}\n .tm-grid {\n}\n .tm-grid .tm-grid-event {\n     color: #fff;\n     background-size: cover;\n     background-position: center ;\n     height: 100%;\n}\n .tm-grid .tm-grid-event .tm-grid-event-overlay {\n    background: linear-gradient(90deg, rgba(6,25,46,0.95) 0%, rgba(8,30,54,0.65) 40%, rgba(13,32,52,0.15) 100%);\n     height: 100%;\n     display: flex;\n     align-items: flex-end\n}\n .tm-grid .event-title {\n     font-size:2em;\n     font-weight: 600;\n}\n .tm-grid .event-info {\n     font-size:1em;\n     margin-bottom: 20px;\n     font-weight:600\n}\n .tm-grid .event-info span {\n     opacity: 0.7;\n     display: block;\n     font-size:1em;\n     font-weight: normal;\n}\n .tm-grid a.btn-event {\n     font-size:1.1em;\n     color: #fff;\n     font-weight: 500;\n     background: var(--main-color);\n     padding: 12px 20px;\n     text-decoration: none;\n     display: inline-block;\n     border-radius:2px\n}\n .tm-grid .event-info-content {\n     padding: 70px;\n}\n\n\n.grid-1 { grid-area: 1 / 1 / 2 / 3; }\n.grid-2 { grid-area: 2 / 1 / 3 / 2; }\n.grid-3 { grid-area: 2 / 2 / 3 / 3; }\n.grid-4 { grid-area: 3 / 1 / 4 / 2; }\n.grid-5 { grid-area: 3 / 2 / 4 / 3; }\n.grid-6 { grid-area: 4 / 1 / 5 / 3; }\n.grid-1 , .grid-2 , .grid-3, .grid-4 , .grid-5, .grid-6, .grid-7, .grid-8 { height: 60vh; }\n\n.grid-1 { width:50%; position: relative;float: left;}\n.grid-2 { width:100% ; position: relative;float: left;}\n\n.grid-1, .grid-2 {\n    height: 55vh;\n    min-height: 400px;\n}\n \n @media (max-width: 1440px){\n     .tm-grid .event-title {\n         font-size: 1.6em;\n    }\n     .tm-grid .event-info {\n         font-size: 1em;\n    }\n     .tm-grid .event-info-content {\n         padding: 4em;\n    }\n     .tm-grid a.btn-event {\n         font-size: 1em;\n        padding: 10px 15px;\n    }\n}\n @media (max-width: 768px){\n\n     .parent-grid {\n        display: flex;\n        flex-direction: column;\n         height: auto;\n    }\n\n    .grid-1 , .grid-2 , .grid-3, .grid-4 , .grid-5, .grid-6, .grid-7, .grid-8 { height: 50vh; }\n\n\n     .tm-grid .event-info-content {\n         padding:30px 20px;\n    }\n     .tm-grid .event-info span {\n         margin: 0;\n         display: block;\n    }\n}\n body {\n     --order-top-bg: #0046cb;\n     --order-top-color: #fff;\n     --header-height: 60px;\n     padding-top:60px;\n}\n .pg_content .pg_sidebar {\n     display:none !important\n}\n .pg_content .col-sm-8 {\n     margin: 0px auto;\n     width:100%;\n     padding: 0 200px;\n     float: inherit;\n}\n @media (max-width: 1280px){\n    .pg_content .col-sm-8 {\n        padding: 0px 100px;\n    }\n }\n \n @media (max-width: 768px){\n    .pg_content .col-sm-8 {\n        padding: 0px 20px;\n    }\n    .grid-1, .grid-2 {\n        height: 40vh;\n        width: 100%;\n        min-height: 350px;\n    }\n}\n\n\ndiv.accesibility {\n    bottom: 30% !important;\n}\n\n\n.event_blocks .grid-label {\n    position: sticky !important;\n    color: #fff;\n    background: var(--main-color);\n    font-weight: normal;\n    font-size: 0.8em;\n    border-radius: 2px;\n    top: 3px;\n    right: 20px;\n    display: block;\n    z-index: 1;\n    margin: 0;\n    padding: 4px 8px;\n}"},"useFacilityFee":true,"userConfiguration":{"requireDocument":true,"requireGender":true,"legalTerms":null,"enabledCountries":[],"passwordStrength":true,"blockDocumentChange":true,"blockEmailChange":true,"minimumAge":18,"enforceMFA":true},"support":{"email":"info@ticketmaster.com.br","link":"https://help.ticketmaster.com.br/hc/pt-br","linkOrMail":"https://help.ticketmaster.com.br/hc/pt-br","linkOrMailLink":"https://help.ticketmaster.com.br/hc/pt-br"},"wafApiKey":"UMg4cv2VBL/+DPsCwQrT9MzSEiF+y90AL50eG+jwc1I8+Q6XiysXXNtNVYrQ0jWTxz3OpPDcCcWzyYkmMpI5oNViyfBw/bM6UuCIL0hEOBiKxOtmFtB+KHOviEveAqVr9U1cjj+iD97VY2j7RJnscQAd200LDpJLq6sI5UWV6KbWgV8vodHlXlc8csSnFMtJYMRYdk5NPEkSulrD1JDDOwMY4zVkV+KNnfofYq7PLa0Xfh1/I/r6OEtDzmc8aPHk7FNphynIOL4ljPL6AR5wQje8va/I99oe3Ygmy1CMQq2HOLT0JO46qImy4L2o5LrDK1DUbNouPfOdvHcAh9gUa79F8b36j4DikZxxs2GOBjFhcSdmUiOfsu9r2neOUwELIKcd74eeENR4q+IkbzFuxub6aCYikJTEmwYEmAxOJYf9VOrFYmJ3D0ljKh6T+fqmCBZWTNjSvpZMJnazNWjbdf9LqA8UbMt3c8qsl/1rEOp1IW6qU9VWAzl9pP3jo/0bXwXjHTcAnPMWuKf8SlAxpOgEecCd2Netf5E7YCO+F6+CpKQBKqS3bxq44H63n3z4IgTKm3UoCk70wJGTG0fm13WKJyoCXHKZE/woWZPk0VGXxlRkB3lb+/3SfyelL9AVn3kl6mQw01OOsB4W/qV3SLSjfw1Z3ON6kfPRhY/LK1c=_0_1","featurePIR":true,"customFooter":"<style type=\"text/css\">.footer-pt,\n.footer-en,\n.footer-es {\n    display: none;\n}\n\n\nhtml[lang=\"pt\"] .footer-pt {\n    display: block;\n}\n\nhtml[lang=\"es\"] .footer-es {\n    display: block;\n}\n\nhtml[lang=\"en\"] .footer-en {\n    display: block;\n}\n</style>\n<div class=\"footer-tm text-left\">\n<div class=\"row footer-es\">\n<div class=\"col-xs-12 col-sm-4\">\n<h3>Acesso R&aacute;pido</h3>\n\n<ul>\n\t<li><a href=\"../account/purchases\">Mis compras</a></li>\n\t<li><a href=\"../account/perfil\">Perfil</a></li>\n\t<li><a href=\"https://help.ticketmaster.com.br/hc/pt-br\" target=\"_blank\">Soporte</a></li>\n\t<li><a href=\"https://www.ticketmaster.com.br/static/acessibilidade\" target=\"_blank\">Acessibilidad</a></li>\n</ul>\n</div>\n\n<div class=\"col-xs-12 col-sm-4\">\n<h3>T&eacute;rminos y Pol&iacute;ticas</h3>\n\n<ul>\n\t<li><a href=\"../static/termos-de-uso\" target=\"_blank\">T&eacute;rminos de uso</a></li>\n\t<li><a href=\"../static/politica-de-compra\" target=\"_blank\">Pol&iacute;tica de Compra</a></li>\n\t<li><a href=\"https://privacy.ticketmaster.com.br/pt/cookie-policy\" target=\"_blank\">Pol&iacute;tica de Cookies</a></li>\n\t<li><a href=\"https://privacy.ticketmaster.com.br/pt/privacy-policy\" target=\"_blank\">Pol&iacute;tica de Privacidad</a></li>\n</ul>\n</div>\n\n<div class=\"col-xs-12 col-sm-4\">\n<h3>Sobre a Ticketmaster</h3>\n\n<ul>\n\t<li><a href=\"https://business.ticketmaster.com.br/pt/\" target=\"_blank\">Ticketmaster Brasil</a></li>\n\t<li><a href=\"https://business.ticketmaster.com.br/pt/nossa-historia/\" target=\"_blank\">Ticketmaster Internacional</a></li>\n\t<li><a href=\"https://www.linkedin.com/company/ticketmasterBR\" target=\"_blank\">Trabaje con nosotros</a></li>\n</ul>\n</div>\n</div>\n\n<div class=\"row footer-pt\">\n<div class=\"col-xs-12 col-sm-4\">\n<h3>Acesso R&aacute;pido</h3>\n\n<ul>\n\t<li><a href=\"../account/purchases\">Minhas Compras</a></li>\n\t<li><a href=\"../account/perfil\">Meu Perfil</a></li>\n\t<li><a aria-label=\"Suporte ao Fã\" href=\"https://help.ticketmaster.com.br/hc/pt-br\" target=\"_blank\">Suporte ao F&atilde;</a></li>\n\t<li><a aria-label=\"Acessibilidade\" href=\"https://www.ticketmaster.com.br/static/acessibilidade\" target=\"_blank\">Acessibilidade</a></li>\n</ul>\n</div>\n\n<div class=\"col-xs-12 col-sm-4\">\n<h3>Termos e Pol&iacute;ticas</h3>\n\n<ul>\n\t<li><a aria-label=\"Termos de Uso\" href=\"../static/termos-de-uso\" target=\"_blank\">Termos de Uso</a></li>\n\t<li><a aria-label=\"Política de Compra\" href=\"../static/politica-de-compra\" target=\"_blank\">Pol&iacute;tica de Compra</a></li>\n\t<li><a aria-label=\"Política de Cookies\" href=\"https://privacy.ticketmaster.com.br/pt/cookie-policy\" target=\"_blank\">Pol&iacute;tica de Cookies</a></li>\n\t<li><a aria-label=\"Política de Privacidade\" href=\"https://privacy.ticketmaster.com.br/pt/privacy-policy\" target=\"_blank\">Pol&iacute;tica de Privacidade</a></li>\n</ul>\n</div>\n\n<div class=\"col-xs-12 col-sm-4\">\n<h3>Sobre a Ticketmaster</h3>\n\n<ul>\n\t<li><a aria-label=\"Ticketmaster Brasil\" href=\"https://business.ticketmaster.com.br/pt/\" target=\"_blank\">Ticketmaster Brasil</a></li>\n\t<li><a aria-label=\"Ticketmaster Internacional\" href=\"https://business.ticketmaster.com.br/pt/nossa-historia/\" target=\"_blank\">Ticketmaster Internacional</a></li>\n\t<li><a aria-label=\"Trabalhe com a gente\" href=\"https://www.linkedin.com/company/ticketmasterBR\" target=\"_blank\">Trabalhe com a gente</a></li>\n</ul>\n</div>\n</div>\n\n<div class=\"row footer-en\">\n<div class=\"col-xs-12 col-sm-4\">\n<h3>Quick access</h3>\n\n<ul>\n\t<li><a href=\"../account/purchases\">My purchases</a></li>\n\t<li><a href=\"../account/perfil\">My profile</a></li>\n\t<li><a aria-label=\"Suporte ao Fã\" href=\"https://help.ticketmaster.com.br/hc/pt-br\" target=\"_blank\">Support</a></li>\n\t<li><a aria-label=\"Acessibilidade\" href=\"https://www.ticketmaster.com.br/static/acessibilidade\" target=\"_blank\">Acessibility</a></li>\n</ul>\n</div>\n\n<div class=\"col-xs-12 col-sm-4\">\n<h3>Terms and Policies</h3>\n\n<ul>\n\t<li><a aria-label=\"Termos de Uso\" href=\"https://www.ticketmaster.com.br/static/terms-of-use\" target=\"_blank\">Terms of Use</a></li>\n\t<li><a aria-label=\"Política de Compra\" href=\"https://www.ticketmaster.com.br/static/purchase-policy\" target=\"_blank\">Purchase Policy</a></li>\n\t<li><a aria-label=\"Política de Cookies\" href=\"https://privacy.ticketmaster.com.br/en/cookie-policy\" target=\"_blank\">Cookies Policy</a></li>\n\t<li><a aria-label=\"Política de Privacidade\" href=\"https://privacy.ticketmaster.com.br/en/privacy-policy\" target=\"_blank\">Privacy Policy</a></li>\n</ul>\n</div>\n\n<div class=\"col-xs-12 col-sm-4\">\n<h3>About Ticketmaster</h3>\n\n<ul>\n\t<li><a aria-label=\"Ticketmaster Brasil\" href=\"https://business.ticketmaster.com.br/pt/\" target=\"_blank\">Ticketmaster Brasil</a></li>\n\t<li><a aria-label=\"Ticketmaster Internacional\" href=\"https://business.ticketmaster.com.br/pt/nossa-historia/\" target=\"_blank\">Ticketmaster Internacional</a></li>\n\t<li><a aria-label=\"Trabalhe com a gente\" href=\"https://www.linkedin.com/company/ticketmasterBR\" target=\"_blank\">Work with us</a></li>\n</ul>\n</div>\n</div>\n\n<div class=\"row\">\n<div class=\"col-xs-12\"><img alt=\"Ticketmaster logo\" class=\"logo\" src=\"https://cdn.boletius.com/ticketmaster/ticketmaster-logo_white.png\" /></div>\n</div>\n\n<div class=\"row\">\n<div class=\"col-xs-12 col-sm-6 foo-social\"><a aria-label=\"Instagram\" href=\"https://www.instagram.com/ticketmasterBR/\" target=\"_blank\"><img alt=\"Instagram\" src=\"https://cdn.boletius.com/images/1643379600508-instagram.png\" style=\"height: 16px;\" /></a> <a aria-label=\"Facebook\" href=\"https://www.facebook.com/ticketmasterbr\" target=\"_blank\"><img alt=\"\nfacebook\" src=\"https://cdn.boletius.com/images/1643379516372-facebook.png\" style=\"height: 16px;\" /></a> <a aria-label=\"LindedIn\" href=\"https://www.linkedin.com/company/ticketmasterBR\" target=\"_blank\"><img alt=\"Linkedin\" src=\"https://cdn.boletius.com/images/1643379625842-linkedin.png\" style=\"height: 16px;\" /></a> <a href=\"https://www.tiktok.com/@ticketmasterbr\" target=\"_blank\"><img alt=\"Tiktok\" aria-label=\"Tiktok\" src=\"https://cdn.getcrowder.com/images/1691588331940-null-l-tiktok.png\" style=\"height: 16px;\" /></a> <a href=\"https://blog.ticketmaster.com.br\" target=\"_blank\"><img alt=\"Blog\" aria-label=\"Blog Ticketmaster\" src=\"https://cdn.getcrowder.com/images/1683574125568-null-blog.png\" style=\"height: 16px;\" /></a></div>\n\n<div class=\"col-xs-12 col-sm-6 foo-copy\"><a class=\"ot-sdk-show-settings cookie-settings-btn\" id=\"ot-sdk-btn\">Cookie preferences&nbsp;&nbsp;</a>&copy; 2025&nbsp;Ticketmaster.</div>\n\n<div class=\"col-xs-12 col-sm-6 foo-copy\">\n<ul>\n\t<li>TICKETMASTER BRASIL LTDA - CNPJ 42.789.521/0001-10</li>\n\t<li>R. Bacaetava, n&ordm; 401, 7&ordm; andar, Vila Gertrudes, S&atilde;o Paulo/SP, CEP 04705-010</li>\n</ul>\n</div>\n</div>\n</div>","newEmailsEnabled":true,"showFooter":false,"featureTicketing":true,"customContactUsForRefund":"<div>Caso a sua compra esteja fora do prazo para cancelamento, não será possível prosseguir com a sua solicitação. Confira as regras de cancelamento acessando este link  <a href=\"https://help.ticketmaster.com.br/hc/pt-br/categories/10492807217809-Como-Cancelar-E-Informações-Sobre-Trocas\">https://help.ticketmaster.com.br/hc/pt-br/categories/10492807217809-Como-Cancelar-E-Informações-Sobre-Trocas </a> </div> </br>  <div> Porém, caso o seu pedido estiver dentro do prazo para reembolso e você precisar de auxilio, entre em contato com o suporte ao fã <a href=\"https://help.ticketmaster.com.br/hc/pt-br/requests/new?ticket_form_id=10146863301905\"> https://help.ticketmaster.com.br/hc/pt-br/requests/new?ticket_form_id=10146863301905 </a> </div>","menuCategories":[],"optInText":"Deixe-nos mantê-lo informado sobre o que está por vir – incluindo pré-vendas e ofertas exclusivas – por meios eletrônicos (por exemplo, e-mail, ferramentas de mensageria, redes sociais, etc.). Você sempre pode alterar a forma como entramos em contato com você por meio de sua conta Ticketmaster.","cashlessRedirectUrl":"https://www.ticketmaster.com.br","lang":"pt","headline":"Ticketmaster","useCashless360":true,"favicon":"https://cdn.getcrowder.com/images/c1ade2d9-b2d1-484a-b163-0e5509e00144-favicon-32x32.png","showAssociatePurchaseButton":false,"showCategoriesOnMenu":false,"featureAutomaticRefund":true,"useFaceRecognition":true,"homeRedirect":null,"gatewaysByCountry":true,"featureSeasonPass":true,"alwaysShowDeliveryMethod":true,"requireBillingAddress":true,"featurePaymentVerificationMP":true,"reCaptchaProvider":"CLOUDFLARE_TURNSTILE","skipCalendarReport":"12063","reCaptchaPublicKey":"0x4AAAAAAAhbw3CJuC34pXu4","featureCashless":true,"isReCaptcha":false,"isCloudflareTurnstile":true},"configParamsModel":{"url":"www.ticketmaster.com.br","configurationUrl":"https://web-layout.s3.amazonaws.com/home/production/3521cff8-d154-486d-b31f-31cb89bda405","country":"BRASIL","cashlessURL":null,"featureEventReports":true,"logoClear":"https://cdn.getcrowder.com/images/46b77c52-6acd-425b-985f-c036a9dcbf90-ticketmaster.svg","analytics":{"facebook":{"pixelId":null},"mixpanel":{"id":null},"google":{"analyticsId":null,"gtmId":"GTM-WBGSPNM"}},"enableAccessibility":true,"countryData":{"streetTypes":[],"country":"BRASIL","defaultCurrency":"BRL"},"logo":"https://cdn.getcrowder.com/images/1664925447950-null-ticketmaster-logo-azurewithoutr.png","id":62,"showCaptchaOnRegister":true,"oneTrustId":"335c8215-96b5-4b4c-91b1-4f1dd9016a7b","homepageImage":"https://cdn.getcrowder.com/images/dd6080af-451e-47da-ac7f-dc0ec704b9d1-ticketmasterbr.png","useHomeCMS":true,"refundServiceEnabled":true,"sitefEnabled":true,"featurePartner":true,"comboName":"Pacote","featureQueueitV2":true,"featurePaymentVerification":true,"timeZone":"America/Argentina/Buenos_Aires","usePagesCMS":true,"homeLogo":"","shopUrl":"www.ticketmaster.com.br","useLandingComponents":true,"showCaptchaOnLogin":true,"userSessionsEnabled":true,"featureDeferred":true,"subtitle":"Ticketmaster","featureStreaming":false,"name":"Ticketmaster Brasil","posInfo":null,"styles":{"colors":{"main":"#024ddf","header":"#024ddf","headerLinks":"#024ddf","footer":"#1f262d","footerLinks":"#ffffff"},"font":{"source":"<link rel=\"preload\" as=\"font\" crossorigin=\"anonymous\" type=\"font/woff2\" href=\"https://cdn.boletius.com/fonts/Averta-Regular.woff2\">\n<link rel=\"preload\" as=\"font\" crossorigin=\"anonymous\" type=\"font/woff2\" href=\"https://cdn.boletius.com/fonts/Averta-Semibold.woff2\">\n<link rel=\"preload\" as=\"font\" crossorigin=\"anonymous\" type=\"font/woff2\" href=\"https://cdn.boletius.com/fonts/Averta-Bold.woff2\">","fontFamily":"Averta, \"Helvetica Neue\", Helvetica, Arial, sans-serif"},"custom":"nav img.logo-dark {\n    display: none;\n}\n\nnav img.logo-light {\n    display: block;\n}\n\n.event-picker .dropdown .btn {\n    overflow: hidden;\n}\n\n.event-picker .dropdown .dropdown-menu li.agotado div {\n    padding: 15px 20px;\n    clear: both;\n    font-weight: 600;\n    line-height: 1.42857143;\n    color: #333;\n    white-space: nowrap;\n    border-bottom: solid 1px #d7d7d773;\n    display: flex !important;\n    align-items: center;\n    justify-content: space-between;\n    gap: 10px;\n    text-wrap: balance;\n    text-decoration: none;\n}\n\n\n#eventList .home-events .col-md-12 { width:100%}\n#eventList .home-events .col-md-8  , #eventList .home-events .col-md-4 { width:50%}\n@media screen and (max-width: 1024px) {#eventList .home-events .col-md-12 { width:100%}}\n.ticket-shop .btn-primary { cursor:pointer !important}\n\n.event_thumb_info .event_venue { display:none}\n\nimg.banner-town {\nwidth: 100%;\n    border-radius: 5px;\n    height: 380px;\n    object-fit: cover;\n}\n.event-thumb .title-container {\n    z-index: 1;\n}\n.va-container:hover img {\n    transform: scale(1.05) !important;\n}\n.event-thumb img {\n    transition: 0.4s;\n}\n\n.title-container { opacity:0; transition:0.3s ease-in-out}\n.title-conttainer .event_thumb_info, .title-container .thumb-title {margin-left: 20px; transition:0.4s ease-in-out}\n\n.va-container:hover .title-container { opacity:1}\n.va-container:hover title-conttainer .event_thumb_info, .va-container:hover .title-container .thumb-title {margin-left: 0px; }\n\n@media screen and (max-width: 768px) {\nimg.banner-town {\n    height: 300px;\n}\n}\n@media screen and (max-width: 1024px) {\n.home-events .col-md-8, .home-events .col-md-4 {\n    width: 100% !important;\n}\n}\n\n.title-container {\n    display: flex;\n    padding: 40px;\n    position: absolute;\n    width: 100%;\n    align-items: flex-start;\n    justify-content: flex-end;\n    background: rgb(0,0,0);\n    background: linear-gradient(51deg, rgb(3 95 196) 0%, rgb(0 101 210 / 42%) 100%);\n    flex-direction: column;\n}\n\n.title-container .thumb-title {\nfont-size: 1.6em;\nfont-weight: 600;\n}\n\n.va-container:hover {\n    transform: scale(1);\n}\n\n.event-thumb {\n    background-color: var(--main-color);\n    box-shadow: none !important;\n}\n\n.event_thumb_info {\n    display: flex;\n    flex-direction: column;\n    align-items: flex-start;\n    color: #fff;\n    font-size: 1em;\n    font-weight: 500;\ngap:2px;\n}\n\n.event_thumb_info span.event_venue { opacity:0.6}\n\n\n@media screen and (max-width: 768px) {\n.title-container { text-align:left !important; padding:20px !important;}\n.title-container .thumb-title {\n    font-size: 1.3em;\n    font-weight: 600;\n    margin: 0 0 10px 0;\n    line-height: 1.4em;\n    text-align: initial;\n}\n}\n\n.container .content ul {padding:0 0 0 20px !important;}\n.container .content table {width:100%; border:solid 1px #f1f1f1}\n.container .content table td {border:solid 1px #f1f1f1; padding:10px;}\n\n.carousel-inner .item {\n    height: 300px !important;\n}\n\n.carousel-indicators {\n    bottom: 10px !important;\n    opacity: 1;\n}\n\n.carousel-indicators li , .carousel-indicators li.active  {\n    width: 10px ;\n    height: 10px;\n    margin: 0 1px;\n}\n\n\n.search_box_home h1 {\n    text-transform: none;\n}\n\nbody {\n     padding-top: 50px;\n     letter-spacing: 0.3px;\n}\n .footer-tm ul li a {\n     color: #fff;\n     margin: 0 !important;\n}\n .home-categories , .home-events {\n     width:90%;\n     max-width: 1260px;\n     margin: 0 auto;\n}\n .home-events .col-md-8, .home-events .col-md-4 {\n     width:50%;\n}\n @font-face {\n     font-family: \"Averta\";\n     src: url(\"https://cdn.boletius.com/fonts/Averta-Light.woff2\") format(\"woff2\");\n     font-weight: 300;\n}\n @font-face {\n     font-family: \"Averta\";\n     src: url(\"https://cdn.boletius.com/fonts/Averta-Regular.woff2\") format(\"woff2\");\n     font-weight: 400;\n}\n @font-face {\n     font-family: \"Averta\";\n     src: url(\"https://cdn.boletius.com/fonts/Averta-Semibold.woff2\") format(\"woff2\");\n     font-weight: 600;\n}\n @font-face {\n     font-family: \"Averta\";\n     src: url(\"https://cdn.boletius.com/fonts/Averta-Bold.woff2\") format(\"woff2\");\n     font-weight: 700;\n}\n @font-face {\n     font-family: \"Averta\";\n     src: url(\"https://cdn.boletius.com/fonts/Averta-Black.woff2\") format(\"woff2\");\n     font-weight: 900;\n}\n @font-face {\n     font-family: \"Averta\";\n     src: url(\"https://cdn.boletius.com/fonts/Averta-RegularItalic.woff2\") format(\"woff2\");\n     font-style: italic;\n}\n @media (min-width: 780px) {\n     .event-header .ticket-shop #buyButton {\n         margin-left: 30px;\n    }\n}\n .event-header .ticket-shop {\n     position: relative;\n     background: rgba(251,252,255);\n     border: solid 2px #F1F2F5;\n}\n .event-header .ticket-shop #show-button, .event-header .ticket-shop #quantity-button {\n     border: solid 1px rgba(0, 0, 0, 0.15);\n}\n .navbar ul.user-menu {\n     padding: 15px 0 0 0;\n}\n .navbar-brand {\n     line-height: normal;\n}\n .event-header .ticket-shop.affix{\n     top: 60px;\n}\n .main {\n     height: 180px;\n     background: #024DDF !important;\n}\n .main h1 { display: none;}\n .navbar .btn {\n     margin-top: 0px;\n     background: transparent;\n     font-size: 1.1em;\n}\n #login_button #ingresar {\n     color: #353C42 !important;\n}\n .navbar a {\n     font-size:1em;\n}\n .navbar .logo {\n     padding: 20px 0;\n}\n .navbar-menu a:hover {\n     background-color: rgb(230, 230, 230);\n}\n .navbar-menu a:hover::after {\n     width:0px;\n}\n @media (min-width: 1600px){\n     .container {\n         width: 1260px;\n    }\n}\n .footer-tm {\n    color:#ffffff;\n}\n .footer-tm h5,  .footer-tm h3 {\n    font-size:1em;\n    font-weight:bold;\n    margin-bottom:15px;\n}\n .footer-tm ul {\n     padding:0;\n     margin:0 0 40px 0\n}\n .footer-tm ul li {\n     list-style:none;\n     display:block;\n     margin-bottom:10px;\n}\n .footer-tm ul li a {\n     color:#fff\n}\n .footer-tm img.logo {\n     margin:0 0 40px 0;\n     height:25px\n}\n .footer-tm .foo-copy {\n     text-align:right;\n     font-size:0.8em;\n}\n .footer-tm .foo-social a {\n     margin-right:20px\n}\n .footer {\n    border: none\n}\n @media (max-width: 768px){\n     .footer-tm .foo-social {\n         margin-bottom:40px\n    }\n     .footer-tm .foo-copy {\n         text-align:left;\n    }\n}\n #eventList.container {\n     width:100%;\n     padding:0;\n}\n .tm-main {\n     height: 92vh;\n     background: #024DDF;\n     background-image: url(https://cdn.getcrowder.com/images/1669406310174-null-main-br.jpg);\n     background-size: cover;\n     animation: bgAnimate 15s ease-in-out infinite alternate;\n     overflow:hidden;\n     text-align: center;\nborder-top: solid 30px #0262cf;\n}\n @keyframes bgAnimate {\n     0% {\n         background-position: 2% 0;\n    }\n     100% {\n         background-position: 100% 0;\n    }\n}\n .tm-main .tm-t {\n     margin-bottom: 10vh;\n}\n .tm-main .tm-t img {\n     height:35vh;\n     animation: tAnimate 2s ease-in-out;\n}\n @keyframes tAnimate {\n     0% {\n         transform: scale(2.5);\n         opacity:0;\n    }\n     100% {\n         transform: scale(1);\n         opacity:1;\n    }\n}\n .tm-main .tm-overlay {\n     display: flex;\n     flex-direction: column;\n     justify-content: center;\n     align-items: center;\n     flex-wrap: nowrap;\n     align-content:center ;\n     height: 100%;\n     background: linear-gradient(0deg, rgba(2,108,223,1) 0%, rgb(0 69 145 / 50%) 49%, rgba(2,108,223,0) 100%);\n}\n .tm-main h2 {\n     margin: 0;\n     font-size: 2em;\n     color: #fff;\n     font-weight: 400;\n     animation: h2Animate 1s ease-in-out;\n}\n .tm-main h2 span {\n     color: #00FFFF;\n}\n @keyframes h2Animate {\n     0% {\n         transform: scale(0.5);\n         opacity:0;\n    }\n     100% {\n         transform: scale(1);\n         opacity:1;\n    }\n}\n .tm-main i {\n     display: block;\n     width: 14px;\n     height: 14px;\n     border: solid 2px #ffffff70;\n     border-left: none;\n     border-top: none;\n     transform: rotate(45deg);\n     border-radius: 3px;\n     bottom: 8vh;\n     position: absolute;\n}\n .tm-suscribe {\n     background: #024DDF;\n     padding: 80px 20px 100px;\n     text-align: center;\n}\n .tm-suscribe h6 {\n     margin: 0;\n     font-size: 1.8em;\n     color: #fff;\n     font-weight: 400;\n}\n .tm-social {\n     display: block;\n     position: relative;\n     height: 300px;\n     color: #fff;\n     text-decoration: none;\n}\n .tm-social .tm-s {\n     width: 100%;\n     position: relative;\n     float: left;\n     height: 300px;\n     display: flex;\n     flex-direction: column;\n     flex-wrap: nowrap;\n     justify-content: center;\n     align-items: center;\n     align-content: center;\n     text-align: center;\n     background: #000;\n}\n .tm-social .tm-s h3 {\n     font-size:1.8em;\n     color: #fff;\n     margin: 0 0 10px 0;\n     font-weight: normal;\n}\n .tm-social .tm-s {\n     color: #fff;\n     text-decoration: none;\n     opacity: 0.95;\n     transition: 0.2s;\n}\n .tm-social .tm-s:hover{\n     opacity:1;\n}\n .tm-social .tm-s span {\n     color: #00FFFF;\n}\n.tm-social .tm-instagram {\nbackground: url(https://cdn.getcrowder.com/images/1683576764155-null-TM_Banner_Instagram.jpeg) no-repeat center center;\nbackground-size: cover;\n}\n.tm-social .tm-facebook {\nbackground: url(https://cdn.getcrowder.com/images/1683576746022-null-TM_Banner_Facebook.jpg) no-repeat center center;\nbackground-size: cover;\n}\n.tm-social .tm-linkedin {\nbackground: url(https://cdn.getcrowder.com/images/1683576712789-null-TM_Banner_LinkedIn.jpg) no-repeat center center;\nbackground-size: cover;\n}\n.tm-social .tm-twitter{\nbackground: url(https://cdn.getcrowder.com/images/1669823412469-null-twitter.jpg) no-repeat center center;\nbackground-size: cover;\n}\n.tm-social .tm-blog{\nbackground: url(https://cdn.getcrowder.com/images/1683576726535-null-TM_Banner_Blog.jpg) no-repeat center center;\nbackground-size: cover;\n}\n.tm-social .tm-tiktok {\nbackground: url(https://cdn.getcrowder.com/images/1691588419752-null-tiktok.jpeg) no-repeat center center;\nbackground-size: cover;\n}\n\n.tm-social .tm-overlay img {\nwidth:40px;\n}\n\n .tm-business {\n     background:#1F262D;\n     padding: 100px 20px;\n     text-align: center;\n     border-bottom: solid 1px #363636;\n}\n .tm-business h2 {\n     margin: 0;\n     font-size: 1.8em;\n     color: #fff;\n     font-weight: 400;\n     margin: 0 0 60px 0;\n}\n .tm-business a {\n     border: solid 1px #fff;\n     text-decoration: none;\n     padding: 18px 30px;\n     font-size:1.1em;\n     color: #fff;\n}\n @media (max-width: 768px){\n     .tm-main {\n         height: 70vh;\n         background-image: url(https://cdn.getcrowder.com/images/1669406540752-null-main-m.jpg);\n         animation: bgAnimate 25s ease-in infinite alternate;\n    }\n     .tm-main .tm-overlay {\n         padding: 0 30px;\n         background: linear-gradient(0deg, #024DDF 0%, #024DDFb0 49%, #024DDF94 100%);\n    }\n     .tm-main .tm-t img {\n         height:150px;\n    }\n     .tm-social {\n         display: block;\n         position: relative;\n         height: 300px;\n    }\n}\n .navbar {\n     height: 60px;\n     background-color:#024DDF;\n     box-shadow: none !important;\n}\n\n .navbar-menu a {\n     color: #fff;\n     font-size: 1.1em !important;\n}\n .navbar-menu a:hover {\n     background-image: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.176));\n     background-color: #0000 !important;\n}\n #login_button #ingresar {\n     color: #fff !important;\n}\n a.btn-togle span {\n     background:#fff;\n}\n .navbar a {\n     font-size: 1em;\n}\n .navbar-collapse ul li:first-child a {\n     border-top:none !important\n}\n .quentro-modal .modal-body {\n    padding: 20px !important;\n}\n .quentro-modal .modal-header a.quentro-logo img {\n    width: 120px;\n}\n .quentro-modal .modal-body img {\n    width: 80px !important;\n}\n .quentro-modal .close-quentro-modal {\n    width: 25px;\n     float: right !important;\n}\n #ot-sdk-btn.ot-sdk-show-settings.cookie-settings-btn {\n     color: white;\n     padding: 0;\n     border: 0;\n     font-size:0.9em;\n}\n #ot-sdk-btn.ot-sdk-show-settings.cookie-settings-btn:hover {\n     color: white;\n     background: none;\n}\n .tm-grid {\n}\n .tm-grid .tm-grid-event {\n     color: #fff;\n     background-size: cover;\n     background-position: center ;\n     height: 100%;\n}\n .tm-grid .tm-grid-event .tm-grid-event-overlay {\n    background: linear-gradient(90deg, rgba(6,25,46,0.95) 0%, rgba(8,30,54,0.65) 40%, rgba(13,32,52,0.15) 100%);\n     height: 100%;\n     display: flex;\n     align-items: flex-end\n}\n .tm-grid .event-title {\n     font-size:2em;\n     font-weight: 600;\n}\n .tm-grid .event-info {\n     font-size:1em;\n     margin-bottom: 20px;\n     font-weight:600\n}\n .tm-grid .event-info span {\n     opacity: 0.7;\n     display: block;\n     font-size:1em;\n     font-weight: normal;\n}\n .tm-grid a.btn-event {\n     font-size:1.1em;\n     color: #fff;\n     font-weight: 500;\n     background: var(--main-color);\n     padding: 12px 20px;\n     text-decoration: none;\n     display: inline-block;\n     border-radius:2px\n}\n .tm-grid .event-info-content {\n     padding: 70px;\n}\n\n\n.grid-1 { grid-area: 1 / 1 / 2 / 3; }\n.grid-2 { grid-area: 2 / 1 / 3 / 2; }\n.grid-3 { grid-area: 2 / 2 / 3 / 3; }\n.grid-4 { grid-area: 3 / 1 / 4 / 2; }\n.grid-5 { grid-area: 3 / 2 / 4 / 3; }\n.grid-6 { grid-area: 4 / 1 / 5 / 3; }\n.grid-1 , .grid-2 , .grid-3, .grid-4 , .grid-5, .grid-6, .grid-7, .grid-8 { height: 60vh; }\n\n.grid-1 { width:50%; position: relative;float: left;}\n.grid-2 { width:100% ; position: relative;float: left;}\n\n.grid-1, .grid-2 {\n    height: 55vh;\n    min-height: 400px;\n}\n \n @media (max-width: 1440px){\n     .tm-grid .event-title {\n         font-size: 1.6em;\n    }\n     .tm-grid .event-info {\n         font-size: 1em;\n    }\n     .tm-grid .event-info-content {\n         padding: 4em;\n    }\n     .tm-grid a.btn-event {\n         font-size: 1em;\n        padding: 10px 15px;\n    }\n}\n @media (max-width: 768px){\n\n     .parent-grid {\n        display: flex;\n        flex-direction: column;\n         height: auto;\n    }\n\n    .grid-1 , .grid-2 , .grid-3, .grid-4 , .grid-5, .grid-6, .grid-7, .grid-8 { height: 50vh; }\n\n\n     .tm-grid .event-info-content {\n         padding:30px 20px;\n    }\n     .tm-grid .event-info span {\n         margin: 0;\n         display: block;\n    }\n}\n body {\n     --order-top-bg: #0046cb;\n     --order-top-color: #fff;\n     --header-height: 60px;\n     padding-top:60px;\n}\n .pg_content .pg_sidebar {\n     display:none !important\n}\n .pg_content .col-sm-8 {\n     margin: 0px auto;\n     width:100%;\n     padding: 0 200px;\n     float: inherit;\n}\n @media (max-width: 1280px){\n    .pg_content .col-sm-8 {\n        padding: 0px 100px;\n    }\n }\n \n @media (max-width: 768px){\n    .pg_content .col-sm-8 {\n        padding: 0px 20px;\n    }\n    .grid-1, .grid-2 {\n        height: 40vh;\n        width: 100%;\n        min-height: 350px;\n    }\n}\n\n\ndiv.accesibility {\n    bottom: 30% !important;\n}\n\n\n.event_blocks .grid-label {\n    position: sticky !important;\n    color: #fff;\n    background: var(--main-color);\n    font-weight: normal;\n    font-size: 0.8em;\n    border-radius: 2px;\n    top: 3px;\n    right: 20px;\n    display: block;\n    z-index: 1;\n    margin: 0;\n    padding: 4px 8px;\n}"},"useFacilityFee":true,"userConfiguration":{"requireDocument":true,"requireGender":true,"legalTerms":null,"enabledCountries":[],"passwordStrength":true,"blockDocumentChange":true,"blockEmailChange":true,"minimumAge":18,"enforceMFA":true},"support":{"email":"info@ticketmaster.com.br","link":"https://help.ticketmaster.com.br/hc/pt-br","linkOrMail":"https://help.ticketmaster.com.br/hc/pt-br","linkOrMailLink":"https://help.ticketmaster.com.br/hc/pt-br"},"wafApiKey":"UMg4cv2VBL/+DPsCwQrT9MzSEiF+y90AL50eG+jwc1I8+Q6XiysXXNtNVYrQ0jWTxz3OpPDcCcWzyYkmMpI5oNViyfBw/bM6UuCIL0hEOBiKxOtmFtB+KHOviEveAqVr9U1cjj+iD97VY2j7RJnscQAd200LDpJLq6sI5UWV6KbWgV8vodHlXlc8csSnFMtJYMRYdk5NPEkSulrD1JDDOwMY4zVkV+KNnfofYq7PLa0Xfh1/I/r6OEtDzmc8aPHk7FNphynIOL4ljPL6AR5wQje8va/I99oe3Ygmy1CMQq2HOLT0JO46qImy4L2o5LrDK1DUbNouPfOdvHcAh9gUa79F8b36j4DikZxxs2GOBjFhcSdmUiOfsu9r2neOUwELIKcd74eeENR4q+IkbzFuxub6aCYikJTEmwYEmAxOJYf9VOrFYmJ3D0ljKh6T+fqmCBZWTNjSvpZMJnazNWjbdf9LqA8UbMt3c8qsl/1rEOp1IW6qU9VWAzl9pP3jo/0bXwXjHTcAnPMWuKf8SlAxpOgEecCd2Netf5E7YCO+F6+CpKQBKqS3bxq44H63n3z4IgTKm3UoCk70wJGTG0fm13WKJyoCXHKZE/woWZPk0VGXxlRkB3lb+/3SfyelL9AVn3kl6mQw01OOsB4W/qV3SLSjfw1Z3ON6kfPRhY/LK1c=_0_1","featurePIR":true,"customFooter":"<style type=\"text/css\">.footer-pt,\n.footer-en,\n.footer-es {\n    display: none;\n}\n\n\nhtml[lang=\"pt\"] .footer-pt {\n    display: block;\n}\n\nhtml[lang=\"es\"] .footer-es {\n    display: block;\n}\n\nhtml[lang=\"en\"] .footer-en {\n    display: block;\n}\n</style>\n<div class=\"footer-tm text-left\">\n<div class=\"row footer-es\">\n<div class=\"col-xs-12 col-sm-4\">\n<h3>Acesso R&aacute;pido</h3>\n\n<ul>\n\t<li><a href=\"../account/purchases\">Mis compras</a></li>\n\t<li><a href=\"../account/perfil\">Perfil</a></li>\n\t<li><a href=\"https://help.ticketmaster.com.br/hc/pt-br\" target=\"_blank\">Soporte</a></li>\n\t<li><a href=\"https://www.ticketmaster.com.br/static/acessibilidade\" target=\"_blank\">Acessibilidad</a></li>\n</ul>\n</div>\n\n<div class=\"col-xs-12 col-sm-4\">\n<h3>T&eacute;rminos y Pol&iacute;ticas</h3>\n\n<ul>\n\t<li><a href=\"../static/termos-de-uso\" target=\"_blank\">T&eacute;rminos de uso</a></li>\n\t<li><a href=\"../static/politica-de-compra\" target=\"_blank\">Pol&iacute;tica de Compra</a></li>\n\t<li><a href=\"https://privacy.ticketmaster.com.br/pt/cookie-policy\" target=\"_blank\">Pol&iacute;tica de Cookies</a></li>\n\t<li><a href=\"https://privacy.ticketmaster.com.br/pt/privacy-policy\" target=\"_blank\">Pol&iacute;tica de Privacidad</a></li>\n</ul>\n</div>\n\n<div class=\"col-xs-12 col-sm-4\">\n<h3>Sobre a Ticketmaster</h3>\n\n<ul>\n\t<li><a href=\"https://business.ticketmaster.com.br/pt/\" target=\"_blank\">Ticketmaster Brasil</a></li>\n\t<li><a href=\"https://business.ticketmaster.com.br/pt/nossa-historia/\" target=\"_blank\">Ticketmaster Internacional</a></li>\n\t<li><a href=\"https://www.linkedin.com/company/ticketmasterBR\" target=\"_blank\">Trabaje con nosotros</a></li>\n</ul>\n</div>\n</div>\n\n<div class=\"row footer-pt\">\n<div class=\"col-xs-12 col-sm-4\">\n<h3>Acesso R&aacute;pido</h3>\n\n<ul>\n\t<li><a href=\"../account/purchases\">Minhas Compras</a></li>\n\t<li><a href=\"../account/perfil\">Meu Perfil</a></li>\n\t<li><a aria-label=\"Suporte ao Fã\" href=\"https://help.ticketmaster.com.br/hc/pt-br\" target=\"_blank\">Suporte ao F&atilde;</a></li>\n\t<li><a aria-label=\"Acessibilidade\" href=\"https://www.ticketmaster.com.br/static/acessibilidade\" target=\"_blank\">Acessibilidade</a></li>\n</ul>\n</div>\n\n<div class=\"col-xs-12 col-sm-4\">\n<h3>Termos e Pol&iacute;ticas</h3>\n\n<ul>\n\t<li><a aria-label=\"Termos de Uso\" href=\"../static/termos-de-uso\" target=\"_blank\">Termos de Uso</a></li>\n\t<li><a aria-label=\"Política de Compra\" href=\"../static/politica-de-compra\" target=\"_blank\">Pol&iacute;tica de Compra</a></li>\n\t<li><a aria-label=\"Política de Cookies\" href=\"https://privacy.ticketmaster.com.br/pt/cookie-policy\" target=\"_blank\">Pol&iacute;tica de Cookies</a></li>\n\t<li><a aria-label=\"Política de Privacidade\" href=\"https://privacy.ticketmaster.com.br/pt/privacy-policy\" target=\"_blank\">Pol&iacute;tica de Privacidade</a></li>\n</ul>\n</div>\n\n<div class=\"col-xs-12 col-sm-4\">\n<h3>Sobre a Ticketmaster</h3>\n\n<ul>\n\t<li><a aria-label=\"Ticketmaster Brasil\" href=\"https://business.ticketmaster.com.br/pt/\" target=\"_blank\">Ticketmaster Brasil</a></li>\n\t<li><a aria-label=\"Ticketmaster Internacional\" href=\"https://business.ticketmaster.com.br/pt/nossa-historia/\" target=\"_blank\">Ticketmaster Internacional</a></li>\n\t<li><a aria-label=\"Trabalhe com a gente\" href=\"https://www.linkedin.com/company/ticketmasterBR\" target=\"_blank\">Trabalhe com a gente</a></li>\n</ul>\n</div>\n</div>\n\n<div class=\"row footer-en\">\n<div class=\"col-xs-12 col-sm-4\">\n<h3>Quick access</h3>\n\n<ul>\n\t<li><a href=\"../account/purchases\">My purchases</a></li>\n\t<li><a href=\"../account/perfil\">My profile</a></li>\n\t<li><a aria-label=\"Suporte ao Fã\" href=\"https://help.ticketmaster.com.br/hc/pt-br\" target=\"_blank\">Support</a></li>\n\t<li><a aria-label=\"Acessibilidade\" href=\"https://www.ticketmaster.com.br/static/acessibilidade\" target=\"_blank\">Acessibility</a></li>\n</ul>\n</div>\n\n<div class=\"col-xs-12 col-sm-4\">\n<h3>Terms and Policies</h3>\n\n<ul>\n\t<li><a aria-label=\"Termos de Uso\" href=\"https://www.ticketmaster.com.br/static/terms-of-use\" target=\"_blank\">Terms of Use</a></li>\n\t<li><a aria-label=\"Política de Compra\" href=\"https://www.ticketmaster.com.br/static/purchase-policy\" target=\"_blank\">Purchase Policy</a></li>\n\t<li><a aria-label=\"Política de Cookies\" href=\"https://privacy.ticketmaster.com.br/en/cookie-policy\" target=\"_blank\">Cookies Policy</a></li>\n\t<li><a aria-label=\"Política de Privacidade\" href=\"https://privacy.ticketmaster.com.br/en/privacy-policy\" target=\"_blank\">Privacy Policy</a></li>\n</ul>\n</div>\n\n<div class=\"col-xs-12 col-sm-4\">\n<h3>About Ticketmaster</h3>\n\n<ul>\n\t<li><a aria-label=\"Ticketmaster Brasil\" href=\"https://business.ticketmaster.com.br/pt/\" target=\"_blank\">Ticketmaster Brasil</a></li>\n\t<li><a aria-label=\"Ticketmaster Internacional\" href=\"https://business.ticketmaster.com.br/pt/nossa-historia/\" target=\"_blank\">Ticketmaster Internacional</a></li>\n\t<li><a aria-label=\"Trabalhe com a gente\" href=\"https://www.linkedin.com/company/ticketmasterBR\" target=\"_blank\">Work with us</a></li>\n</ul>\n</div>\n</div>\n\n<div class=\"row\">\n<div class=\"col-xs-12\"><img alt=\"Ticketmaster logo\" class=\"logo\" src=\"https://cdn.boletius.com/ticketmaster/ticketmaster-logo_white.png\" /></div>\n</div>\n\n<div class=\"row\">\n<div class=\"col-xs-12 col-sm-6 foo-social\"><a aria-label=\"Instagram\" href=\"https://www.instagram.com/ticketmasterBR/\" target=\"_blank\"><img alt=\"Instagram\" src=\"https://cdn.boletius.com/images/1643379600508-instagram.png\" style=\"height: 16px;\" /></a> <a aria-label=\"Facebook\" href=\"https://www.facebook.com/ticketmasterbr\" target=\"_blank\"><img alt=\"\nfacebook\" src=\"https://cdn.boletius.com/images/1643379516372-facebook.png\" style=\"height: 16px;\" /></a> <a aria-label=\"LindedIn\" href=\"https://www.linkedin.com/company/ticketmasterBR\" target=\"_blank\"><img alt=\"Linkedin\" src=\"https://cdn.boletius.com/images/1643379625842-linkedin.png\" style=\"height: 16px;\" /></a> <a href=\"https://www.tiktok.com/@ticketmasterbr\" target=\"_blank\"><img alt=\"Tiktok\" aria-label=\"Tiktok\" src=\"https://cdn.getcrowder.com/images/1691588331940-null-l-tiktok.png\" style=\"height: 16px;\" /></a> <a href=\"https://blog.ticketmaster.com.br\" target=\"_blank\"><img alt=\"Blog\" aria-label=\"Blog Ticketmaster\" src=\"https://cdn.getcrowder.com/images/1683574125568-null-blog.png\" style=\"height: 16px;\" /></a></div>\n\n<div class=\"col-xs-12 col-sm-6 foo-copy\"><a class=\"ot-sdk-show-settings cookie-settings-btn\" id=\"ot-sdk-btn\">Cookie preferences&nbsp;&nbsp;</a>&copy; 2025&nbsp;Ticketmaster.</div>\n\n<div class=\"col-xs-12 col-sm-6 foo-copy\">\n<ul>\n\t<li>TICKETMASTER BRASIL LTDA - CNPJ 42.789.521/0001-10</li>\n\t<li>R. Bacaetava, n&ordm; 401, 7&ordm; andar, Vila Gertrudes, S&atilde;o Paulo/SP, CEP 04705-010</li>\n</ul>\n</div>\n</div>\n</div>","newEmailsEnabled":true,"showFooter":false,"featureTicketing":true,"customContactUsForRefund":"<div>Caso a sua compra esteja fora do prazo para cancelamento, não será possível prosseguir com a sua solicitação. Confira as regras de cancelamento acessando este link  <a href=\"https://help.ticketmaster.com.br/hc/pt-br/categories/10492807217809-Como-Cancelar-E-Informações-Sobre-Trocas\">https://help.ticketmaster.com.br/hc/pt-br/categories/10492807217809-Como-Cancelar-E-Informações-Sobre-Trocas </a> </div> </br>  <div> Porém, caso o seu pedido estiver dentro do prazo para reembolso e você precisar de auxilio, entre em contato com o suporte ao fã <a href=\"https://help.ticketmaster.com.br/hc/pt-br/requests/new?ticket_form_id=10146863301905\"> https://help.ticketmaster.com.br/hc/pt-br/requests/new?ticket_form_id=10146863301905 </a> </div>","menuCategories":[],"optInText":"Deixe-nos mantê-lo informado sobre o que está por vir – incluindo pré-vendas e ofertas exclusivas – por meios eletrônicos (por exemplo, e-mail, ferramentas de mensageria, redes sociais, etc.). Você sempre pode alterar a forma como entramos em contato com você por meio de sua conta Ticketmaster.","cashlessRedirectUrl":"https://www.ticketmaster.com.br","lang":"pt","headline":"Ticketmaster","useCashless360":true,"favicon":"https://cdn.getcrowder.com/images/c1ade2d9-b2d1-484a-b163-0e5509e00144-favicon-32x32.png","showAssociatePurchaseButton":false,"showCategoriesOnMenu":false,"featureAutomaticRefund":true,"useFaceRecognition":true,"homeRedirect":null,"gatewaysByCountry":true,"featureSeasonPass":true,"alwaysShowDeliveryMethod":true,"requireBillingAddress":true,"featurePaymentVerificationMP":true,"reCaptchaProvider":"CLOUDFLARE_TURNSTILE","skipCalendarReport":"12063","reCaptchaPublicKey":"0x4AAAAAAAhbw3CJuC34pXu4","featureCashless":true,"isReCaptcha":false,"isCloudflareTurnstile":true},"locale":"pt","simpleLocale":"pt","envConfig":{"root":"","environment":"production","staticDomain":"cdn.boletius.com","apiPath":"https://public.getcrowder.com/","dataAdapterConfig":{"host":"public.getcrowder.com","protocol":"https","headers":{"X-CRW-SECRET":"djaso1-adas9da00-JIUsna8-dasm1*sd-s8dn11-amU42nX-BBL2nn8-P202100"}},"version":"dev"},"params":{"id":"bts-world-tour-arirang","country":"ar","url":"www.ticketmaster.com.br"},"channelId":55736,"properties":[{"name":"og:image","value":"https://cdn.getcrowder.com/images/03316baa-fac1-4f23-b152-b36a5dd1e52c-bts640x640.gif"},{"name":"og:title","value":"BTS WORLD TOUR ARIRANG"},{"name":"og:url","value":"https://www.ticketmaster.com.br/event/bts-world-tour-arirang"},{"name":"og:site_name","value":"Ticketmaster Brasil"},{"name":"og:type","value":"website"},{"name":"og:description","value":"28, 30 e 31 de Outubro de 2026"},{"name":"description","value":"28, 30 e 31 de Outubro de 2026"},{"name":"fb:app_id"}],"additionalMeta":[{"name":"twitter:card","value":"summary_large_image"},{"name":"twitter:title","value":"BTS WORLD TOUR ARIRANG"},{"name":"twitter:description","value":"28, 30 e 31 de Outubro de 2026"},{"name":"twitter:img:src","value":null},{"name":"description","value":"28, 30 e 31 de Outubro de 2026"},{"name":"keywords","value":"entradas,evento,undefined,,BTS WORLD TOUR ARIRANG | BTS | BTS WORLD TOUR | ARIRANG | Jungkook | V | Jimin | RM | Suga | Jin | j-hope | ARMY"}],"canonicalUrl":"https://www.ticketmaster.com.br/event/bts-world-tour-arirang","title":"BTS WORLD TOUR ARIRANG","schemaData":{"location":{"address":{"streetAddress":"Praça Roberto Gomes Pedrosa","addressLocality":"São Paulo","postalCode":"05653-070"},"@type":"Place","name":"MorumBis"},"offers":[],"performer":[],"@context":"http://schema.org/","@type":"Event","name":"BTS WORLD TOUR ARIRANG","description":"28, 30 e 31 de Outubro de 2026","image":null,"url":"https://www.ticketmaster.com.br/event/bts-world-tour-arirang"},"videoComponents":[{"id":"component-53aa4770-ddf7-4e02-a091-c320c1c6aefc","widgetType":"Video","state":{"enabled":true,"header":{"title":""},"config":{"customClass":"","containerAppearance":"full-width","backgroundColor":"","titleColor":"","paragraphColor":"","linkColor":""},"url":"https://www.youtube.com/watch?v=b4iVv91Z6lY"},"version":1}],"cmsPageHeader":{"id":"e4f2312a-d7de-4db3-a931-9ae4315a63a8","enabled":true,"htmlUrl":"https://cdn.getcrowder.com/images/1cc6881c-8a6d-4c11-9b42-d0122e737e45-bts1920x720landing.gif","mobileUrl":"https://cdn.getcrowder.com/images/dff8e041-b489-44d5-bbad-49411dbba93a-bts768x768.gif"},"componentStyles":[{"id":"component-9b2c036f-bc08-4c3b-a9de-3904a44393aa","titleColor":"","linkColor":"","paragraphColor":""},{"id":"component-69deda28-0b5b-4e19-9cbc-c98f5303454e"},{"id":"component-6d1c48d7-a313-47d5-806e-f905d7b3ffb6"},{"id":"component-595dd5db-5b36-493d-b9b4-e00a35b7d835"},{"id":"component-53aa4770-ddf7-4e02-a091-c320c1c6aefc","titleColor":"","linkColor":"","paragraphColor":""},{"id":"component-5bc8b8fc-cc87-4ea0-ab24-0498a47368a0"},{"id":"component-4ef1df05-7333-4569-b054-b1ddc98ae9a7"}],"customCSS":".embed-container {\r\n  display: flex;\r\n  flex-direction: row;\r\n  width: 100%;\r\n  gap: 20px;\r\n}\r\n\r\n.embed-box {\r\n  flex: 1;\r\n  display: flex;\r\n  flex-direction: column;\r\n  align-items: center;\r\n}\r\n\r\n.embed-box h2 {\r\n  font-size: 2.5rem;\r\n  font-weight: bold;\r\n  margin-bottom: 10px;\r\n  color: #000000;\r\n  text-decoration: underline #024ddf 4px;\r\n  font-family: 'Averta', sans-serif;\r\n}\r\n\r\n.embed-box iframe {\r\n  width: 100%;\r\n  height: 400px;\r\n  border: none;\r\n}\r\n\r\n@media (max-width: 768px) {\r\n  .embed-container {\r\n    flex-direction: column;\r\n  }\r\n\r\n  .embed-box iframe {\r\n    height: 160px;\r\n  }\r\n}\r\n"});
+				App.bootstrapData({"model":{"summary":{"model":"event","id":15726},"data":{"id":15726,"country":"ar","url":"www.ticketmaster.com.br","minorsPolicy":null,"longDescription":"null","limitByUser":null,"configurationUrl":"https://web-layout.s3.amazonaws.com/event/production/907b42d2-80f6-400d-8c93-392d0f7a3078","venue":{"id":1121,"name":"MorumBis","description":"Praça Roberto Gomes Pedrosa, 1 - Morumbi, São Paulo - SP, 05653-070","link":"morumbis","logo":"","image":"","mapImage":"","address":{"street":"Praça Roberto Gomes Pedrosa","streetNumber":"1","streetType":null,"additionalInfo":null,"city":"São Paulo","province":"SP","zipCode":"05653-070","latitude":-23.6002654,"longitude":-46.7210506,"formatReadableSimple":"Praça Roberto Gomes Pedrosa 1, São Paulo","country":{"key":"br","name":"BRASIL"}}},"footerBannerDesktop":null,"keywords":"BTS WORLD TOUR ARIRANG | BTS | BTS WORLD TOUR | ARIRANG | Jungkook | V | Jimin | RM | Suga | Jin | j-hope | ARMY","addons":[],"pageTitle":"BTS WORLD TOUR ARIRANG","wildcards":[],"channel":55736,"link":"bts-world-tour-arirang","description":"28, 30 e 31 de Outubro de 2026","queueConfiguration":null,"facilityFee":null,"thumbImage":"https://cdn.getcrowder.com/images/03316baa-fac1-4f23-b152-b36a5dd1e52c-bts640x640.gif","selectionType":{"id":16740,"type":"MultiSeatsSelection","svgMap":null,"onlyShowSectors":true},"wildcardName":null,"shows":[],"currency":"BRL","combos":[],"tag":"bts-world-tour-arirang","landingPageUrl":"https://web-layout.s3.amazonaws.com/event/production/907b42d2-80f6-400d-8c93-392d0f7a3078","disclaimer":"Declaro que li e ACEITO os termos e condições, além dos <a href=\"https://www.ticketmaster.com.br/static/termos-de-uso\"target=\"_blank\">Termos de Uso</a>, <a href=\"https://www.ticketmaster.com.br/static/politica-de-compra\"target=\"_blank\">Termos de Compra</a>, <a href=\"https://www.ticketmaster.com.br/static/politica-de-cookies\"target=\"_blank\">Política de Cookies</a> e <a href=\"https://www.ticketmaster.com.br/static/politica-de-privacidade\"target=\"_blank\">Política de Privacidade</a> da Ticketmaster Brasil. <br>Em caso de constatação de fraude relacionada à aquisição do ingresso, especialmente se adquirido em canal não oficial ou se for utilizado algum benefício de meia-entrada que o adquirente não tiver direito, o mesmo poderá ser cancelado e não será permitida a entrada no evento por parte do cliente.\n<br> <br>\nAutorizo o compartilhamento dos meus dados pessoais com parceiros e patrocinadores do Evento/Show para que eles possam me enviar, por qualquer meio, inclusive eletronicamente, ofertas de produtos e serviços e comunicações comerciais, próprias e de terceiros, de forma personalizada e que possam ser de meu interesse. Se mudar de ideia, você pode cancelar a inscrição a qualquer momento, entrando em contato diretamente com o parceiro ou patrocinador do evento.","channelId":55736,"fraudData":{"limitPerUser":4,"limitPerUserMessage":"Limite máximo de ingressos por cliente atingido.","limitPerUserPerShow":0,"limitPerUserPerShowMessage":null},"image":null,"gateways":[],"limitByUserPerShow":null,"showsRange":{},"footerBannerMobile":null,"eventType":"SIMPLE","requireBillingAddress":true,"hasPromotionsAvailable":false,"marketing":{"pixelData":{"adWords":{"id":null,"label":null},"google":{"floodlight":{"configID":null,"activityGroupTagString":null,"activityTagString":null,"countingMethod":null},"gtm":{"id":null},"analytics":{"id":null}},"facebook":{"pixelId":null},"custom":{"conversion":null,"remarketing":null},"optin":{"enabled":false,"description":null}}},"insuranceProvider":null,"salesStart":null,"name":"BTS WORLD TOUR ARIRANG","donationCampaigns":[],"affiliates":[],"gtmId":null,"salesStatus":"NONE","category":"Shows","deliveryConfigurations":[],"customRemarketingPixel":"null","customConversionPixel":"null","notStarted":false,"hasShows":false,"widgetComponents":[{"id":"component-9b2c036f-bc08-4c3b-a9de-3904a44393aa","widgetType":"Image","state":{"enabled":true,"header":{"title":""},"config":{"customClass":"","containerAppearance":"full-width","backgroundColor":"","titleColor":"","paragraphColor":"","linkColor":""},"htmlUrl":"https://cdn.getcrowder.com/images/4fcc7e0c-3fad-48e0-92d9-d7d3e72cc8f8-btsprereserva.png","mobileUrl":"https://cdn.getcrowder.com/images/2823b735-c0c0-49db-993f-1cab1e6969c5-btsprereservamobile.png","linkControl":{"haveLink":true,"haveLinkUrl":"https://www.ticketmaster.com.br/event/bts-boxoffice-reservation"}},"version":1},{"id":"component-69deda28-0b5b-4e19-9cbc-c98f5303454e","widgetType":"Html","state":{"enabled":true,"header":{"title":""},"config":{"containerAppearance":"centered"},"html":"<!DOCTYPE html>\r\n<html lang=\"es\">\r\n<head>\r\n  <meta charset=\"UTF-8\">\r\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\r\n  <title>Botones de Venta - Interface</title>\r\n  <style>\r\n    /* CSS Reset básico */\r\n.tmpe-container * {\r\n  margin: 0;\r\n  padding: 0;\r\n  box-sizing: border-box;\r\n  font-family: 'Averta', 'Helvetica Neue', Helvetica, Arial, sans-serif;\r\n}\r\n\r\n.tmpe-container {\r\n  width: 1200px !important;\r\n  max-width: 1200px !important;\r\n  margin: 0 auto !important;\r\n  background: #FAFBFC;\r\n  position: relative;\r\n  z-index: 1;\r\n  box-sizing: border-box !important;\r\n  overflow: hidden !important;\r\n  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.15) !important;\r\n}\r\n\r\n@media (max-width: 800px) {\r\n  .tmpe-container {\r\n    width: 100% !important;\r\n  }\r\n}\r\n\r\n/* Default state - Desktop first */\r\n.tmpe-desktop-view {\r\n  display: block;\r\n}\r\n\r\n.tmpe-mobile-view {\r\n  display: none;\r\n}\r\n\r\n/* Tarjetas de ticket - Desktop */\r\n.tmpe-ticket-item {\r\n  display: flex;\r\n  align-items: center;\r\n  padding: 20px 24px;\r\n  background: #fff;\r\n  border-bottom: 1px solid #D6D6D6;\r\n  position: relative;\r\n  justify-content: space-between;\r\n  gap: 24px;\r\n  transition: background-color 0.2s ease;\r\n}\r\n\r\n.tmpe-logo-container {\r\n  width: 56px;\r\n  height: 56px;\r\n  border-radius: 4px;\r\n  display: flex;\r\n  align-items: center;\r\n  justify-content: center;\r\n  flex-shrink: 0;\r\n  overflow: hidden;\r\n  background: #FFFFFF !important;\r\n  transform: translateZ(0);\r\n  will-change: transform;\r\n  -webkit-font-smoothing: antialiased;\r\n  -moz-osx-font-smoothing: grayscale;\r\n}\r\n\r\n.tmpe-logo-interbank {\r\n  background: #1A1A1A;\r\n}\r\n\r\n.tmpe-logo-ticketmaster {\r\n  background: #FFFFFF;\r\n}\r\n\r\n.tmpe-logo-bcp {\r\n  background: #FFFFFF;\r\n}\r\n\r\n.tmpe-logo-comercio {\r\n  background: #FFFFFF;\r\n}\r\n\r\n.tmpe-logo-bbva {\r\n  background: #FFFFFF;\r\n}\r\n\r\n.tmpe-logo-custom {\r\n  background: #FFFFFF;\r\n}\r\n\r\n.tmpe-logo-img {\r\n  width: 100%;\r\n  height: 100%;\r\n  object-fit: cover;\r\n  padding: 0;\r\n  margin: 0;\r\n  image-rendering: -webkit-optimize-contrast;\r\n  image-rendering: crisp-edges;\r\n  -ms-interpolation-mode: nearest-neighbor;\r\n  transform: translateZ(0);\r\n  backface-visibility: hidden;\r\n}\r\n\r\n.tmpe-info-container {\r\n  flex: 1;\r\n}\r\n\r\n/* Tipografía directamente aplicada con alta especificidad */\r\n.tmpe-container .tmpe-ticket-title {\r\n  font-family: 'Averta', 'Helvetica Neue', Helvetica, Arial, sans-serif;\r\n  font-size: 20px;\r\n  font-style: normal;\r\n  font-weight: 700;\r\n  margin-bottom: 8px;\r\n  color: #262626;\r\n  letter-spacing: 0.4px;\r\n  line-height: 20px;\r\n}\r\n\r\n.tmpe-container .tmpe-date-text {\r\n  font-family: 'Averta', 'Helvetica Neue', Helvetica, Arial, sans-serif;\r\n  color: #7D7D7D;\r\n  font-size: 16px;\r\n  font-weight: 400;\r\n  letter-spacing: 0.32px;\r\n  line-height: 20px;\r\n}\r\n\r\n.tmpe-status-container {\r\n  display: flex;\r\n  align-items: center;\r\n  flex-wrap: wrap;\r\n  gap: 8px;\r\n}\r\n\r\n.tmpe-container .tmpe-status-badge {\r\n  font-family: 'Averta', 'Helvetica Neue', Helvetica, Arial, sans-serif;\r\n  display: flex;\r\n  align-items: center;\r\n  gap: 4px;\r\n  border: 1px solid #D6D6D6;\r\n  border-radius: 4px;\r\n  padding: 4px 8px;\r\n  font-size: 12px;\r\n  font-weight: 600;\r\n  text-transform: uppercase;\r\n  height: 22px;\r\n  letter-spacing: 0.24px;\r\n  line-height: 20px;\r\n}\r\n\r\n/* Regla de alta especificidad para sobrescribir .ticketmaster global */\r\n.tmpe-container .tmpe-status-badge span {\r\n  color: #121212 !important;\r\n  font-weight: 600 !important;\r\n}\r\n\r\n.tmpe-status-dot {\r\n  width: 10px;\r\n  height: 10px;\r\n  border-radius: 50%;\r\n}\r\n\r\n.tmpe-dot-available {\r\n  background: #048851;\r\n}\r\n\r\n.tmpe-dot-soon {\r\n  background: #646464;\r\n}\r\n\r\n.tmpe-dot-soldout {\r\n  background: #DD2C00;\r\n}\r\n\r\n.tmpe-dot-canceled {\r\n  background: #646464;\r\n}\r\n\r\n/* Estilo de enlace según diseño */\r\n.tmpe-container .tmpe-link-details {\r\n  font-family: 'Averta', 'Helvetica Neue', Helvetica, Arial, sans-serif;\r\n  background: #024DDF;\r\n  color: white;\r\n  border: none;\r\n  border-radius: 4px;\r\n  padding: 16px 40px;\r\n  font-size: 16px;\r\n  font-weight: 600;\r\n  display: inline-flex;\r\n  align-items: center;\r\n  gap: 8px;\r\n  cursor: pointer;\r\n  margin-left: auto;\r\n  text-decoration: none;\r\n  letter-spacing: 0.32px;\r\n  line-height: 24px;\r\n  height: 48px;\r\n  min-width: 150px;\r\n  justify-content: center;\r\n  transition: background-color 0.2s ease;\r\n}\r\n\r\n.tmpe-link-reminder {\r\n  background: #FFFFFF;\r\n  color: #646464;\r\n  border: 1px solid #D6D6D6;\r\n  border-radius: 23px;\r\n  padding: 6px 12px;\r\n  font-size: 14px;\r\n  font-weight: 600;\r\n  display: inline-flex;\r\n  align-items: center;\r\n  gap: 5px;\r\n  cursor: pointer;\r\n  margin-left: auto;\r\n  text-decoration: none;\r\n  box-shadow: 0px 6px 12px 0px rgba(0, 0, 0, 0.06);\r\n  height: 39px;\r\n  min-width: auto;\r\n  justify-content: center;\r\n  font-family: 'Averta', 'Helvetica Neue', Helvetica, Arial, sans-serif;\r\n}\r\n\r\n.tmpe-link-mobile {\r\n  width: 40px;\r\n  height: 40px;\r\n  border-radius: 50%;\r\n  background: #024DDF;\r\n  display: flex;\r\n  align-items: center;\r\n  justify-content: center;\r\n  border: none;\r\n  cursor: pointer;\r\n  color: white;\r\n  text-decoration: none;\r\n  transition: background-color 0.2s ease;\r\n}\r\n\r\n/* Responsive styles */\r\n@media (max-width: 768px) {\r\n  .tmpe-desktop-view {\r\n    display: none;\r\n  }\r\n  \r\n  .tmpe-mobile-view {\r\n    display: block;\r\n    box-shadow: 0px 1px 4px 0px rgba(18, 18, 18, 0.15);\r\n  }\r\n  \r\n  .tmpe-ticket-item {\r\n    padding: 0;\r\n    gap: 0;\r\n    align-items: stretch;\r\n  }\r\n  \r\n  .tmpe-ticket-link {\r\n    display: flex;\r\n    width: 100%;\r\n    padding: 20px 12px;\r\n    gap: 16px;\r\n    align-items: flex-start;\r\n    text-decoration: none !important;\r\n    color: inherit;\r\n    cursor: pointer;\r\n  }\r\n  \r\n  .tmpe-logo-container {\r\n    width: 42px;\r\n    height: 40px;\r\n    margin-right: 0;\r\n    border-radius: 2.68px;\r\n    margin-top: 0;\r\n    align-self: flex-start;\r\n    overflow: hidden;\r\n    background: #FFFFFF !important;\r\n    transform: translateZ(0);\r\n    will-change: transform;\r\n    -webkit-font-smoothing: antialiased;\r\n    -moz-osx-font-smoothing: grayscale;\r\n  }\r\n  \r\n  .tmpe-container .tmpe-ticket-title {\r\n    font-size: 18px;\r\n    line-height: 20px;\r\n    letter-spacing: 0.32px;\r\n    color: #121212;\r\n    margin-bottom: 2px;\r\n  }\r\n\r\n  .tmpe-container .tmpe-date-text {\r\n    font-size: 14px;\r\n    margin-left: 0;\r\n    line-height: 20px;\r\n    letter-spacing: 0.28px;\r\n    color: #828282;\r\n  }\r\n  \r\n  .tmpe-status-container {\r\n    flex-direction: column;\r\n    align-items: flex-start;\r\n    gap: 4px;\r\n  }\r\n\r\n  .tmpe-container .tmpe-status-badge {\r\n    font-size: 12px;\r\n    letter-spacing: 0.24px;\r\n    line-height: 20px;\r\n    color: #121212;\r\n  }\r\n\r\n  .tmpe-link-mobile {\r\n    width: 36px;\r\n    height: 36px;\r\n    background: #024DDF;\r\n    border-radius: 50%;\r\n    display: flex;\r\n    align-items: center;\r\n    justify-content: center;\r\n    align-self: flex-start;\r\n    margin-top: 0;\r\n  }\r\n}\r\n\r\n/* Desktop hover effect */\r\n@media (min-width: 769px) {\r\n  .tmpe-ticket-item:hover {\r\n    background-color: #F6F6F6;\r\n  }\r\n  \r\n  .tmpe-link-details:hover {\r\n    background-color: #0035A0;\r\n  }\r\n}\r\n\r\n/* Mobile hover/active effects */\r\n@media (max-width: 768px) {\r\n  .tmpe-ticket-link:hover, \r\n  .tmpe-ticket-link:active {\r\n    background-color: #F6F6F6;\r\n  }\r\n  \r\n  .tmpe-ticket-link:hover .tmpe-link-mobile, \r\n  .tmpe-ticket-link:active .tmpe-link-mobile {\r\n    background-color: #0035A0;\r\n  }\r\n}\r\n  </style>\r\n</head>\r\n<body>\r\n\r\n<div class=\"tmpe-container\">\r\n  <!-- Vista Desktop -->\r\n  <div class=\"tmpe-desktop-view\">\r\n\r\n    <!-- PRÉ-VENDA ARMY MEMBERSHIP -->\r\n    <div class=\"tmpe-ticket-item\">\r\n      <div class=\"tmpe-logo-container tmpe-logo-ticketmaster\">\r\n        <img class=\"tmpe-logo-img\" src=\"https://prod-assets.tmlat.com/Tk_general_c73b9c007f.svg\" alt=\"Logo\" onerror=\"this.src='https://prod-assets.tmlat.com/Property_1_visa_f8a51aef4b.png'\">\r\n      </div>\r\n      <div class=\"tmpe-info-container\">\r\n        <h2 class=\"tmpe-ticket-title\">PRÉ-VENDA ARMY MEMBERSHIP</h2>\r\n        <div class=\"tmpe-status-container\">\r\n          <div class=\"tmpe-status-badge\">\r\n            <span class=\"tmpe-status-dot tmpe-dot-soon\"></span>\r\n            <span style=\"color: #121212 !important; font-weight: 600 !important;\">Início em 08/04 às 10h</span>\r\n          </div>\r\n          <span class=\"tmpe-date-text\">31/10 • Estádio MorumBIS</span>\r\n        </div>\r\n      </div>\r\n      <a href=\"https://www.ticketmaster.com.br/event/pre-venda-army-membership-bts-world-tour-arirang-31-10\" class=\"tmpe-link-details\">\r\n            INGRESSOS\r\n            <svg width=\"20\" height=\"20\" viewBox=\"0 0 20 20\">\r\n              <polyline points=\"7 5 13 10 7 15\" fill=\"none\" stroke=\"#fff\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\r\n            </svg>\r\n          </a>\r\n    </div>\r\n    <!-- VENDA GERAL -->\r\n    <div class=\"tmpe-ticket-item\">\r\n      <div class=\"tmpe-logo-container tmpe-logo-ticketmaster\">\r\n        <img class=\"tmpe-logo-img\" src=\"https://prod-assets.tmlat.com/Tk_general_c73b9c007f.svg\" alt=\"Logo\" onerror=\"this.src='https://prod-assets.tmlat.com/Property_1_visa_f8a51aef4b.png'\">\r\n      </div>\r\n      <div class=\"tmpe-info-container\">\r\n        <h2 class=\"tmpe-ticket-title\">VENDA GERAL</h2>\r\n        <div class=\"tmpe-status-container\">\r\n          <div class=\"tmpe-status-badge\">\r\n            <span class=\"tmpe-status-dot tmpe-dot-soon\"></span>\r\n            <span style=\"color: #121212 !important; font-weight: 600 !important;\">Início em 10/04 às 10h</span>\r\n          </div>\r\n          <span class=\"tmpe-date-text\">28/10 • Estádio MorumBIS</span>\r\n        </div>\r\n      </div>\r\n      <a href=\"https://www.ticketmaster.com.br/event/venda-geral-bts-world-tour-arirang-28-10\" class=\"tmpe-link-details\">\r\n            INGRESSOS\r\n            <svg width=\"20\" height=\"20\" viewBox=\"0 0 20 20\">\r\n              <polyline points=\"7 5 13 10 7 15\" fill=\"none\" stroke=\"#fff\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\r\n            </svg>\r\n          </a>\r\n    </div>\r\n    <!-- VENDA GERAL -->\r\n    <div class=\"tmpe-ticket-item\">\r\n      <div class=\"tmpe-logo-container tmpe-logo-ticketmaster\">\r\n        <img class=\"tmpe-logo-img\" src=\"https://prod-assets.tmlat.com/Tk_general_c73b9c007f.svg\" alt=\"Logo\" onerror=\"this.src='https://prod-assets.tmlat.com/Property_1_visa_f8a51aef4b.png'\">\r\n      </div>\r\n      <div class=\"tmpe-info-container\">\r\n        <h2 class=\"tmpe-ticket-title\">VENDA GERAL</h2>\r\n        <div class=\"tmpe-status-container\">\r\n          <div class=\"tmpe-status-badge\">\r\n            <span class=\"tmpe-status-dot tmpe-dot-soon\"></span>\r\n            <span style=\"color: #121212 !important; font-weight: 600 !important;\">Início em 10/04 às 10h</span>\r\n          </div>\r\n          <span class=\"tmpe-date-text\">30/10 • Estádio MorumBIS</span>\r\n        </div>\r\n      </div>\r\n      <a href=\"https://www.ticketmaster.com.br/event/venda-geral-bts-world-tour-arirang-30-10\" class=\"tmpe-link-details\">\r\n            INGRESSOS\r\n            <svg width=\"20\" height=\"20\" viewBox=\"0 0 20 20\">\r\n              <polyline points=\"7 5 13 10 7 15\" fill=\"none\" stroke=\"#fff\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\r\n            </svg>\r\n          </a>\r\n    </div>\r\n    <!-- VENDA GERAL -->\r\n    <div class=\"tmpe-ticket-item\">\r\n      <div class=\"tmpe-logo-container tmpe-logo-ticketmaster\">\r\n        <img class=\"tmpe-logo-img\" src=\"https://prod-assets.tmlat.com/Tk_general_c73b9c007f.svg\" alt=\"Logo\" onerror=\"this.src='https://prod-assets.tmlat.com/Property_1_visa_f8a51aef4b.png'\">\r\n      </div>\r\n      <div class=\"tmpe-info-container\">\r\n        <h2 class=\"tmpe-ticket-title\">VENDA GERAL</h2>\r\n        <div class=\"tmpe-status-container\">\r\n          <div class=\"tmpe-status-badge\">\r\n            <span class=\"tmpe-status-dot tmpe-dot-soon\"></span>\r\n            <span style=\"color: #121212 !important; font-weight: 600 !important;\">Início em 10/04 às 10h</span>\r\n          </div>\r\n          <span class=\"tmpe-date-text\">31/10 • Estádio MorumBIS</span>\r\n        </div>\r\n      </div>\r\n      <a href=\"https://www.ticketmaster.com.br/event/venda-geral-bts-world-tour-arirang-31-10\" class=\"tmpe-link-details\">\r\n            INGRESSOS\r\n            <svg width=\"20\" height=\"20\" viewBox=\"0 0 20 20\">\r\n              <polyline points=\"7 5 13 10 7 15\" fill=\"none\" stroke=\"#fff\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\r\n            </svg>\r\n          </a>\r\n    </div>\r\n    <!-- PRÉ-VENDA ARMY MEMBERSHIP -->\r\n    <div class=\"tmpe-ticket-item\">\r\n      <div class=\"tmpe-logo-container tmpe-logo-ticketmaster\">\r\n        <img class=\"tmpe-logo-img\" src=\"https://prod-assets.tmlat.com/Tk_general_c73b9c007f.svg\" alt=\"Logo\" onerror=\"this.src='https://prod-assets.tmlat.com/Property_1_visa_f8a51aef4b.png'\">\r\n      </div>\r\n      <div class=\"tmpe-info-container\">\r\n        <h2 class=\"tmpe-ticket-title\">PRÉ-VENDA ARMY MEMBERSHIP</h2>\r\n        <div class=\"tmpe-status-container\">\r\n          <div class=\"tmpe-status-badge\">\r\n            <span class=\"tmpe-status-dot tmpe-dot-soldout\"></span>\r\n            <span style=\"color: #121212 !important; font-weight: 600 !important;\">Esgotado</span>\r\n          </div>\r\n          <span class=\"tmpe-date-text\">28/10 • Estádio MorumBIS</span>\r\n        </div>\r\n      </div>\r\n      <a href=\"https://www.ticketmaster.com.br/event/pre-venda-army-membership-bts-world-tour-arirang-28-10\" class=\"tmpe-link-details\">\r\n            ESGOTADO\r\n            <svg width=\"20\" height=\"20\" viewBox=\"0 0 20 20\">\r\n              <polyline points=\"7 5 13 10 7 15\" fill=\"none\" stroke=\"#fff\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\r\n            </svg>\r\n          </a>\r\n    </div>\r\n    <!-- PRÉ-VENDA ARMY MEMBERSHIP -->\r\n    <div class=\"tmpe-ticket-item\">\r\n      <div class=\"tmpe-logo-container tmpe-logo-ticketmaster\">\r\n        <img class=\"tmpe-logo-img\" src=\"https://prod-assets.tmlat.com/Tk_general_c73b9c007f.svg\" alt=\"Logo\" onerror=\"this.src='https://prod-assets.tmlat.com/Property_1_visa_f8a51aef4b.png'\">\r\n      </div>\r\n      <div class=\"tmpe-info-container\">\r\n        <h2 class=\"tmpe-ticket-title\">PRÉ-VENDA ARMY MEMBERSHIP</h2>\r\n        <div class=\"tmpe-status-container\">\r\n          <div class=\"tmpe-status-badge\">\r\n            <span class=\"tmpe-status-dot tmpe-dot-soldout\"></span>\r\n            <span style=\"color: #121212 !important; font-weight: 600 !important;\">Esgotado</span>\r\n          </div>\r\n          <span class=\"tmpe-date-text\"> 30/10 • Estádio MorumBIS</span>\r\n        </div>\r\n      </div>\r\n      <a href=\"https://www.ticketmaster.com.br/event/pre-venda-army-membership-bts-world-tour-arirang-30-10\" class=\"tmpe-link-details\">\r\n            ESGOTADO\r\n            <svg width=\"20\" height=\"20\" viewBox=\"0 0 20 20\">\r\n              <polyline points=\"7 5 13 10 7 15\" fill=\"none\" stroke=\"#fff\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\r\n            </svg>\r\n          </a>\r\n    </div>\r\n  </div>\r\n  \r\n  <!-- Vista Mobile -->\r\n  <div class=\"tmpe-mobile-view\">\r\n\r\n    <!-- PRÉ-VENDA ARMY MEMBERSHIP -->\r\n    <div class=\"tmpe-ticket-item\">\r\n      <a href=\"https://www.ticketmaster.com.br/event/pre-venda-army-membership-bts-world-tour-arirang-31-10\" class=\"tmpe-ticket-link\">\r\n        <div class=\"tmpe-logo-container tmpe-logo-ticketmaster\">\r\n          <img class=\"tmpe-logo-img\" src=\"https://prod-assets.tmlat.com/Tk_general_c73b9c007f.svg\" alt=\"Logo\" onerror=\"this.src='https://prod-assets.tmlat.com/Property_1_visa_f8a51aef4b.png'\">\r\n        </div>\r\n        <div class=\"tmpe-info-container\">\r\n          <h2 class=\"tmpe-ticket-title\">PRÉ-VENDA ARMY MEMBERSHIP</h2>\r\n          <div class=\"tmpe-status-container\">\r\n            <span class=\"tmpe-date-text\">31/10 • Estádio MorumBIS</span>\r\n            <div class=\"tmpe-status-badge\">\r\n              <span class=\"tmpe-status-dot tmpe-dot-soon\"></span>\r\n              <span style=\"color: #121212 !important; font-weight: 600 !important;\">Início em 08/04 às 10h</span>\r\n            </div>\r\n          </div>\r\n        </div>\r\n        <div class=\"tmpe-link-mobile\">\r\n            <svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\">\r\n              <path d=\"M9 6L15 12L9 18\" stroke=\"white\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\r\n            </svg>\r\n          </div>\r\n      </a>\r\n    </div>\r\n    <!-- VENDA GERAL -->\r\n    <div class=\"tmpe-ticket-item\">\r\n      <a href=\"https://www.ticketmaster.com.br/event/venda-geral-bts-world-tour-arirang-28-10\" class=\"tmpe-ticket-link\">\r\n        <div class=\"tmpe-logo-container tmpe-logo-ticketmaster\">\r\n          <img class=\"tmpe-logo-img\" src=\"https://prod-assets.tmlat.com/Tk_general_c73b9c007f.svg\" alt=\"Logo\" onerror=\"this.src='https://prod-assets.tmlat.com/Property_1_visa_f8a51aef4b.png'\">\r\n        </div>\r\n        <div class=\"tmpe-info-container\">\r\n          <h2 class=\"tmpe-ticket-title\">VENDA GERAL</h2>\r\n          <div class=\"tmpe-status-container\">\r\n            <span class=\"tmpe-date-text\">28/10 • Estádio MorumBIS</span>\r\n            <div class=\"tmpe-status-badge\">\r\n              <span class=\"tmpe-status-dot tmpe-dot-soon\"></span>\r\n              <span style=\"color: #121212 !important; font-weight: 600 !important;\">Início em 10/04 às 10h</span>\r\n            </div>\r\n          </div>\r\n        </div>\r\n        <div class=\"tmpe-link-mobile\">\r\n            <svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\">\r\n              <path d=\"M9 6L15 12L9 18\" stroke=\"white\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\r\n            </svg>\r\n          </div>\r\n      </a>\r\n    </div>\r\n    <!-- VENDA GERAL -->\r\n    <div class=\"tmpe-ticket-item\">\r\n      <a href=\"https://www.ticketmaster.com.br/event/venda-geral-bts-world-tour-arirang-30-10\" class=\"tmpe-ticket-link\">\r\n        <div class=\"tmpe-logo-container tmpe-logo-ticketmaster\">\r\n          <img class=\"tmpe-logo-img\" src=\"https://prod-assets.tmlat.com/Tk_general_c73b9c007f.svg\" alt=\"Logo\" onerror=\"this.src='https://prod-assets.tmlat.com/Property_1_visa_f8a51aef4b.png'\">\r\n        </div>\r\n        <div class=\"tmpe-info-container\">\r\n          <h2 class=\"tmpe-ticket-title\">VENDA GERAL</h2>\r\n          <div class=\"tmpe-status-container\">\r\n            <span class=\"tmpe-date-text\">30/10 • Estádio MorumBIS</span>\r\n            <div class=\"tmpe-status-badge\">\r\n              <span class=\"tmpe-status-dot tmpe-dot-soon\"></span>\r\n              <span style=\"color: #121212 !important; font-weight: 600 !important;\">Início em 10/04 às 10h</span>\r\n            </div>\r\n          </div>\r\n        </div>\r\n        <div class=\"tmpe-link-mobile\">\r\n            <svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\">\r\n              <path d=\"M9 6L15 12L9 18\" stroke=\"white\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\r\n            </svg>\r\n          </div>\r\n      </a>\r\n    </div>\r\n    <!-- VENDA GERAL -->\r\n    <div class=\"tmpe-ticket-item\">\r\n      <a href=\"https://www.ticketmaster.com.br/event/venda-geral-bts-world-tour-arirang-31-10\" class=\"tmpe-ticket-link\">\r\n        <div class=\"tmpe-logo-container tmpe-logo-ticketmaster\">\r\n          <img class=\"tmpe-logo-img\" src=\"https://prod-assets.tmlat.com/Tk_general_c73b9c007f.svg\" alt=\"Logo\" onerror=\"this.src='https://prod-assets.tmlat.com/Property_1_visa_f8a51aef4b.png'\">\r\n        </div>\r\n        <div class=\"tmpe-info-container\">\r\n          <h2 class=\"tmpe-ticket-title\">VENDA GERAL</h2>\r\n          <div class=\"tmpe-status-container\">\r\n            <span class=\"tmpe-date-text\">31/10 • Estádio MorumBIS</span>\r\n            <div class=\"tmpe-status-badge\">\r\n              <span class=\"tmpe-status-dot tmpe-dot-soon\"></span>\r\n              <span style=\"color: #121212 !important; font-weight: 600 !important;\">Início em 10/04 às 10h</span>\r\n            </div>\r\n          </div>\r\n        </div>\r\n        <div class=\"tmpe-link-mobile\">\r\n            <svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\">\r\n              <path d=\"M9 6L15 12L9 18\" stroke=\"white\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\r\n            </svg>\r\n          </div>\r\n      </a>\r\n    </div>\r\n    <!-- PRÉ-VENDA ARMY MEMBERSHIP -->\r\n    <div class=\"tmpe-ticket-item\">\r\n      <a href=\"https://www.ticketmaster.com.br/event/pre-venda-army-membership-bts-world-tour-arirang-28-10\" class=\"tmpe-ticket-link\">\r\n        <div class=\"tmpe-logo-container tmpe-logo-ticketmaster\">\r\n          <img class=\"tmpe-logo-img\" src=\"https://prod-assets.tmlat.com/Tk_general_c73b9c007f.svg\" alt=\"Logo\" onerror=\"this.src='https://prod-assets.tmlat.com/Property_1_visa_f8a51aef4b.png'\">\r\n        </div>\r\n        <div class=\"tmpe-info-container\">\r\n          <h2 class=\"tmpe-ticket-title\">PRÉ-VENDA ARMY MEMBERSHIP</h2>\r\n          <div class=\"tmpe-status-container\">\r\n            <span class=\"tmpe-date-text\">28/10 • Estádio MorumBIS</span>\r\n            <div class=\"tmpe-status-badge\">\r\n              <span class=\"tmpe-status-dot tmpe-dot-soldout\"></span>\r\n              <span style=\"color: #121212 !important; font-weight: 600 !important;\">Esgotado</span>\r\n            </div>\r\n          </div>\r\n        </div>\r\n        <div class=\"tmpe-link-mobile\">\r\n            <svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\">\r\n              <path d=\"M9 6L15 12L9 18\" stroke=\"white\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\r\n            </svg>\r\n          </div>\r\n      </a>\r\n    </div>\r\n    <!-- PRÉ-VENDA ARMY MEMBERSHIP -->\r\n    <div class=\"tmpe-ticket-item\">\r\n      <a href=\"https://www.ticketmaster.com.br/event/pre-venda-army-membership-bts-world-tour-arirang-30-10\" class=\"tmpe-ticket-link\">\r\n        <div class=\"tmpe-logo-container tmpe-logo-ticketmaster\">\r\n          <img class=\"tmpe-logo-img\" src=\"https://prod-assets.tmlat.com/Tk_general_c73b9c007f.svg\" alt=\"Logo\" onerror=\"this.src='https://prod-assets.tmlat.com/Property_1_visa_f8a51aef4b.png'\">\r\n        </div>\r\n        <div class=\"tmpe-info-container\">\r\n          <h2 class=\"tmpe-ticket-title\">PRÉ-VENDA ARMY MEMBERSHIP</h2>\r\n          <div class=\"tmpe-status-container\">\r\n            <span class=\"tmpe-date-text\"> 30/10 • Estádio MorumBIS</span>\r\n            <div class=\"tmpe-status-badge\">\r\n              <span class=\"tmpe-status-dot tmpe-dot-soldout\"></span>\r\n              <span style=\"color: #121212 !important; font-weight: 600 !important;\">Esgotado</span>\r\n            </div>\r\n          </div>\r\n        </div>\r\n        <div class=\"tmpe-link-mobile\">\r\n            <svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\">\r\n              <path d=\"M9 6L15 12L9 18\" stroke=\"white\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/>\r\n            </svg>\r\n          </div>\r\n      </a>\r\n    </div>\r\n  </div>\r\n</div>\r\n\r\n</body>\r\n</html>"},"version":1},{"id":"component-6d1c48d7-a313-47d5-806e-f905d7b3ffb6","widgetType":"Image","state":{"enabled":true,"header":{"title":""},"config":{"containerAppearance":"centered"},"htmlUrl":"https://cdn.getcrowder.com/images/b9865031-e0ec-42c0-8fd3-08d3c72d817d-btsdesktop.png","mobileUrl":"https://cdn.getcrowder.com/images/f943d2cc-4b9e-4939-835b-0176908ae260-btsmobile.png"},"version":1},{"id":"component-595dd5db-5b36-493d-b9b4-e00a35b7d835","widgetType":"Text","state":{"enabled":true,"header":{"title":""},"config":{"containerAppearance":"centered"},"textcontent":{"adf":{"version":1,"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"O BTS, acrônimo de Bangtan Sonyeondan ou “Beyond the Scene”, é uma boyband sul-coreana indicada ao GRAMMY que vem conquistando os corações de milhões de fãs ao redor do mundo desde sua estreia, em junho de 2013. Os integrantes do BTS são RM, Jin, SUGA, j-hope, Jimin, V e Jung Kook. Reconhecido por sua música autêntica e autoral, performances de altíssimo nível e pela forma como se conectam com seus fãs, o grupo se consolidou como um ícone pop do século XXI, quebrando inúmeros recordes globais."}]},{"type":"paragraph","content":[{"type":"text","text":"Ao mesmo tempo em que promove uma influência positiva por meio de iniciativas como a campanha LOVE MYSELF e o discurso “Speak Yourself” na ONU, o grupo mobilizou milhões de fãs ao redor do mundo (conhecidos como ARMY), conquistou seis singles em 1º lugar na Billboard Hot 100 desde 2020 e realizou diversas apresentações em estádios esgotados globalmente. Em 2020, também foram nomeados “Entertainer of the Year” pela TIME."}]},{"type":"paragraph","content":[{"type":"text","text":"O BTS possui cinco indicações ao GRAMMY (da 63ª à 65ª edição) e já foi reconhecido com diversos prêmios de prestígio, como o Billboard Music Awards, o American Music Awards (Artista do Ano de 2021) e o MTV Video Music Awards. O grupo lançou seu quinto álbum de estúdio, ARIRANG, em 20 de março de 2026, seguido de uma grande turnê mundial — marcando um retorno que promete ficar para a história da cultura pop."}]},{"type":"paragraph","content":[{"type":"text","text":"**Acompanhe o BTS:** "},{"type":"text","text":"Website","marks":[{"type":"link","attrs":{"href":"https://ibighit.com/bts/eng/"}}]},{"type":"text","text":" | "},{"type":"text","text":"Instagram","marks":[{"type":"link","attrs":{"href":"https://www.instagram.com/bts.bighitofficial/"}}]},{"type":"text","text":" | "},{"type":"text","text":"YouTube","marks":[{"type":"link","attrs":{"href":"https://www.youtube.com/user/BANGTANTV"}}]},{"type":"text","text":" | "},{"type":"text","text":"Facebook","marks":[{"type":"link","attrs":{"href":"https://www.facebook.com/bangtan.official"}}]},{"type":"text","text":" | "},{"type":"text","text":"X","marks":[{"type":"link","attrs":{"href":"https://x.com/BTS_bighit"}}]},{"type":"text","text":" | "},{"type":"text","text":"Spotify","marks":[{"type":"link","attrs":{"href":"https://open.spotify.com/artist/3Nrfpe0tUJi4K4DXYWgMUX?si=fm_P_5yyQiu-08VqWRYfNQ"}}]}]},{"type":"heading","attrs":{"level":3},"content":[{"type":"text","text":"Datas da BTS 2026 Tour:","marks":[{"type":"strong"}]}]},{"type":"paragraph","content":[{"type":"text","text":"2 & 3 de Outubro, 2026 – Bogotá, CO – Estadio El Campín\\"},{"type":"hardBreak"},{"type":"text","text":"9 & 10 de Outubro, 2026 – Lima, PE – Estadio San Marcos\\"},{"type":"hardBreak"},{"type":"text","text":"16 & 17 de Outubro, 2026 – Santiago, CL – Estadio Nacional\\"},{"type":"hardBreak"},{"type":"text","text":"28, 30 & 31 de Outubro, 2026 – São Paulo, BR – Estádio do MorumBIS"}]}]},"md":{"result":"O BTS, acrônimo de Bangtan Sonyeondan ou “Beyond the Scene”, é uma boyband sul-coreana indicada ao GRAMMY que vem conquistando os corações de milhões de fãs ao redor do mundo desde sua estreia, em junho de 2013. Os integrantes do BTS são RM, Jin, SUGA, j-hope, Jimin, V e Jung Kook. Reconhecido por sua música autêntica e autoral, performances de altíssimo nível e pela forma como se conectam com seus fãs, o grupo se consolidou como um ícone pop do século XXI, quebrando inúmeros recordes globais.\n\nAo mesmo tempo em que promove uma influência positiva por meio de iniciativas como a campanha LOVE MYSELF e o discurso “Speak Yourself” na ONU, o grupo mobilizou milhões de fãs ao redor do mundo (conhecidos como ARMY), conquistou seis singles em 1º lugar na Billboard Hot 100 desde 2020 e realizou diversas apresentações em estádios esgotados globalmente. Em 2020, também foram nomeados “Entertainer of the Year” pela TIME.\n\nO BTS possui cinco indicações ao GRAMMY (da 63ª à 65ª edição) e já foi reconhecido com diversos prêmios de prestígio, como o Billboard Music Awards, o American Music Awards (Artista do Ano de 2021) e o MTV Video Music Awards. O grupo lançou seu quinto álbum de estúdio, ARIRANG, em 20 de março de 2026, seguido de uma grande turnê mundial — marcando um retorno que promete ficar para a história da cultura pop.\n\n**Acompanhe o BTS:** [Website](https://ibighit.com/bts/eng/) | [Instagram](https://www.instagram.com/bts.bighitofficial/) | [YouTube](https://www.youtube.com/user/BANGTANTV) | [Facebook](https://www.facebook.com/bangtan.official) | [X](https://x.com/BTS_bighit) | [Spotify](https://open.spotify.com/artist/3Nrfpe0tUJi4K4DXYWgMUX?si=fm_P_5yyQiu-08VqWRYfNQ)\n\n### **Datas da BTS 2026 Tour:**\n\n2 & 3 de Outubro, 2026 – Bogotá, CO – Estadio El Campín\\\n9 & 10 de Outubro, 2026 – Lima, PE – Estadio San Marcos\\\n16 & 17 de Outubro, 2026 – Santiago, CL – Estadio Nacional\\\n28, 30 & 31 de Outubro, 2026 – São Paulo, BR – Estádio do MorumBIS","warnings":{}}}},"version":1},{"id":"component-53aa4770-ddf7-4e02-a091-c320c1c6aefc","widgetType":"Video","state":{"enabled":true,"header":{"title":""},"config":{"customClass":"","containerAppearance":"full-width","backgroundColor":"","titleColor":"","paragraphColor":"","linkColor":""},"url":"https://www.youtube.com/watch?v=b4iVv91Z6lY"},"version":1},{"id":"component-5bc8b8fc-cc87-4ea0-ab24-0498a47368a0","widgetType":"Html","state":{"enabled":true,"header":{"title":""},"config":{"containerAppearance":"centered"},"html":"<iframe src=\"https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3656.0928476179342!2d-46.722614323913!3d-23.60100286305125!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94ce56c31b1fe649%3A0x7d134f4dfc6618c2!2sEst%C3%A1dio%20MorumBIS!5e0!3m2!1spt-BR!2sbr!4v1774546682954!5m2!1spt-BR!2sbr\" width=\"100%\" height=\"450\" style=\"border:0;\" allowfullscreen=\"\" loading=\"lazy\" referrerpolicy=\"no-referrer-when-downgrade\"></iframe>"},"version":1},{"id":"component-4ef1df05-7333-4569-b054-b1ddc98ae9a7","widgetType":"Faq","state":{"enabled":true,"header":{"title":"PERGUNTAS FREQUENTES"},"config":{"containerAppearance":"centered"},"faqItems":[{"title":"Quando o BTS se apresenta na América Latina?","content":{"adf":{"version":1,"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"O BTS iniciará a etapa latino-americana de sua turnê mundial 2026 em 2 de outubro de 2026, com um show em Bogotá, Colômbia. A turnê pela região será encerrada no fim do mês com três apresentações em São Paulo."}]}]},"md":{"result":"O BTS iniciará a etapa latino-americana de sua turnê mundial 2026 em 2 de outubro de 2026, com um show em Bogotá, Colômbia. A turnê pela região será encerrada no fim do mês com três apresentações em São Paulo.","warnings":{}}}},{"title":" Haverão pacotes VIP para tour do BTS?","content":{"adf":{"version":1,"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"Sim. Os ARMY terão a oportunidade de adquirir pacotes VIP mediante a disponibilidade para a tour do BTS. Os benefícios incluem:"}]},{"type":"heading","attrs":{"level":3},"content":[{"type":"text","text":"LATIN AMERICA SOUNDCHECK VIP PACKAGE","marks":[{"type":"strong"}]}]},{"type":"paragraph","content":[{"type":"text","text":" O valor do Soundcheck Pacote VIP é composto por um ingresso do tipo inteira ou meia-entrada* do setor Pista e os Serviços VIP** oferecidos."}]},{"type":"paragraph","content":[{"type":"text","text":"DESCRIÇÃO DOS SERVIÇOS DO VIP","marks":[{"type":"strong"}]}]},{"type":"bulletList","content":[{"type":"listItem","content":[{"type":"paragraph","content":[{"type":"text","text":"Entrada antecipada no local do evento"}]}]}]},{"type":"bulletList","content":[{"type":"listItem","content":[{"type":"paragraph","content":[{"type":"text","text":"Um ingresso de pista"}]}]}]},{"type":"bulletList","content":[{"type":"listItem","content":[{"type":"paragraph","content":[{"type":"text","text":"Acesso ao soundcheck pré-show do BTS"}]}]}]},{"type":"bulletList","content":[{"type":"listItem","content":[{"type":"paragraph","content":[{"type":"text","text":"Brinde VIP exclusivo"}]}]}]},{"type":"bulletList","content":[{"type":"listItem","content":[{"type":"paragraph","content":[{"type":"text","text":"Credencial VIP com cordão"}]}]}]},{"type":"bulletList","content":[{"type":"listItem","content":[{"type":"paragraph","content":[{"type":"text","text":"Oportunidade de comprar merchandising da turnê antes do show"}]}]}]},{"type":"bulletList","content":[{"type":"listItem","content":[{"type":"paragraph","content":[{"type":"text","text":"Check-in exclusivo e equipe dedicada de atendimento VIP no local"}]}]}]},{"type":"paragraph","content":[{"type":"text","text":"*O benefício da meia-entrada é aplicado exclusivamente sobre o valor do ingresso que dá acesso ao evento. De acordo com a legislação vigente, esse desconto não se estende aos valores correspondentes a serviços adicionais, como os que compõem os Pacotes VIP.","marks":[{"type":"em"}]}]},{"type":"paragraph","content":[{"type":"text","text":"**Para compras do show BTS WORLD TOUR ARIRANG através do site da Ticketmaster, a taxa de serviço do evento é aplicada sobre o valor do ingresso; verifique no ato da compra a taxa de serviço vigente, informada na página do evento. Para compras realizadas na Bilheteria Oficial, não haverá a cobrança da Taxa de Serviço. Poderão incidir outras taxas por ingresso de acordo com definições da promotora do evento sobre todos os ingressos comercializados, tanto no Marketplacequanto em pontos de venda físicos, com valores fixos, previamente informados e repassados integralmente à promotora do evento após as vendas, não havendo qualquer participação ou responsabilidade da Ticketmaster.","marks":[{"type":"em"}]}]}]},"md":{"result":"Sim. Os ARMY terão a oportunidade de adquirir pacotes VIP mediante a disponibilidade para a tour do BTS. Os benefícios incluem:\n\n### **LATIN AMERICA SOUNDCHECK VIP PACKAGE**\n\n O valor do Soundcheck Pacote VIP é composto por um ingresso do tipo inteira ou meia-entrada* do setor Pista e os Serviços VIP** oferecidos.\n\n**DESCRIÇÃO DOS SERVIÇOS DO VIP**\n\n  * Entrada antecipada no local do evento\n\n  * Um ingresso de pista\n\n  * Acesso ao soundcheck pré-show do BTS\n\n  * Brinde VIP exclusivo\n\n  * Credencial VIP com cordão\n\n  * Oportunidade de comprar merchandising da turnê antes do show\n\n  * Check-in exclusivo e equipe dedicada de atendimento VIP no local\n\n_*O benefício da meia-entrada é aplicado exclusivamente sobre o valor do ingresso que dá acesso ao evento. De acordo com a legislação vigente, esse desconto não se estende aos valores correspondentes a serviços adicionais, como os que compõem os Pacotes VIP._\n\n_**Para compras do show BTS WORLD TOUR ARIRANG através do site da Ticketmaster, a taxa de serviço do evento é aplicada sobre o valor do ingresso; verifique no ato da compra a taxa de serviço vigente, informada na página do evento. Para compras realizadas na Bilheteria Oficial, não haverá a cobrança da Taxa de Serviço. Poderão incidir outras taxas por ingresso de acordo com definições da promotora do evento sobre todos os ingressos comercializados, tanto no Marketplacequanto em pontos de venda físicos, com valores fixos, previamente informados e repassados integralmente à promotora do evento após as vendas, não havendo qualquer participação ou responsabilidade da Ticketmaster._","warnings":{}}}},{"title":"Como posso comprar ingressos para o BTS?","content":{"adf":{"version":1,"type":"doc","content":[{"type":"paragraph","content":[{"type":"text","text":"Os ingressos para a BTS WORLD TOUR ‘ARIRANG’ na América Latina estarão disponíveis através do site da Ticketmaster. Membros do ARMY MEMBERSHIP (GLOBAL) podem se registrar para participar da pré-venda, que irá ocorrer na terça-feira, 7 de abril, e para alguns shows na quarta-feira, 8 de abril. Consulte a lista de eventos para verificar os horários exatos de cada etapa de venda. Lembre-se de que os ingressos serão colocados à venda no fuso-horário correspondente ao local do evento que você está realizando a compra, e não necessariamente o seu fuso-horário."}]},{"type":"paragraph","content":[{"type":"text","text":"Para acessar a ARMY MEMBERSHIP PRESALE, você precisa ser membro ativo do ARMY MEMBERSHIP (GLOBAL) e ter se registrado para a pré-venda no Weverse até quinta-feira, 2 de abril, às 4PM (BRT)."}]},{"type":"paragraph","content":[{"type":"text","text":"O seu ARMY MEMBERSHIP NUMBER (o número do ARMY MEMBERSHIP possui 9 dígitos e começa com BA) irá funcionar como seu código de pré-venda somente se você tiver se cadastrado com sucesso para esta pré-venda no Weverse dentro do prazo estipulado. Certifique-se de que você possua uma conta ativa na Ticketmaster no país para o qual você pretende comprar ingressos. Se você ainda não possui uma conta, por favor acesse o site da Ticketmaster com antecedência e realize seu cadastro completo antes do início da pré-venda. Para Ticketmaster Brasil, clique "},{"type":"text","text":"aqui","marks":[{"type":"link","attrs":{"href":"https://www.ticketmaster.com.br/"}}]},{"type":"text","text":"; para Ticketmaster Chile, clique "},{"type":"text","text":"aqui","marks":[{"type":"link","attrs":{"href":"https://www.ticketmaster.cl/"}}]},{"type":"text","text":"; para Ticketmaster Colômbia, clique "},{"type":"text","text":"aqui","marks":[{"type":"link","attrs":{"href":"https://www.ticketmaster.co/"}}]},{"type":"text","text":"; e para Ticketmaster Perú, clique "},{"type":"text","text":"aqui","marks":[{"type":"link","attrs":{"href":"https://www.ticketmaster.pe/"}}]},{"type":"text","text":"."}]},{"type":"paragraph","content":[{"type":"text","text":"A VENDA GERAL de ingressos terá início na sexta-feira, 10 de abril. Verifique a lista de eventos para datas e horários exatos desta etapa de venda. "}]},{"type":"paragraph","content":[{"type":"text","text":"Para mais informações, clique "},{"type":"text","text":"AQUI","marks":[{"type":"link","attrs":{"href":"https://help.ticketmaster.com.br/hc/pt-br/articles/45190189941265-BTS-Informa%C3%A7%C3%B5es-Gerais"}},{"type":"strong"}]},{"type":"text","text":"."}]}]},"md":{"result":"Os ingressos para a BTS WORLD TOUR ‘ARIRANG’ na América Latina estarão disponíveis através do site da Ticketmaster. Membros do ARMY MEMBERSHIP (GLOBAL) podem se registrar para participar da pré-venda, que irá ocorrer na terça-feira, 7 de abril, e para alguns shows na quarta-feira, 8 de abril. Consulte a lista de eventos para verificar os horários exatos de cada etapa de venda. Lembre-se de que os ingressos serão colocados à venda no fuso-horário correspondente ao local do evento que você está realizando a compra, e não necessariamente o seu fuso-horário.\n\nPara acessar a ARMY MEMBERSHIP PRESALE, você precisa ser membro ativo do ARMY MEMBERSHIP (GLOBAL) e ter se registrado para a pré-venda no Weverse até quinta-feira, 2 de abril, às 4PM (BRT).\n\nO seu ARMY MEMBERSHIP NUMBER (o número do ARMY MEMBERSHIP possui 9 dígitos e começa com BA) irá funcionar como seu código de pré-venda somente se você tiver se cadastrado com sucesso para esta pré-venda no Weverse dentro do prazo estipulado. Certifique-se de que você possua uma conta ativa na Ticketmaster no país para o qual você pretende comprar ingressos. Se você ainda não possui uma conta, por favor acesse o site da Ticketmaster com antecedência e realize seu cadastro completo antes do início da pré-venda. Para Ticketmaster Brasil, clique [aqui](https://www.ticketmaster.com.br/); para Ticketmaster Chile, clique [aqui](https://www.ticketmaster.cl/); para Ticketmaster Colômbia, clique [aqui](https://www.ticketmaster.co/); e para Ticketmaster Perú, clique [aqui](https://www.ticketmaster.pe/).\n\nA VENDA GERAL de ingressos terá início na sexta-feira, 10 de abril. Verifique a lista de eventos para datas e horários exatos desta etapa de venda. \n\nPara mais informações, clique **[AQUI](https://help.ticketmaster.com.br/hc/pt-br/articles/45190189941265-BTS-Informa%C3%A7%C3%B5es-Gerais)**.","warnings":{}}}}]},"version":1}],"cmsMenuOptions":[],"cmsPageHeader":{"id":"e4f2312a-d7de-4db3-a931-9ae4315a63a8","enabled":true,"htmlUrl":"https://cdn.getcrowder.com/images/1cc6881c-8a6d-4c11-9b42-d0122e737e45-bts1920x720landing.gif","mobileUrl":"https://cdn.getcrowder.com/images/dff8e041-b489-44d5-bbad-49411dbba93a-bts768x768.gif"}}}});
+				App.start();
+			})();
+		</script>
+
+
+		<script src="../content/js/reactPlayer.b94940a4bc.js"></script>
+		<script>
+			(function() {
+			document.addEventListener('DOMContentLoaded', function () {
+				var containerId = 'video_player-' + "component-53aa4770-ddf7-4e02-a091-c320c1c6aefc";
+				var container = document.getElementById(containerId);
+				var url = "https://www.youtube.com/watch?v=b4iVv91Z6lY"
+				renderReactPlayer(container, { url, playing: false, width: "100%"});
+			});
+			})();
+		</script>
+    <script src="track.js"></script>
+    <script>
+    (function(){
+      fetch(apiUrl('/api/public-config')).then(function(r){ return r.json(); }).then(function(c){
+        if (c.ga4MeasurementId) {
+          var s = document.createElement('script');
+          s.async = true;
+          s.src = 'https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(c.ga4MeasurementId);
+          document.head.appendChild(s);
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){ dataLayer.push(arguments); }
+          window.gtag = gtag;
+          gtag('js', new Date());
+          gtag('config', c.ga4MeasurementId);
+          if (c.googleAdsConversionId) gtag('config', c.googleAdsConversionId);
+        }
+        if (window.BtsTracking) window.BtsTracking.pushPageView('home');
+      }).catch(function(){ if (window.BtsTracking) window.BtsTracking.pushPageView('home'); });
+    })();
+    </script>
+	</body>
+</html>

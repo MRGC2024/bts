@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="bts-api-base" content="">
+  <script src="../api-base.js"></script>
+  <title>Meu ingresso</title>
+  <link href="../content/css/styles.295508835c.css" rel="stylesheet" type="text/css">
+  <link rel="icon" sizes="196x196" href="../images/c1ade2d9-b2d1-484a-b163-0e5509e00144-favicon-32x32.png?w=196">
+  <style>
+    body { font-family: Averta, "Helvetica Neue", Helvetica, Arial, sans-serif; }
+    .mi-wrap { max-width: 520px; margin: 0 auto; padding: 96px 16px; }
+    .mi-card { border: 1px solid #ddd; border-radius: 12px; padding: 24px; background: linear-gradient(180deg, #f8fbff 0%, #fff 40%); }
+    .mi-card h1 { font-size: 22px; color: #024ddf; margin-top: 0; }
+    .mi-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #eee; font-size: 15px; }
+    .mi-row span:first-child { color: #666; }
+    .mi-badge { display: inline-block; padding: 4px 10px; border-radius: 4px; font-size: 12px; font-weight: 700; text-transform: uppercase; }
+    .mi-badge.paid { background: #e8f5e9; color: #048851; }
+    .mi-badge.wait { background: #fff8e1; color: #f57c00; }
+    .mi-qr { text-align: center; margin: 24px 0; }
+    .mi-qr img { border: 8px solid #fff; box-shadow: 0 4px 16px rgba(0,0,0,.12); border-radius: 8px; }
+    nav.navbar { background: #024ddf; border: 0; }
+  </style>
+</head>
+<body>
+<header>
+  <nav class="navbar navbar-fixed-top" role="navigation">
+    <div class="horizontal-container navbar-container">
+      <a style="height:48px;display:flex;align-items:center" href="bts-world-tour-arirang.html">
+        <img style="height:48px" src="../images/46b77c52-6acd-425b-985f-c036a9dcbf90-ticketmaster.svg?w=300" alt="">
+      </a>
+    </div>
+  </nav>
+</header>
+
+<main class="mi-wrap">
+  <div class="mi-card" id="card">
+    <h1>Detalhes da compra</h1>
+    <p id="miStatus"></p>
+    <div id="miBody"></div>
+    <div class="mi-qr" id="miQr" style="display:none;">
+      <p style="font-size:14px;color:#555;">Apresente este QR na entrada (referência do pedido).</p>
+      <img id="miQrImg" alt="QR" width="200" height="200" />
+    </div>
+  </div>
+</main>
+
+<script src="track.js"></script>
+<script>
+(function () {
+  const token = new URLSearchParams(window.location.search).get('token');
+  const card = document.getElementById('card');
+
+  fetch(apiUrl('/api/public-config'))
+    .then((r) => r.json())
+    .then((c) => {
+      if (c.ga4MeasurementId) {
+        const s = document.createElement('script');
+        s.async = true;
+        s.src = 'https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(c.ga4MeasurementId);
+        document.head.appendChild(s);
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        window.gtag = gtag;
+        gtag('js', new Date());
+        gtag('config', c.ga4MeasurementId);
+      }
+      window.BtsTracking.pushPageView('meu_ingresso');
+    })
+    .catch(() => window.BtsTracking.pushPageView('meu_ingresso'));
+
+  function fmtMoney(cents) {
+    return 'R$ ' + (cents / 100).toLocaleString('pt-BR', { minimumFractionDigits: 2 });
+  }
+
+  function render(o) {
+    const paid = o.status === 'paid';
+    document.getElementById('miStatus').innerHTML =
+      '<span class="mi-badge ' + (paid ? 'paid' : 'wait') + '">' +
+      (paid ? 'Pago' : 'Aguardando pagamento') + '</span>';
+
+    const rows = [
+      ['ID da solicitação', o.requestId || '—'],
+      ['ID da compra', o.fakePurchaseId || '—'],
+      ['Pedido interno', o.id],
+      ['Lote / evento', o.lote],
+      ['Setor', o.sectorLabel],
+      ['Tipo', o.ticketType === 'meia' ? 'Meia-entrada' : 'Inteira'],
+      ['Quantidade', String(o.quantity)],
+      ['Unitário', fmtMoney(o.unitPriceCents)],
+      ['Total', fmtMoney(o.totalCents)],
+      ['Nome', o.customerName],
+      ['E-mail', o.customerEmail],
+    ];
+    if (o.paidAt) rows.push(['Confirmado em', new Date(o.paidAt).toLocaleString('pt-BR')]);
+
+    document.getElementById('miBody').innerHTML = rows
+      .map(([k, v]) => '<div class="mi-row"><span>' + k + '</span><strong>' + v + '</strong></div>')
+      .join('');
+
+    const payload = 'BTS-ARIRANG|' + o.id + '|' + o.publicToken + '|' + (o.fakePurchaseId || '');
+    const qrUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=' + encodeURIComponent(payload);
+    document.getElementById('miQrImg').src = qrUrl;
+    document.getElementById('miQr').style.display = 'block';
+  }
+
+  if (!token) {
+    card.innerHTML = '<h1>Pedido não encontrado</h1><p>Verifique o link enviado por e-mail.</p>';
+  } else {
+    fetch(apiUrl('/api/order/' + encodeURIComponent(token)))
+      .then((r) => {
+        if (!r.ok) throw new Error('404');
+        return r.json();
+      })
+      .then(render)
+      .catch(() => {
+        card.innerHTML = '<h1>Pedido não encontrado</h1>';
+      });
+
+    setInterval(() => {
+      fetch(apiUrl('/api/order/' + encodeURIComponent(token)))
+        .then((r) => r.ok ? r.json() : null)
+        .then((o) => { if (o) render(o); })
+        .catch(() => {});
+    }, 5000);
+  }
+})();
+</script>
+</body>
+</html>

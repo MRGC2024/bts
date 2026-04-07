@@ -1,0 +1,45 @@
+================================================================================
+  DEPLOY NA RAILWAY — BTS INGRESSOS (Node + site estático)
+================================================================================
+
+1) O QUE SOBE
+   - Repositório Git com esta raiz (pastas server/, event/, admin/, images/, …).
+   - NÃO use só a pasta server/ como raiz do serviço: o Express serve os HTML
+     a partir da pasta pai (event/, admin/, etc.).
+
+2) NO RAILWAY (railway.app)
+   a) New Project → Deploy from GitHub → escolha o repo.
+   b) O arquivo railway.toml já aponta para o Dockerfile na raiz.
+      • Se o painel pedir “Root Directory”, deixe VAZIO (raiz do repo).
+   c) Gere um domínio público: Settings → Networking → Generate Domain.
+   d) Variáveis de ambiente (opcional mas recomendado):
+        PUBLIC_BASE_URL = https://SEU-PROJETO.up.railway.app
+      (copie exatamente a URL pública, sem barra no final)
+      Isso fixa o webhook do PIX mesmo se o painel ainda não tiver publicBaseUrl.
+      Opcional: ADMIN_PASSWORD = uma senha forte (acesso admin sem gravar hash na primeira vez)
+
+3) DEPLOY
+   - Cada push na branch conectada refaz o deploy (se ativado).
+   - Healthcheck interno: GET https://sua-url/health → deve responder "ok".
+   - Home: https://seudominio/event/bts-world-tour-arirang.html
+   - Painel: https://seudominio/admin/
+
+4) META bts-api-base (IMPORTANTE)
+   - Em produção a API é o MESMO domínio, sem subpasta → deixe vazio:
+        <meta name="bts-api-base" content="">
+   - Já está assim nos HTML. Não coloque /api em content.
+
+5) DADOS (pedidos e config)
+   - Gravados em server/data/ dentro do container.
+   - Sem volume: ao redeploy você PODE perder pedidos/config.
+   - Produção: Railway → Volume → monte em /app/server/data
+
+6) PHP / HostGator
+   - Na Railway este projeto usa só o Node (server/index.js).
+   - .htaccess e api/*.php não são usados aqui.
+
+7) PROBLEMAS
+   - 502: veja Deploy Logs; confira se PORT é injetado (Railway faz isso automaticamente).
+   - Webhook PIX não marca pago: confira PUBLIC_BASE_URL e URL no painel Quantum.
+
+================================================================================

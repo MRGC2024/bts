@@ -1,0 +1,79 @@
+================================================================================
+  BTS INGRESSOS — PUBLICAR NA HOSTGATOR (ZIP → public_html)
+================================================================================
+
+1) COMPACTAR
+   - Selecione TODA a pasta do projeto (arquivos na raiz do ZIP = raiz do site)
+   - Ex.: dentro do ZIP existem: event/, admin/, api/, lib/, data/, .htaccess, etc.
+
+2) ENVIAR
+   - cPanel → Gerenciador de arquivos → public_html (ou subpasta)
+   - Envie o ZIP → Extrair aqui
+   - Apague o ZIP depois
+
+3) PHP
+   - Necessário PHP 8.0 ou superior (cPanel → MultiPHP)
+   - Extensão curl habilitada (padrão na HostGator)
+
+4) PERMISSÕES
+   - Pasta data/ deve ser gravável pelo servidor (755 ou 775)
+   - O primeiro acesso à API cria data/config.json e data/orders.json
+
+5) SSL (HTTPS)
+   - Ative SSL grátis (Let’s Encrypt) no cPanel
+   - O webhook do PIX (Quantum) exige URL pública HTTPS em produção
+
+6) URL DO SITE
+   a) Se o site fica na RAIZ do domínio (https://seudominio.com.br/):
+      - Não precisa mudar nada no .htaccess (RewriteBase /)
+
+   b) Se fica em SUBPASTA (https://seudominio.com.br/bts/):
+      - Edite .htaccess e altere:
+           RewriteBase /bts/
+      - Em CADA página HTML principal, ajuste a meta (veja item 8)
+
+7) PAINEL ADMIN
+   - USE COM BARRA NO FINAL ou o .htaccess redireciona sozinho:
+       https://seudominio.com.br/admin/
+   - Se ainda der 404, teste direto:
+       https://seudominio.com.br/admin/index.php
+       https://seudominio.com.br/admin/index.html
+   - Primeiro login: qualquer senha com 6+ caracteres (grava a senha no servidor)
+     OU crie lib/local.php a partir de lib/local.example.php com BTS_ADMIN_PASSWORD
+   - Configure: chaves Quantum, token Utmify, GA4, URL pública (webhook)
+
+   IMPORTANTE — domínio apontando para subpasta:
+   - Se no Gerenciador de arquivos o site está em public_html/ALGUMA_PASTA/
+     o painel será https://seudominio.com.br/ALGUMA_PASTA/admin/
+   - Ajuste RewriteBase no .htaccess e a meta bts-api-base (item 8) com /ALGUMA_PASTA
+
+8) META bts-api-base (somente se usar SUBPASTA)
+   Nos arquivos:
+     event/bts-world-tour-arirang.html
+     event/ingressos.html
+     event/checkout.html
+     event/meu-ingresso.html
+     admin/index.html
+   Dentro de <head>, use:
+     <meta name="bts-api-base" content="/bts">
+   (troque /bts pelo nome da sua subpasta)
+
+9) INDEX
+   - index.php redireciona para event/bts-world-tour-arirang.html
+   - Opcional: em cPanel defina “index.php” como primeiro índice
+
+10) O NODE (pasta server/) NÃO É OBRIGATÓRIO NA HOSTGATOR
+   - Em produção a API é PHP: api/index.php
+   - Pode apagar a pasta server/ no servidor para economizar espaço (opcional)
+   - Para testar no PC, ainda pode usar: cd server && npm start
+
+11) PROBLEMAS COMUNS
+   - 404 em /admin → envie de novo a pasta admin/ com index.html, index.php e .htaccess
+     e o .htaccess da RAIZ do site (sem isso o redirecionamento não funciona).
+   - 404 em /api/... → mod_rewrite desligado ou .htaccess ignorado → fale com suporte
+   - 401 no admin → limpe cache / senha errada
+   - PIX não gera → chaves Quantum e URL pública no painel
+   - Webhook não atualiza pago → publicBaseUrl no painel = URL real com HTTPS
+   - Confira no cPanel se a pasta admin existe no MESMO nível de event/, api/, lib/
+
+================================================================================

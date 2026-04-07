@@ -1,0 +1,24 @@
+# HostGator / Apache — BTS Ingressos
+# Se o site estiver em uma SUBPASTA (ex: public_html/meusite/), altere a linha RewriteBase.
+
+DirectoryIndex index.php index.html
+
+RewriteEngine On
+RewriteBase /
+
+# Repassa Authorization (Bearer) para PHP em alguns servidores
+RewriteCond %{HTTP:Authorization} .
+RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+# /admin sem barra no final → /admin/ (evita 404 na HostGator)
+RewriteCond %{REQUEST_URI} !^/api/
+RewriteCond %{REQUEST_URI} /admin$
+RewriteRule .* %{REQUEST_URI}/ [R=301,L]
+
+# API REST (substitui o servidor Node em produção)
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^api/(.*)$ api/index.php?route=$1 [L,QSA]
+
+# Página inicial opcional (descomente se quiser raiz → evento)
+# DirectoryIndex index.php index.html

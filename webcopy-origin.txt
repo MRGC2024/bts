@@ -1,0 +1,428 @@
+Uri: https://34189e193af8.f1214fc5.us-east-1.captcha.awswaf.com/34189e193af8/jsapi.js
+File Name: C:\Downloaded Web Sites\www.ticketmaster.com.br\34189e193af8\jsapi.js
+Content Type: application/javascript
+
+Uri: https://34189e193af8.f1214fc5.us-east-1.token.awswaf.com/34189e193af8/9a3d9d72875b/challenge.js
+File Name: C:\Downloaded Web Sites\www.ticketmaster.com.br\34189e193af8\9a3d9d72875b\challenge.js
+Content Type: text/javascript
+
+Uri: https://cdn.boletius.com/content/css/styles.295508835c.css
+File Name: C:\Downloaded Web Sites\www.ticketmaster.com.br\content\css\styles.295508835c.css
+Content Type: text/css
+
+Uri: https://cdn.boletius.com/content/img/bg_working.jpg
+File Name: C:\Downloaded Web Sites\www.ticketmaster.com.br\content\img\bg_working.jpg
+Content Type: image/jpeg
+
+Uri: https://cdn.boletius.com/content/img/purchase_li.png
+File Name: C:\Downloaded Web Sites\www.ticketmaster.com.br\content\img\purchase_li.png
+Content Type: image/png
+
+Uri: https://cdn.boletius.com/content/js/bootstrap-dialog.min.d31cd3b133.js
+File Name: C:\Downloaded Web Sites\www.ticketmaster.com.br\content\js\bootstrap-dialog.min.d31cd3b133.js
+Content Type: application/javascript
+
+Uri: https://cdn.boletius.com/content/js/jquery.card.a9c4efaf33.js
+File Name: C:\Downloaded Web Sites\www.ticketmaster.com.br\content\js\jquery.card.a9c4efaf33.js
+Content Type: application/javascript
+
+Uri: https://cdn.boletius.com/content/js/jquery.maskedinput.min.240c61253d.js
+File Name: C:\Downloaded Web Sites\www.ticketmaster.com.br\content\js\jquery.maskedinput.min.240c61253d.js
+Content Type: application/javascript
+
+Uri: https://cdn.boletius.com/content/js/libphonenumber-js.min.js
+File Name: C:\Downloaded Web Sites\www.ticketmaster.com.br\content\js\libphonenumber-js.min.js
+Content Type: application/javascript
+
+Uri: https://cdn.boletius.com/content/js/md5.983f472ede.js
+File Name: C:\Downloaded Web Sites\www.ticketmaster.com.br\content\js\md5.983f472ede.js
+Content Type: application/javascript
+
+Uri: https://cdn.boletius.com/content/js/mergedAssets.d99af53e95.js
+File Name: C:\Downloaded Web Sites\www.ticketmaster.com.br\content\js\mergedAssets.d99af53e95.js
+Content Type: application/javascript
+
+Uri: https://cdn.boletius.com/content/js/reactPlayer.b94940a4bc.js
+File Name: C:\Downloaded Web Sites\www.ticketmaster.com.br\content\js\reactPlayer.b94940a4bc.js
+Content Type: application/javascript
+
+Uri: https://cdn.boletius.com/fonts/Averta-Black.woff2
+File Name: C:\Downloaded Web Sites\www.ticketmaster.com.br\fonts\Averta-Black.woff2
+Content Type: application/octet-stream
+
+Uri: https://cdn.boletius.com/fonts/Averta-Bold.woff2
+File Name: C:\Downloaded Web Sites\www.ticketmaster.com.br\fonts\Averta-Bold.woff2
+Content Type: application/octet-stream
+
+Uri: https://cdn.boletius.com/fonts/Averta-Light.woff2
+File Name: C:\Downloaded Web Sites\www.ticketmaster.com.br\fonts\Averta-Light.woff2
+Content Type: application/octet-stream
+
+Uri: https://cdn.boletius.com/fonts/Averta-Regular.woff2
+File Name: C:\Downloaded Web Sites\www.ticketmaster.com.br\fonts\Averta-Regular.woff2
+Content Type: application/octet-stream
+
+Uri: https://cdn.boletius.com/fonts/Averta-RegularItalic.woff2
+File Name: C:\Downloaded Web Sites\www.ticketmaster.com.br\fonts\Averta-RegularItalic.woff2
+Content Type: application/octet-stream
+
+Uri: https://cdn.boletius.com/fonts/Averta-Semibold.woff2
+File Name: C:\Downloaded Web Sites\www.ticketmaster.com.br\fonts\Averta-Semibold.woff2
+Content Type: application/octet-stream
+
+Uri: https://cdn.boletius.com/images/1643379516372-facebook.png
+File Name: C:\Downloaded Web Sites\www.ticketmaster.com.br\images\1643379516372-facebook.png
+Content Type: image/png
+
+Uri: https://cdn.boletius.com/images/1643379600508-instagram.png
+File Name: C:\Downloaded Web Sites\www.ticketmaster.com.br\images\1643379600508-instagram.png
+Content Type: image/png
+
+Uri: https://cdn.boletius.com/images/1643379625842-linkedin.png
+File Name: C:\Downloaded Web Sites\www.ticketmaster.com.br\images\1643379625842-linkedin.png
+Content Type: image/png
+
+Uri: https://cdn.boletius.com/images/1675716664687-null-seat-icon.svg
+File Name: C:\Downloaded Web Sites\www.ticketmaster.com.br\images\1675716664687-null-seat-icon.svg
+Content Type: image/svg+xml
+
+Uri: https://cdn.boletius.com/images/v3/landings/pin_1.gif
+File Name: C:\Downloaded Web Sites\www.ticketmaster.com.br\images\v3\landings\pin_1.gif
+Content Type: image/gif
+
+Uri: https://cdn.boletius.com/images/v3/landings/pin_2.gif
+File Name: C:\Downloaded Web Sites\www.ticketmaster.com.br\images\v3\landings\pin_2.gif
+Content Type: image/gif
+
+Uri: https://cdn.boletius.com/images/v3/landings/pin_3.gif
+File Name: C:\Downloaded Web Sites\www.ticketmaster.com.br\images\v3\landings\pin_3.gif
+Content Type: image/gif
+
+Uri: https://cdn.boletius.com/images/v3/landings/pin_4.gif
+File Name: C:\Downloaded Web Sites\www.ticketmaster.com.br\images\v3\landings\pin_4.gif
+Content Type: image/gif
+
+Uri: https://cdn.boletius.com/images/v3/landings/pin_5.gif
+File Name: C:\Downloaded Web Sites\www.ticketmaster.com.br\images\v3\landings\pin_5.gif
+Content Type: image/gif
+
+Uri: https://cdn.boletius.com/images/v3/landings/pin_6.gif
+File Name: C:\Downloaded Web Sites\www.ticketmaster.com.br\images\v3\landings\pin_6.gif
+Content Type: image/gif
+
+Uri: https://cdn.boletius.com/images/v3/ui/header_drop_shadow.png
+File Name: C:\Downloaded Web Sites\www.ticketmaster.com.br\images\v3\ui\header_drop_shadow.png
+Content Type: image/png
+
+Uri: https://cdn.boletius.com/images/v3/ui/select.png
+File Name: C:\Downloaded Web Sites\www.ticketmaster.com.br\images\v3\ui\select.png
+Content Type: image/png
+
+Uri: https://cdn.boletius.com/images/web/ticket/dashed.png
+File Name: C:\Downloaded Web Sites\www.ticketmaster.com.br\images\web\ticket\dashed.png
+Content Type: image/png
+
+Uri: https://cdn.boletius.com/images/web/ticket/fold_down.png
+File Name: C:\Downloaded Web Sites\www.ticketmaster.com.br\images\web\ticket\fold_down.png
+Content Type: image/png
+
+Uri: https://cdn.boletius.com/images/web/ticket/fold_up.png
+File Name: C:\Downloaded Web Sites\www.ticketmaster.com.br\images\web\ticket\fold_up.png
+Content Type: image/png
+
+Uri: https://cdn.boletius.com/images/web/ticket/no.png
+File Name: C:\Downloaded Web Sites\www.ticketmaster.com.br\images\web\ticket\no.png
+Content Type: image/png
+
+Uri: https://cdn.boletius.com/images/web/ticket/ok.png
+File Name: C:\Downloaded Web Sites\www.ticketmaster.com.br\images\web\ticket\ok.png
+Content Type: image/png
+
+Uri: https://cdn.boletius.com/images/web/ticket/pas.png
+File Name: C:\Downloaded Web Sites\www.ticketmaster.com.br\images\web\ticket\pas.png
+Content Type: image/png
+
+Uri: https://cdn.boletius.com/images/web/ticket/pen.png
+File Name: C:\Downloaded Web Sites\www.ticketmaster.com.br\images\web\ticket\pen.png
+Content Type: image/png
+
+Uri: https://cdn.boletius.com/ticketmaster/ticketmaster-logo_white.png
+File Name: C:\Downloaded Web Sites\www.ticketmaster.com.br\ticketmaster\ticketmaster-logo_white.png
+Content Type: image/png
+
+Uri: https://cdn.cookielaw.org/scripttemplates/otSDKStub.js
+File Name: C:\Downloaded Web Sites\www.ticketmaster.com.br\scripttemplates\otSDKStub.js
+Content Type: application/javascript
+
+Uri: https://cdn.getcrowder.com/images/1664925447950-null-ticketmaster-logo-azurewithoutr.png?w=300
+File Name: C:\Downloaded Web Sites\www.ticketmaster.com.br\images\1664925447950-null-ticketmaster-logo-azurewithoutr.png
+Content Type: image/png
+
+Uri: https://cdn.getcrowder.com/images/1669406310174-null-main-br.jpg
+File Name: C:\Downloaded Web Sites\www.ticketmaster.com.br\images\1669406310174-null-main-br.jpg
+Content Type: image/jpg
+
+Uri: https://cdn.getcrowder.com/images/1669406540752-null-main-m.jpg
+File Name: C:\Downloaded Web Sites\www.ticketmaster.com.br\images\1669406540752-null-main-m.jpg
+Content Type: image/jpg
+
+Uri: https://cdn.getcrowder.com/images/1669823412469-null-twitter.jpg
+File Name: C:\Downloaded Web Sites\www.ticketmaster.com.br\images\1669823412469-null-twitter.jpg
+Content Type: image/jpg
+
+Uri: https://cdn.getcrowder.com/images/1683574125568-null-blog.png
+File Name: C:\Downloaded Web Sites\www.ticketmaster.com.br\images\1683574125568-null-blog.png
+Content Type: image/png
+
+Uri: https://cdn.getcrowder.com/images/1683576712789-null-TM_Banner_LinkedIn.jpg
+File Name: C:\Downloaded Web Sites\www.ticketmaster.com.br\images\1683576712789-null-TM_Banner_LinkedIn.jpg
+Content Type: image/jpg
+
+Uri: https://cdn.getcrowder.com/images/1683576726535-null-TM_Banner_Blog.jpg
+File Name: C:\Downloaded Web Sites\www.ticketmaster.com.br\images\1683576726535-null-TM_Banner_Blog.jpg
+Content Type: image/jpg
+
+Uri: https://cdn.getcrowder.com/images/1683576746022-null-TM_Banner_Facebook.jpg
+File Name: C:\Downloaded Web Sites\www.ticketmaster.com.br\images\1683576746022-null-TM_Banner_Facebook.jpg
+Content Type: image/jpg
+
+Uri: https://cdn.getcrowder.com/images/1683576764155-null-TM_Banner_Instagram.jpeg
+File Name: C:\Downloaded Web Sites\www.ticketmaster.com.br\images\1683576764155-null-TM_Banner_Instagram.jpeg
+Content Type: image/jpeg
+
+Uri: https://cdn.getcrowder.com/images/1691588331940-null-l-tiktok.png
+File Name: C:\Downloaded Web Sites\www.ticketmaster.com.br\images\1691588331940-null-l-tiktok.png
+Content Type: image/png
+
+Uri: https://cdn.getcrowder.com/images/1691588419752-null-tiktok.jpeg
+File Name: C:\Downloaded Web Sites\www.ticketmaster.com.br\images\1691588419752-null-tiktok.jpeg
+Content Type: image/jpeg
+
+Uri: https://cdn.getcrowder.com/images/1712608775311-null-pattern-sh.png
+File Name: C:\Downloaded Web Sites\www.ticketmaster.com.br\images\1712608775311-null-pattern-sh.png
+Content Type: image/png
+
+Uri: https://cdn.getcrowder.com/images/1748954813856-sprite.png
+File Name: C:\Downloaded Web Sites\www.ticketmaster.com.br\images\1748954813856-sprite.png
+Content Type: image/png
+
+Uri: https://cdn.getcrowder.com/images/1748954835541-sprite-on.png
+File Name: C:\Downloaded Web Sites\www.ticketmaster.com.br\images\1748954835541-sprite-on.png
+Content Type: image/png
+
+Uri: https://cdn.getcrowder.com/images/1cc6881c-8a6d-4c11-9b42-d0122e737e45-bts1920x720landing.gif
+File Name: C:\Downloaded Web Sites\www.ticketmaster.com.br\images\1cc6881c-8a6d-4c11-9b42-d0122e737e45-bts1920x720landing.gif
+Content Type: image/gif
+
+Uri: https://cdn.getcrowder.com/images/2823b735-c0c0-49db-993f-1cab1e6969c5-btsprereservamobile.png
+File Name: C:\Downloaded Web Sites\www.ticketmaster.com.br\images\2823b735-c0c0-49db-993f-1cab1e6969c5-btsprereservamobile.png
+Content Type: image/png
+
+Uri: https://cdn.getcrowder.com/images/46b77c52-6acd-425b-985f-c036a9dcbf90-ticketmaster.svg?w=300
+File Name: C:\Downloaded Web Sites\www.ticketmaster.com.br\images\46b77c52-6acd-425b-985f-c036a9dcbf90-ticketmaster.svg
+Content Type: image/svg+xml
+
+Uri: https://cdn.getcrowder.com/images/4fcc7e0c-3fad-48e0-92d9-d7d3e72cc8f8-btsprereserva.png
+File Name: C:\Downloaded Web Sites\www.ticketmaster.com.br\images\4fcc7e0c-3fad-48e0-92d9-d7d3e72cc8f8-btsprereserva.png
+Content Type: image/png
+
+Uri: https://cdn.getcrowder.com/images/b9865031-e0ec-42c0-8fd3-08d3c72d817d-btsdesktop.png
+File Name: C:\Downloaded Web Sites\www.ticketmaster.com.br\images\b9865031-e0ec-42c0-8fd3-08d3c72d817d-btsdesktop.png
+Content Type: image/png
+
+Uri: https://cdn.getcrowder.com/images/c1ade2d9-b2d1-484a-b163-0e5509e00144-favicon-32x32.png?w=196
+File Name: C:\Downloaded Web Sites\www.ticketmaster.com.br\images\c1ade2d9-b2d1-484a-b163-0e5509e00144-favicon-32x32.png
+Content Type: image/png
+
+Uri: https://cdn.getcrowder.com/images/dff8e041-b489-44d5-bbad-49411dbba93a-bts768x768.gif
+File Name: C:\Downloaded Web Sites\www.ticketmaster.com.br\images\dff8e041-b489-44d5-bbad-49411dbba93a-bts768x768.gif
+Content Type: image/gif
+
+Uri: https://cdn.getcrowder.com/images/f943d2cc-4b9e-4939-835b-0176908ae260-btsmobile.png
+File Name: C:\Downloaded Web Sites\www.ticketmaster.com.br\images\f943d2cc-4b9e-4939-835b-0176908ae260-btsmobile.png
+Content Type: image/png
+
+Uri: https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.2/css/all.min.css
+File Name: C:\Downloaded Web Sites\www.ticketmaster.com.br\ajax\libs\font-awesome\5.10.2\css\all.min.css
+Content Type: text/css
+
+Uri: https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.2/webfonts/fa-brands-400.eot
+File Name: C:\Downloaded Web Sites\www.ticketmaster.com.br\ajax\libs\font-awesome\5.10.2\webfonts\fa-brands-400.eot
+Content Type: application/octet-stream
+
+Uri: https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.2/webfonts/fa-brands-400.eot?
+File Name: C:\Downloaded Web Sites\www.ticketmaster.com.br\ajax\libs\font-awesome\5.10.2\webfonts\fa-brands-400-1.eot
+Content Type: application/octet-stream
+
+Uri: https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.2/webfonts/fa-brands-400.svg
+File Name: C:\Downloaded Web Sites\www.ticketmaster.com.br\ajax\libs\font-awesome\5.10.2\webfonts\fa-brands-400.svg
+Content Type: image/svg+xml
+
+Uri: https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.2/webfonts/fa-brands-400.ttf
+File Name: C:\Downloaded Web Sites\www.ticketmaster.com.br\ajax\libs\font-awesome\5.10.2\webfonts\fa-brands-400.ttf
+Content Type: application/octet-stream
+
+Uri: https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.2/webfonts/fa-brands-400.woff
+File Name: C:\Downloaded Web Sites\www.ticketmaster.com.br\ajax\libs\font-awesome\5.10.2\webfonts\fa-brands-400.woff
+Content Type: application/octet-stream
+
+Uri: https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.2/webfonts/fa-brands-400.woff2
+File Name: C:\Downloaded Web Sites\www.ticketmaster.com.br\ajax\libs\font-awesome\5.10.2\webfonts\fa-brands-400.woff2
+Content Type: application/octet-stream
+
+Uri: https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.2/webfonts/fa-regular-400.eot
+File Name: C:\Downloaded Web Sites\www.ticketmaster.com.br\ajax\libs\font-awesome\5.10.2\webfonts\fa-regular-400.eot
+Content Type: application/octet-stream
+
+Uri: https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.2/webfonts/fa-regular-400.eot?
+File Name: C:\Downloaded Web Sites\www.ticketmaster.com.br\ajax\libs\font-awesome\5.10.2\webfonts\fa-regular-400-1.eot
+Content Type: application/octet-stream
+
+Uri: https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.2/webfonts/fa-regular-400.svg
+File Name: C:\Downloaded Web Sites\www.ticketmaster.com.br\ajax\libs\font-awesome\5.10.2\webfonts\fa-regular-400.svg
+Content Type: image/svg+xml
+
+Uri: https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.2/webfonts/fa-regular-400.ttf
+File Name: C:\Downloaded Web Sites\www.ticketmaster.com.br\ajax\libs\font-awesome\5.10.2\webfonts\fa-regular-400.ttf
+Content Type: application/octet-stream
+
+Uri: https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.2/webfonts/fa-regular-400.woff
+File Name: C:\Downloaded Web Sites\www.ticketmaster.com.br\ajax\libs\font-awesome\5.10.2\webfonts\fa-regular-400.woff
+Content Type: application/octet-stream
+
+Uri: https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.2/webfonts/fa-regular-400.woff2
+File Name: C:\Downloaded Web Sites\www.ticketmaster.com.br\ajax\libs\font-awesome\5.10.2\webfonts\fa-regular-400.woff2
+Content Type: application/octet-stream
+
+Uri: https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.2/webfonts/fa-solid-900.eot
+File Name: C:\Downloaded Web Sites\www.ticketmaster.com.br\ajax\libs\font-awesome\5.10.2\webfonts\fa-solid-900.eot
+Content Type: application/octet-stream
+
+Uri: https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.2/webfonts/fa-solid-900.eot?
+File Name: C:\Downloaded Web Sites\www.ticketmaster.com.br\ajax\libs\font-awesome\5.10.2\webfonts\fa-solid-900-1.eot
+Content Type: application/octet-stream
+
+Uri: https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.2/webfonts/fa-solid-900.svg
+File Name: C:\Downloaded Web Sites\www.ticketmaster.com.br\ajax\libs\font-awesome\5.10.2\webfonts\fa-solid-900.svg
+Content Type: image/svg+xml
+
+Uri: https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.2/webfonts/fa-solid-900.ttf
+File Name: C:\Downloaded Web Sites\www.ticketmaster.com.br\ajax\libs\font-awesome\5.10.2\webfonts\fa-solid-900.ttf
+Content Type: application/octet-stream
+
+Uri: https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.2/webfonts/fa-solid-900.woff
+File Name: C:\Downloaded Web Sites\www.ticketmaster.com.br\ajax\libs\font-awesome\5.10.2\webfonts\fa-solid-900.woff
+Content Type: application/octet-stream
+
+Uri: https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.2/webfonts/fa-solid-900.woff2
+File Name: C:\Downloaded Web Sites\www.ticketmaster.com.br\ajax\libs\font-awesome\5.10.2\webfonts\fa-solid-900.woff2
+Content Type: application/octet-stream
+
+Uri: https://challenges.cloudflare.com/turnstile/v0/b/625261456364/api.js
+File Name: C:\Downloaded Web Sites\www.ticketmaster.com.br\turnstile\v0\b\625261456364\api.js
+Content Type: application/javascript
+
+Uri: https://fonts.googleapis.com/css2?family=Inter&display=swap
+File Name: C:\Downloaded Web Sites\www.ticketmaster.com.br\css2-1
+Content Type: text/css
+
+Uri: https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap
+File Name: C:\Downloaded Web Sites\www.ticketmaster.com.br\css2
+Content Type: text/css
+
+Uri: https://fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,400italic,300italic,500,700,700italic,500italic,900,900italic
+File Name: C:\Downloaded Web Sites\www.ticketmaster.com.br\css
+Content Type: text/css
+
+Uri: https://fonts.gstatic.com/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuBWYMZg.ttf
+File Name: C:\Downloaded Web Sites\www.ticketmaster.com.br\s\inter\v20\UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuBWYMZg.ttf
+Content Type: font/ttf
+
+Uri: https://fonts.gstatic.com/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuDyfMZg.ttf
+File Name: C:\Downloaded Web Sites\www.ticketmaster.com.br\s\inter\v20\UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuDyfMZg.ttf
+Content Type: font/ttf
+
+Uri: https://fonts.gstatic.com/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuDyYMZg.ttf
+File Name: C:\Downloaded Web Sites\www.ticketmaster.com.br\s\inter\v20\UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuDyYMZg.ttf
+Content Type: font/ttf
+
+Uri: https://fonts.gstatic.com/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuFuYMZg.ttf
+File Name: C:\Downloaded Web Sites\www.ticketmaster.com.br\s\inter\v20\UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuFuYMZg.ttf
+Content Type: font/ttf
+
+Uri: https://fonts.gstatic.com/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuGKYMZg.ttf
+File Name: C:\Downloaded Web Sites\www.ticketmaster.com.br\s\inter\v20\UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuGKYMZg.ttf
+Content Type: font/ttf
+
+Uri: https://fonts.gstatic.com/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuI6fMZg.ttf
+File Name: C:\Downloaded Web Sites\www.ticketmaster.com.br\s\inter\v20\UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuI6fMZg.ttf
+Content Type: font/ttf
+
+Uri: https://fonts.gstatic.com/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuLyeMZg.ttf
+File Name: C:\Downloaded Web Sites\www.ticketmaster.com.br\s\inter\v20\UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuLyeMZg.ttf
+Content Type: font/ttf
+
+Uri: https://fonts.gstatic.com/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuLyfMZg.ttf
+File Name: C:\Downloaded Web Sites\www.ticketmaster.com.br\s\inter\v20\UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuLyfMZg.ttf
+Content Type: font/ttf
+
+Uri: https://fonts.gstatic.com/s/inter/v20/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuOKfMZg.ttf
+File Name: C:\Downloaded Web Sites\www.ticketmaster.com.br\s\inter\v20\UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuOKfMZg.ttf
+Content Type: font/ttf
+
+Uri: https://fonts.gstatic.com/s/roboto/v51/KFOKCnqEu92Fr1Mu53ZEC9_Vu3r1gIhOszmOClHrs6ljXfMMLijXuAj-lg.ttf
+File Name: C:\Downloaded Web Sites\www.ticketmaster.com.br\s\roboto\v51\KFOKCnqEu92Fr1Mu53ZEC9_Vu3r1gIhOszmOClHrs6ljXfMMLijXuAj-lg.ttf
+Content Type: font/ttf
+
+Uri: https://fonts.gstatic.com/s/roboto/v51/KFOKCnqEu92Fr1Mu53ZEC9_Vu3r1gIhOszmOClHrs6ljXfMMLmbXuAj-lg.ttf
+File Name: C:\Downloaded Web Sites\www.ticketmaster.com.br\s\roboto\v51\KFOKCnqEu92Fr1Mu53ZEC9_Vu3r1gIhOszmOClHrs6ljXfMMLmbXuAj-lg.ttf
+Content Type: font/ttf
+
+Uri: https://fonts.gstatic.com/s/roboto/v51/KFOKCnqEu92Fr1Mu53ZEC9_Vu3r1gIhOszmOClHrs6ljXfMMLoHQuAj-lg.ttf
+File Name: C:\Downloaded Web Sites\www.ticketmaster.com.br\s\roboto\v51\KFOKCnqEu92Fr1Mu53ZEC9_Vu3r1gIhOszmOClHrs6ljXfMMLoHQuAj-lg.ttf
+Content Type: font/ttf
+
+Uri: https://fonts.gstatic.com/s/roboto/v51/KFOKCnqEu92Fr1Mu53ZEC9_Vu3r1gIhOszmOClHrs6ljXfMMLoHRuAj-lg.ttf
+File Name: C:\Downloaded Web Sites\www.ticketmaster.com.br\s\roboto\v51\KFOKCnqEu92Fr1Mu53ZEC9_Vu3r1gIhOszmOClHrs6ljXfMMLoHRuAj-lg.ttf
+Content Type: font/ttf
+
+Uri: https://fonts.gstatic.com/s/roboto/v51/KFOKCnqEu92Fr1Mu53ZEC9_Vu3r1gIhOszmOClHrs6ljXfMMLrPQuAj-lg.ttf
+File Name: C:\Downloaded Web Sites\www.ticketmaster.com.br\s\roboto\v51\KFOKCnqEu92Fr1Mu53ZEC9_Vu3r1gIhOszmOClHrs6ljXfMMLrPQuAj-lg.ttf
+Content Type: font/ttf
+
+Uri: https://fonts.gstatic.com/s/roboto/v51/KFOKCnqEu92Fr1Mu53ZEC9_Vu3r1gIhOszmOClHrs6ljXfMMLt_QuAj-lg.ttf
+File Name: C:\Downloaded Web Sites\www.ticketmaster.com.br\s\roboto\v51\KFOKCnqEu92Fr1Mu53ZEC9_Vu3r1gIhOszmOClHrs6ljXfMMLt_QuAj-lg.ttf
+Content Type: font/ttf
+
+Uri: https://fonts.gstatic.com/s/roboto/v51/KFOMCnqEu92Fr1ME7kSn66aGLdTylUAMQXC89YmC2DPNWuaabVmUiA8.ttf
+File Name: C:\Downloaded Web Sites\www.ticketmaster.com.br\s\roboto\v51\KFOMCnqEu92Fr1ME7kSn66aGLdTylUAMQXC89YmC2DPNWuaabVmUiA8.ttf
+Content Type: font/ttf
+
+Uri: https://fonts.gstatic.com/s/roboto/v51/KFOMCnqEu92Fr1ME7kSn66aGLdTylUAMQXC89YmC2DPNWub2bVmUiA8.ttf
+File Name: C:\Downloaded Web Sites\www.ticketmaster.com.br\s\roboto\v51\KFOMCnqEu92Fr1ME7kSn66aGLdTylUAMQXC89YmC2DPNWub2bVmUiA8.ttf
+Content Type: font/ttf
+
+Uri: https://fonts.gstatic.com/s/roboto/v51/KFOMCnqEu92Fr1ME7kSn66aGLdTylUAMQXC89YmC2DPNWubEbFmUiA8.ttf
+File Name: C:\Downloaded Web Sites\www.ticketmaster.com.br\s\roboto\v51\KFOMCnqEu92Fr1ME7kSn66aGLdTylUAMQXC89YmC2DPNWubEbFmUiA8.ttf
+Content Type: font/ttf
+
+Uri: https://fonts.gstatic.com/s/roboto/v51/KFOMCnqEu92Fr1ME7kSn66aGLdTylUAMQXC89YmC2DPNWubEbVmUiA8.ttf
+File Name: C:\Downloaded Web Sites\www.ticketmaster.com.br\s\roboto\v51\KFOMCnqEu92Fr1ME7kSn66aGLdTylUAMQXC89YmC2DPNWubEbVmUiA8.ttf
+Content Type: font/ttf
+
+Uri: https://fonts.gstatic.com/s/roboto/v51/KFOMCnqEu92Fr1ME7kSn66aGLdTylUAMQXC89YmC2DPNWuYjalmUiA8.ttf
+File Name: C:\Downloaded Web Sites\www.ticketmaster.com.br\s\roboto\v51\KFOMCnqEu92Fr1ME7kSn66aGLdTylUAMQXC89YmC2DPNWuYjalmUiA8.ttf
+Content Type: font/ttf
+
+Uri: https://fonts.gstatic.com/s/roboto/v51/KFOMCnqEu92Fr1ME7kSn66aGLdTylUAMQXC89YmC2DPNWuZtalmUiA8.ttf
+File Name: C:\Downloaded Web Sites\www.ticketmaster.com.br\s\roboto\v51\KFOMCnqEu92Fr1ME7kSn66aGLdTylUAMQXC89YmC2DPNWuZtalmUiA8.ttf
+Content Type: font/ttf
+
+Uri: https://prod-assets.tmlat.com/Tk_general_c73b9c007f.svg
+File Name: C:\Downloaded Web Sites\www.ticketmaster.com.br\Tk_general_c73b9c007f.svg
+Content Type: image/svg+xml
+
+Uri: https://www.ticketmaster.com.br/event/bts-world-tour-arirang
+File Name: C:\Downloaded Web Sites\www.ticketmaster.com.br\event\bts-world-tour-arirang.html
+Content Type: text/html
+

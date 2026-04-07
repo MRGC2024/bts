@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="bts-api-base" content="">
+  <script src="../api-base.js"></script>
+  <title>Ingressos — BTS WORLD TOUR ARIRANG</title>
+  <link href="../content/css/styles.295508835c.css" rel="stylesheet" type="text/css">
+  <link rel="icon" sizes="196x196" href="../images/c1ade2d9-b2d1-484a-b163-0e5509e00144-favicon-32x32.png?w=196">
+  <style>
+    body { font-family: Averta, "Helvetica Neue", Helvetica, Arial, sans-serif; --main-color:#024ddf; --header-color:#024ddf; }
+    .ing-wrap { max-width: 1200px; margin: 0 auto; padding: 88px 16px 48px; }
+    .ing-banner img { width: 100%; border-radius: 6px; display: block; }
+    .ing-lote { font-size: 14px; color: #666; margin: 24px 0 8px; text-transform: uppercase; letter-spacing: .06em; }
+    .ing-title { font-size: 28px; font-weight: 700; color: #024ddf; margin: 0 0 24px; }
+    .ing-table-wrap { background: #fff; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,.08); overflow: hidden; margin-bottom: 32px; }
+    .ing-table-title { color: #024ddf; font-weight: 700; font-size: 22px; padding: 20px 24px 0; }
+    .ing-table { width: 100%; border-collapse: collapse; }
+    .ing-table th { text-align: left; color: #024ddf; font-weight: 600; padding: 16px 24px; border-bottom: 2px solid #024ddf; }
+    .ing-table td { padding: 14px 24px; border-bottom: 1px solid #e8e8e8; color: #121212; }
+    .ing-dot { display: inline-block; width: 12px; height: 12px; border-radius: 2px; margin-right: 10px; vertical-align: middle; }
+    .ing-cards { display: grid; gap: 16px; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
+    .ing-card { border: 1px solid #d6d6d6; border-radius: 8px; padding: 20px; background: #fafbfc; }
+    .ing-card h3 { margin: 0 0 12px; font-size: 18px; display: flex; align-items: center; gap: 8px; }
+    .ing-card .row { display: flex; justify-content: space-between; align-items: center; margin: 8px 0; font-size: 15px; }
+    .ing-card label { cursor: pointer; display: flex; align-items: center; gap: 8px; }
+    .ing-btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px; width: 100%;
+      margin-top: 16px; padding: 14px; background: #024ddf; color: #fff !important; border: none; border-radius: 4px;
+      font-weight: 600; font-size: 16px; text-decoration: none; cursor: pointer; box-sizing: border-box;
+    }
+    .ing-btn:hover { background: #0035a0; color: #fff !important; }
+  </style>
+</head>
+<body class="accesible" id="Ingressos">
+<a href="#main" class="skip-link" style="position:absolute;top:-40px;left:0;background:#0057b4;color:#fff;padding:10px;z-index:100">Ir para conteúdo</a>
+
+<div data-view="header/header_view">
+  <header>
+    <nav class="navbar navbar-fixed-top" role="navigation" style="background:#024ddf; border:0;">
+      <div class="horizontal-container navbar-container">
+        <div class="horizontal-container">
+          <a class="" style="height:100%" href="bts-world-tour-arirang.html">
+            <img class="logo logo-dark" style="height:48px;display:none" src="../images/1664925447950-null-ticketmaster-logo-azurewithoutr.png?w=300" alt="Logo">
+            <img class="logo logo-light" style="height:48px" src="../images/46b77c52-6acd-425b-985f-c036a9dcbf90-ticketmaster.svg?w=300" alt="Logo">
+          </a>
+        </div>
+        <div class="hidden-xs" style="flex-shrink:0;color:#fff;display:flex;align-items:center;font-size:14px;">
+          <a href="bts-world-tour-arirang.html" style="color:#fff;text-decoration:underline;">Voltar ao evento</a>
+        </div>
+      </div>
+    </nav>
+  </header>
+</div>
+
+<main id="main" class="ing-wrap">
+  <p class="ing-lote" id="ingLoteLabel"></p>
+  <h1 class="ing-title">Seleção de ingressos</h1>
+
+  <div class="ing-banner">
+    <img src="../images/b9865031-e0ec-42c0-8fd3-08d3c72d817d-btsdesktop.png" alt="Mapa de setores — MorumBIS">
+  </div>
+
+  <div class="ing-table-wrap">
+    <div class="ing-table-title">SETORES E PREÇOS</div>
+    <table class="ing-table" aria-label="Preços por setor">
+      <thead>
+        <tr><th>Setor</th><th>Inteira</th><th>Meia-entrada</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><span class="ing-dot" style="background:#e02020;"></span>Arquibancada</td><td>R$&nbsp;680,00</td><td>R$&nbsp;340,00</td></tr>
+        <tr><td><span class="ing-dot" style="background:#ff9800;"></span>Cadeira Superior</td><td>R$&nbsp;980,00</td><td>R$&nbsp;490,00</td></tr>
+        <tr><td><span class="ing-dot" style="background:#00bcd4;"></span>Cadeira Inferior</td><td>R$&nbsp;1.080,00</td><td>R$&nbsp;540,00</td></tr>
+        <tr><td><span class="ing-dot" style="background:#0d47a1;"></span>Pista</td><td>R$&nbsp;1.250,00</td><td>R$&nbsp;625,00</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="ing-cards" id="sectorCards"></div>
+</main>
+
+<footer class="footer" style="display:block;margin-top:48px;" role="contentinfo">
+  <div class="container">
+    <div class="footer-tm text-left">
+      <div class="row footer-pt" style="display:block">
+        <div class="col-xs-12"><p style="color:#fff">Ingressos sujeitos à disponibilidade. Ambiente seguro de pagamento.</p></div>
+      </div>
+      <div class="row">
+        <div class="col-xs-12"><img alt="Ticketmaster" class="logo" src="../ticketmaster/ticketmaster-logo_white.png"></div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="track.js"></script>
+<script>
+(function () {
+  const LOTE_LABELS = {
+    'pre-army-31-10': 'PRÉ-VENDA ARMY MEMBERSHIP — 31/10/2026 • MorumBIS',
+    'vg-28-10': 'VENDA GERAL — 28/10/2026 • MorumBIS',
+    'vg-30-10': 'VENDA GERAL — 30/10/2026 • MorumBIS',
+    'vg-31-10': 'VENDA GERAL — 31/10/2026 • MorumBIS',
+  };
+  const sectors = [
+    { id: 'arquib', label: 'Arquibancada', color: '#e02020', inteira: 680, meia: 340 },
+    { id: 'sup', label: 'Cadeira Superior', color: '#ff9800', inteira: 980, meia: 490 },
+    { id: 'inf', label: 'Cadeira Inferior', color: '#00bcd4', inteira: 1080, meia: 540 },
+    { id: 'pista', label: 'Pista', color: '#0d47a1', inteira: 1250, meia: 625 },
+  ];
+
+  const params = new URLSearchParams(window.location.search);
+  const lote = params.get('lote') || 'vg-28-10';
+  document.getElementById('ingLoteLabel').textContent = LOTE_LABELS[lote] || lote;
+
+  const cards = document.getElementById('sectorCards');
+  sectors.forEach((s) => {
+    const card = document.createElement('div');
+    card.className = 'ing-card';
+    card.innerHTML = `
+      <h3><span class="ing-dot" style="background:${s.color};border-radius:50%"></span> ${s.label}</h3>
+      <div class="row"><label><input type="radio" name="tt_${s.id}" value="inteira" checked> Inteira</label> <strong>R$ ${s.inteira.toLocaleString('pt-BR')},00</strong></div>
+      <div class="row"><label><input type="radio" name="tt_${s.id}" value="meia"> Meia-entrada</label> <strong>R$ ${s.meia.toLocaleString('pt-BR')},00</strong></div>
+      <button type="button" class="ing-btn" data-sector="${s.id}">Comprar ingresso</button>
+    `;
+    cards.appendChild(card);
+  });
+
+  cards.querySelectorAll('.ing-btn').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const sid = btn.getAttribute('data-sector');
+      const type = cards.querySelector(`input[name="tt_${sid}"]:checked`).value;
+      const q = new URLSearchParams(window.location.search);
+      q.set('sector', sid);
+      q.set('ticketType', type);
+      window.location.href = 'checkout.html?' + q.toString();
+    });
+  });
+
+  function loadAnalytics() {
+    fetch(apiUrl('/api/public-config')).then(r=>r.json()).then((c) => {
+      if (c.ga4MeasurementId) {
+        const s = document.createElement('script');
+        s.async = true;
+        s.src = 'https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(c.ga4MeasurementId);
+        document.head.appendChild(s);
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        window.gtag = gtag;
+        gtag('js', new Date());
+        gtag('config', c.ga4MeasurementId);
+        if (c.googleAdsConversionId) {
+          gtag('config', c.googleAdsConversionId);
+        }
+      }
+      window.BtsTracking.pushPageView('ingressos');
+    }).catch(()=>{ window.BtsTracking.pushPageView('ingressos'); });
+  }
+  loadAnalytics();
+})();
+</script>
+</body>
+</html>

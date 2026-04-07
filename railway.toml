@@ -1,0 +1,9 @@
+# Railway — use a RAIZ do projeto (onde estão server/, event/, Dockerfile).
+# https://docs.railway.app/deploy/config-as-code
+
+[build]
+builder = "dockerfile"
+dockerfilePath = "Dockerfile"
+
+[deploy]
+numReplicas = 1

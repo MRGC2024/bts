@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="bts-api-base" content="">
+  <script src="../api-base.js"></script>
+  <title>Painel — BTS Ingressos</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { font-family: system-ui, sans-serif; margin: 0; background: #0f1419; color: #e6edf3; min-height: 100vh; }
+    a { color: #58a6ff; }
+    .wrap { max-width: 1100px; margin: 0 auto; padding: 24px; }
+    h1 { font-size: 1.35rem; margin: 0 0 20px; }
+    .grid { display: grid; gap: 16px; grid-template-columns: 1fr 1fr; }
+    @media (max-width: 800px) { .grid { grid-template-columns: 1fr; } }
+    .card { background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 20px; }
+    .card h2 { margin: 0 0 16px; font-size: 1rem; }
+    label { display: block; font-size: 12px; color: #8b949e; margin: 12px 0 6px; }
+    input, textarea { width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #30363d; background: #0d1117; color: #e6edf3; font-size: 14px; }
+    textarea { min-height: 72px; font-family: inherit; }
+    button { padding: 10px 18px; border-radius: 6px; border: 0; background: #238636; color: #fff; font-weight: 600; cursor: pointer; margin-top: 16px; }
+    button.secondary { background: #21262d; border: 1px solid #30363d; }
+    .login { max-width: 400px; margin: 80px auto; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th, td { text-align: left; padding: 8px; border-bottom: 1px solid #30363d; vertical-align: top; }
+    th { color: #8b949e; font-weight: 600; }
+    .pill { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 600; }
+    .pill.paid { background: #23863633; color: #3fb950; }
+    .pill.wait { background: #d2992233; color: #e3b341; }
+    .pill.err { background: #f8514933; color: #ff7b72; }
+    .mono { font-family: ui-monospace, monospace; font-size: 11px; word-break: break-all; }
+  </style>
+</head>
+<body>
+<div id="viewLogin" class="wrap login card">
+  <h1>Painel administrativo</h1>
+  <label>Senha</label>
+  <input type="password" id="loginPass" autocomplete="current-password">
+  <button type="button" id="loginBtn">Entrar</button>
+  <p id="loginErr" style="color:#f85149;font-size:14px;display:none;"></p>
+</div>
+
+<div id="viewApp" class="wrap" style="display:none;">
+  <h1>Painel BTS Ingressos</h1>
+
+  <div class="grid">
+    <div class="card">
+      <h2>Quantum Payments (PIX)</h2>
+      <label>Chave pública</label>
+      <input id="quantumPublicKey" autocomplete="off">
+      <label>Chave secreta (deixe em branco para não alterar)</label>
+      <input id="quantumSecretKey" type="password" placeholder="********" autocomplete="new-password">
+      <label>Base da API (opcional)</label>
+      <input id="quantumApiBase" placeholder="https://api.quantumpayments.com.br/v1">
+    </div>
+    <div class="card">
+      <h2>Utmify & rastreamento</h2>
+      <label>Token API Utmify (x-api-token)</label>
+      <input id="utmifyApiToken" type="password" autocomplete="off" placeholder="********">
+      <label>Nome da plataforma (campo platform)</label>
+      <input id="platformName" placeholder="BTSIngressos">
+      <label>URL pública do site (webhook PIX)</label>
+      <input id="publicBaseUrl" placeholder="https://seu-dominio.com">
+    </div>
+    <div class="card">
+      <h2>Google Analytics & Ads</h2>
+      <label>GA4 Measurement ID</label>
+      <input id="ga4MeasurementId" placeholder="G-XXXXXXXXXX">
+      <label>Google Ads — ID de conversão / conta (gtag config)</label>
+      <input id="googleAdsConversionId" placeholder="AW-XXXXXXXXX">
+      <label>Label de conversão (opcional)</label>
+      <input id="googleAdsConversionLabel">
+    </div>
+    <div class="card">
+      <h2>Limites & segurança</h2>
+      <label>Máx. ingressos por pedido (limite PIX)</label>
+      <input id="maxTicketsPerOrder" type="number" min="1" max="99" value="4">
+      <label>Nova senha do painel (mín. 6 caracteres)</label>
+      <input type="password" id="newAdminPassword" autocomplete="new-password" placeholder="Deixe vazio para manter">
+      <button type="button" id="saveCfg">Salvar configurações</button>
+      <p id="saveMsg" style="font-size:14px;margin-top:12px;"></p>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:20px;">
+    <h2>Vendas</h2>
+    <button type="button" class="secondary" id="reloadOrders">Atualizar lista</button>
+    <div style="overflow-x:auto;margin-top:12px;">
+      <table>
+        <thead>
+          <tr>
+            <th>Data</th>
+            <th>Status</th>
+            <th>Cliente</th>
+            <th>Setor / Qtd</th>
+            <th>Total</th>
+            <th>IDs</th>
+          </tr>
+        </thead>
+        <tbody id="ordersBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <p style="margin-top:32px;font-size:13px;color:#8b949e;">
+    Os pedidos são gravados em <code>server/data/orders.json</code>. Em produção use backup e HTTPS.
+  </p>
+</div>
+
+<script>
+(function () {
+  let token = sessionStorage.getItem('bts_admin_t') || '';
+
+  const $ = (id) => document.getElementById(id);
+
+  function authHeaders() {
+    return { Authorization: 'Bearer ' + token, 'Content-Type': 'application/json' };
+  }
+
+  async function api(path, opt) {
+    const r = await fetch(apiUrl(path), { ...opt, headers: { ...authHeaders(), ...(opt && opt.headers) } });
+    const data = await r.json().catch(() => ({}));
+    if (!r.ok) throw new Error(data.error || r.status);
+    return data;
+  }
+
+  function showApp() {
+    $('viewLogin').style.display = 'none';
+    $('viewApp').style.display = 'block';
+  }
+
+  $('loginBtn').onclick = async () => {
+    $('loginErr').style.display = 'none';
+    try {
+      const res = await fetch(apiUrl('/api/admin/login'), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: $('loginPass').value }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error);
+      token = data.token;
+      sessionStorage.setItem('bts_admin_t', token);
+      showApp();
+      loadCfg();
+      loadOrders();
+    } catch (e) {
+      $('loginErr').textContent = e.message;
+      $('loginErr').style.display = 'block';
+    }
+  };
+
+  if (token) {
+    fetch(apiUrl('/api/admin/config'), { headers: authHeaders() })
+      .then((r) => (r.ok ? showApp() : null))
+      .then(() => {
+        if ($('viewApp').style.display === 'block') {
+          loadCfg();
+          loadOrders();
+        }
+      });
+  }
+
+  async function loadCfg() {
+    try {
+      const c = await api('/api/admin/config');
+      $('quantumPublicKey').value = c.quantumPublicKey || '';
+      $('quantumApiBase').value = c.quantumApiBase || '';
+      $('platformName').value = c.platformName || '';
+      $('publicBaseUrl').value = c.publicBaseUrl || '';
+      $('ga4MeasurementId').value = c.ga4MeasurementId || '';
+      $('googleAdsConversionId').value = c.googleAdsConversionId || '';
+      $('googleAdsConversionLabel').value = c.googleAdsConversionLabel || '';
+      $('maxTicketsPerOrder').value = c.maxTicketsPerOrder || 4;
+    } catch {
+      sessionStorage.removeItem('bts_admin_t');
+      location.reload();
+    }
+  }
+
+  $('saveCfg').onclick = async () => {
+    $('saveMsg').textContent = '';
+    try {
+      await api('/api/admin/config', {
+        method: 'PUT',
+        body: JSON.stringify({
+          quantumPublicKey: $('quantumPublicKey').value.trim(),
+          quantumSecretKey: $('quantumSecretKey').value,
+          quantumApiBase: $('quantumApiBase').value.trim(),
+          utmifyApiToken: $('utmifyApiToken').value,
+          platformName: $('platformName').value.trim(),
+          publicBaseUrl: $('publicBaseUrl').value.trim(),
+          ga4MeasurementId: $('ga4MeasurementId').value.trim(),
+          googleAdsConversionId: $('googleAdsConversionId').value.trim(),
+          googleAdsConversionLabel: $('googleAdsConversionLabel').value.trim(),
+          maxTicketsPerOrder: parseInt($('maxTicketsPerOrder').value, 10) || 4,
+          newAdminPassword: $('newAdminPassword').value || undefined,
+        }),
+      });
+      $('saveMsg').textContent = 'Salvo.';
+      $('quantumSecretKey').value = '';
+      $('utmifyApiToken').value = '';
+      $('newAdminPassword').value = '';
+    } catch (e) {
+      $('saveMsg').textContent = 'Erro: ' + e.message;
+    }
+  };
+
+  function pill(status) {
+    const s = String(status);
+    let cls = 'wait';
+    if (s === 'paid' || s === 'approved') cls = 'paid';
+    if (s === 'gateway_error' || s === 'refused') cls = 'err';
+    return '<span class="pill ' + cls + '">' + s + '</span>';
+  }
+
+  async function loadOrders() {
+    const { orders } = await api('/api/admin/orders');
+    $('ordersBody').innerHTML = orders
+      .map((o) => {
+        const total = (o.totalCents / 100).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+        const when = new Date(o.createdAt).toLocaleString('pt-BR');
+        return (
+          '<tr><td>' + when + '</td><td>' + pill(o.status) + '</td><td>' +
+          (o.customerName || '') + '<br><span class="mono">' + (o.customerEmail || '') + '</span></td><td>' +
+          (o.sectorLabel || '') + '<br>' + o.ticketType + ' × ' + o.quantity + '</td><td>' + total + '</td><td class="mono">' +
+          'SOL: ' + (o.requestId || '') + '<br>TM: ' + (o.fakePurchaseId || '') + '<br>GW: ' + (o.quantumTransactionId || '') +
+          '</td></tr>'
+        );
+      })
+      .join('');
+  }
+
+  $('reloadOrders').onclick = () => loadOrders().catch((e) => alert(e.message));
+})();
+</script>
+</body>
+</html>
