@@ -1,13 +1,13 @@
 /* Shell compartilhado: header/footer alinhados à home Ticketmaster + espaçamento do main */
 .tm-shell-body {
-  padding-top: 56px;
+  padding-top: 72px;
   background: #f4f6f8;
   min-height: 100vh;
 }
 
 @media (min-width: 768px) {
   .tm-shell-body {
-    padding-top: 64px;
+    padding-top: 80px;
   }
 }
 
@@ -18,7 +18,7 @@
 }
 
 .tm-shell-body .navbar-container {
-  min-height: 52px;
+  min-height: 56px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -43,19 +43,17 @@
   min-width: 0;
 }
 
-.tm-shell-body .navbar img.logo-unified {
+/* Logo do header: mesmo tamanho em todas as páginas (home antes: inline max 56px; shell antigo: 34–40px) */
+.navbar.navbar-fixed-top img.logo.logo-unified {
   display: block !important;
-  max-height: 34px;
+  height: auto !important;
+  max-height: 56px;
   width: auto;
-  max-width: min(200px, 52vw);
+  max-width: min(280px, 72vw);
   object-fit: contain;
-}
-
-@media (min-width: 768px) {
-  .tm-shell-body .navbar img.logo-unified {
-    max-height: 40px;
-    max-width: 240px;
-  }
+  padding: 0 !important;
+  margin: 0;
+  vertical-align: middle;
 }
 
 .tm-shell-body .tm-shell-nav-actions {
