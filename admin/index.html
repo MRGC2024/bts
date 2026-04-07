@@ -8,110 +8,198 @@
   <title>Painel — BTS Ingressos</title>
   <style>
     * { box-sizing: border-box; }
-    body { font-family: system-ui, sans-serif; margin: 0; background: #0f1419; color: #e6edf3; min-height: 100vh; }
-    a { color: #58a6ff; }
-    .wrap { max-width: 1100px; margin: 0 auto; padding: 24px; }
-    h1 { font-size: 1.35rem; margin: 0 0 20px; }
-    .grid { display: grid; gap: 16px; grid-template-columns: 1fr 1fr; }
-    @media (max-width: 800px) { .grid { grid-template-columns: 1fr; } }
-    .card { background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 20px; }
-    .card h2 { margin: 0 0 16px; font-size: 1rem; }
-    label { display: block; font-size: 12px; color: #8b949e; margin: 12px 0 6px; }
-    input, textarea { width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #30363d; background: #0d1117; color: #e6edf3; font-size: 14px; }
-    textarea { min-height: 72px; font-family: inherit; }
-    button { padding: 10px 18px; border-radius: 6px; border: 0; background: #238636; color: #fff; font-weight: 600; cursor: pointer; margin-top: 16px; }
-    button.secondary { background: #21262d; border: 1px solid #30363d; }
-    .login { max-width: 400px; margin: 80px auto; }
+    body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; margin: 0; background: #0d1117; color: #e6edf3; min-height: 100vh; }
+    a { color: #58a6ff; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .adm-topbar {
+      background: #161b22; border-bottom: 1px solid #30363d; padding: 14px 24px;
+      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;
+    }
+    .adm-topbar h1 { margin: 0; font-size: 1.1rem; font-weight: 700; letter-spacing: -0.02em; }
+    .adm-topbar .sub { display: block; font-size: 12px; color: #8b949e; font-weight: 500; margin-top: 4px; }
+    .adm-topbar-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .adm-topbar-actions .btn-save {
+      padding: 8px 16px; border-radius: 6px; border: 0; background: #238636; color: #fff; font-size: 13px; font-weight: 700; cursor: pointer;
+    }
+    .adm-topbar-actions .btn-save:hover { filter: brightness(1.08); }
+    .adm-topbar-actions .btn-out {
+      background: #21262d; border: 1px solid #30363d; color: #e6edf3; padding: 8px 14px; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer;
+    }
+    .adm-topbar-actions .btn-out:hover { background: #30363d; }
+    #saveMsgTop { font-size: 13px; color: #8b949e; }
+    #saveMsgTop.ok { color: #3fb950; }
+    .adm-shell { max-width: 1120px; margin: 0 auto; padding: 20px 20px 48px; }
+    .adm-tabs { display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 20px; border-bottom: 1px solid #30363d; }
+    .adm-tab {
+      padding: 10px 16px; font-size: 13px; font-weight: 600; color: #8b949e; cursor: pointer; border: 1px solid transparent;
+      border-bottom: none; background: transparent; border-radius: 6px 6px 0 0; margin-bottom: -1px;
+    }
+    .adm-tab:hover { color: #e6edf3; background: #21262d; }
+    .adm-tab[aria-selected="true"] { color: #e6edf3; background: #161b22; border-color: #30363d; border-bottom: 1px solid #161b22; }
+    .adm-panel { display: none; animation: admFade 0.2s ease; }
+    .adm-panel.is-active { display: block; }
+    @keyframes admFade { from { opacity: 0; } to { opacity: 1; } }
+    .adm-card {
+      background: #161b22; border: 1px solid #30363d; border-radius: 10px; padding: 22px 24px; margin-bottom: 18px;
+    }
+    .adm-card h2 { margin: 0 0 6px; font-size: 1rem; font-weight: 700; color: #f0f6fc; }
+    .adm-card .hint { margin: 0 0 18px; font-size: 13px; color: #8b949e; line-height: 1.55; }
+    label { display: block; font-size: 12px; color: #8b949e; margin: 14px 0 6px; font-weight: 600; }
+    input {
+      width: 100%; max-width: 560px; padding: 10px 12px; border-radius: 6px; border: 1px solid #30363d;
+      background: #0d1117; color: #e6edf3; font-size: 14px;
+    }
+    .adm-callout {
+      background: #1f2933; border: 1px solid #3b4754; border-radius: 8px; padding: 16px 18px; margin-bottom: 20px;
+      font-size: 13px; line-height: 1.55; color: #adbac7;
+    }
+    .adm-callout strong { color: #79c0ff; }
+    .adm-callout code { font-size: 12px; background: #0d1117; padding: 2px 6px; border-radius: 4px; color: #d2a8ff; }
+    .login { max-width: 400px; margin: 80px auto; background: #161b22; border: 1px solid #30363d; border-radius: 10px; padding: 28px; }
+    .login h1 { margin: 0 0 8px; font-size: 1.25rem; }
+    .login .hint { margin: 0 0 20px; color: #8b949e; font-size: 13px; }
+    .login .primary { width: 100%; padding: 12px; border: 0; border-radius: 6px; background: #238636; color: #fff; font-weight: 700; cursor: pointer; margin-top: 8px; }
     table { width: 100%; border-collapse: collapse; font-size: 13px; }
-    th, td { text-align: left; padding: 8px; border-bottom: 1px solid #30363d; vertical-align: top; }
-    th { color: #8b949e; font-weight: 600; }
-    .pill { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 600; }
+    th, td { text-align: left; padding: 10px 8px; border-bottom: 1px solid #30363d; vertical-align: top; }
+    th { color: #8b949e; font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: 0.04em; }
+    .pill { display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: 11px; font-weight: 700; }
     .pill.paid { background: #23863633; color: #3fb950; }
     .pill.wait { background: #d2992233; color: #e3b341; }
     .pill.err { background: #f8514933; color: #ff7b72; }
     .mono { font-family: ui-monospace, monospace; font-size: 11px; word-break: break-all; }
+    .table-wrap { overflow-x: auto; margin-top: 12px; border: 1px solid #30363d; border-radius: 8px; }
+    .table-wrap table { margin: 0; }
+    .table-wrap th, .table-wrap td { padding: 12px; }
   </style>
 </head>
 <body>
-<div id="viewLogin" class="wrap login card">
+<div id="viewLogin" class="login">
   <h1>Painel administrativo</h1>
-  <label>Senha</label>
+  <p class="hint">Depois de entrar, leia <strong>Visão geral</strong> para saber onde os arquivos são salvos no servidor.</p>
+  <label for="loginPass">Senha</label>
   <input type="password" id="loginPass" autocomplete="current-password">
-  <button type="button" id="loginBtn">Entrar</button>
-  <p id="loginErr" style="color:#f85149;font-size:14px;display:none;"></p>
+  <button type="button" class="primary" id="loginBtn">Entrar</button>
+  <p id="loginErr" style="color:#f85149;font-size:14px;display:none;margin-top:14px;"></p>
 </div>
 
-<div id="viewApp" class="wrap" style="display:none;">
-  <h1>Painel BTS Ingressos</h1>
+<div id="viewApp" style="display:none;">
+  <header class="adm-topbar">
+    <div>
+      <h1>BTS Ingressos <span style="font-weight:500;color:#8b949e">· Painel</span></h1>
+      <span class="sub">Integrações · limites · vendas</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
+      <span id="saveMsgTop"></span>
+      <div class="adm-topbar-actions">
+        <button type="button" class="btn-save" id="saveCfgTop">Salvar configurações</button>
+        <button type="button" class="btn-out" id="btnLogout">Sair</button>
+      </div>
+    </div>
+  </header>
 
-  <div class="grid">
-    <div class="card">
-      <h2>Quantum Payments (PIX)</h2>
-      <label>Chave pública</label>
-      <input id="quantumPublicKey" autocomplete="off">
-      <label>Chave secreta (deixe em branco para não alterar)</label>
-      <input id="quantumSecretKey" type="password" placeholder="********" autocomplete="new-password">
-      <label>Base da API (opcional)</label>
-      <input id="quantumApiBase" placeholder="https://api.quantumpayments.com.br/v1">
-    </div>
-    <div class="card">
-      <h2>Utmify & rastreamento</h2>
-      <label>Token API Utmify (x-api-token)</label>
-      <input id="utmifyApiToken" type="password" autocomplete="off" placeholder="********">
-      <label>Nome da plataforma (campo platform)</label>
-      <input id="platformName" placeholder="BTSIngressos">
-      <label>URL pública do site (webhook PIX)</label>
-      <input id="publicBaseUrl" placeholder="https://seu-dominio.com">
-    </div>
-    <div class="card">
-      <h2>Google Analytics & Ads</h2>
-      <label>GA4 Measurement ID</label>
-      <input id="ga4MeasurementId" placeholder="G-XXXXXXXXXX">
-      <label>Google Ads — ID de conversão / conta (gtag config)</label>
-      <input id="googleAdsConversionId" placeholder="AW-XXXXXXXXX">
-      <label>Label de conversão (opcional)</label>
-      <input id="googleAdsConversionLabel">
-    </div>
-    <div class="card">
-      <h2>Limites & segurança</h2>
-      <label>Máx. ingressos por pedido (limite PIX)</label>
-      <input id="maxTicketsPerOrder" type="number" min="1" max="99" value="4">
-      <label>Nova senha do painel (mín. 6 caracteres)</label>
-      <input type="password" id="newAdminPassword" autocomplete="new-password" placeholder="Deixe vazio para manter">
-      <button type="button" id="saveCfg">Salvar configurações</button>
-      <p id="saveMsg" style="font-size:14px;margin-top:12px;"></p>
-    </div>
+  <div class="adm-shell">
+      <div class="adm-tabs" role="tablist">
+        <button type="button" class="adm-tab is-active" role="tab" data-tab="p-home">Visão geral</button>
+        <button type="button" class="adm-tab" role="tab" data-tab="p-pay">Gateway PIX</button>
+        <button type="button" class="adm-tab" role="tab" data-tab="p-utm">Utmify e URL</button>
+        <button type="button" class="adm-tab" role="tab" data-tab="p-ga">Google</button>
+        <button type="button" class="adm-tab" role="tab" data-tab="p-sec">Segurança</button>
+        <button type="button" class="adm-tab" role="tab" data-tab="p-sales">Vendas</button>
+      </div>
+
+      <section class="adm-panel is-active" id="p-home" role="tabpanel">
+        <div class="adm-callout">
+          <strong>Onde os dados do painel são salvos?</strong><br><br>
+          Com o <strong>Node.js</strong> (Railway ou <code>npm start</code> na pasta <code>server/</code>):<br>
+          · <code>server/data/config.json</code> — chaves do gateway, token Utmify, GA/Ads, URL pública do site, limite de ingressos por pedido, hash da sua senha de admin.<br>
+          · <code>server/data/orders.json</code> — lista de todos os pedidos (cliente, PIX, status, UTM, IDs).<br><br>
+          Na <strong>Railway</strong>, sem <strong>volume</strong> montado em <code>/app/server/data</code>, esses arquivos podem ser <strong>perdidos a cada redeploy</strong>. Para produção, adicione um volume ou backup externo.<br><br>
+          Na <strong>HostGator (PHP)</strong>, o equivalente fica na pasta <code>data/</code> na raiz do site (ver <code>api/index.php</code> / <code>lib/Store.php</code>).
+        </div>
+        <div class="adm-card">
+          <h2>Como usar</h2>
+          <p class="hint">Preencha as abas <em>Gateway PIX</em>, <em>Utmify e URL</em>, <em>Google</em> e <em>Segurança</em>. Depois clique em <strong>Salvar configurações</strong> no topo (grava todos os campos de uma vez). A aba <em>Vendas</em> é somente leitura da lista de pedidos.</p>
+        </div>
+      </section>
+
+      <section class="adm-panel" id="p-pay" role="tabpanel">
+        <div class="adm-card">
+          <h2>Quantum Payments (PIX)</h2>
+          <p class="hint">Credenciais da API Basic (chave pública e secreta no painel Quantum).</p>
+          <label for="quantumPublicKey">Chave pública</label>
+          <input id="quantumPublicKey" autocomplete="off">
+          <label for="quantumSecretKey">Chave secreta (vazio = não alterar)</label>
+          <input id="quantumSecretKey" type="password" placeholder="********" autocomplete="new-password">
+          <label for="quantumApiBase">Base da API (opcional)</label>
+          <input id="quantumApiBase" placeholder="https://api.quantumpayments.com.br/v1">
+        </div>
+      </section>
+
+      <section class="adm-panel" id="p-utm" role="tabpanel">
+        <div class="adm-card">
+          <h2>Utmify e URL pública</h2>
+          <p class="hint">Token de API da Utmify e a URL base do site para o webhook do PIX (ex.: <code>https://seu-app.up.railway.app</code>).</p>
+          <label for="utmifyApiToken">Token API Utmify (x-api-token)</label>
+          <input id="utmifyApiToken" type="password" autocomplete="off" placeholder="********">
+          <label for="platformName">Nome da plataforma (campo platform na Utmify)</label>
+          <input id="platformName" placeholder="BTSIngressos">
+          <label for="publicBaseUrl">URL pública do site (webhook)</label>
+          <input id="publicBaseUrl" placeholder="https://...">
+        </div>
+      </section>
+
+      <section class="adm-panel" id="p-ga" role="tabpanel">
+        <div class="adm-card">
+          <h2>Google Analytics e Ads</h2>
+          <p class="hint">IDs carregados no front para <code>gtag</code>.</p>
+          <label for="ga4MeasurementId">GA4 Measurement ID</label>
+          <input id="ga4MeasurementId" placeholder="G-XXXXXXXXXX">
+          <label for="googleAdsConversionId">Google Ads (gtag config)</label>
+          <input id="googleAdsConversionId" placeholder="AW-XXXXXXXXX">
+          <label for="googleAdsConversionLabel">Label de conversão (opcional)</label>
+          <input id="googleAdsConversionLabel">
+        </div>
+      </section>
+
+      <section class="adm-panel" id="p-sec" role="tabpanel">
+        <div class="adm-card">
+          <h2>Limites e senha do painel</h2>
+          <p class="hint">O limite máximo de ingressos por pedido reduz risco de abuso e alinha com limites do gateway.</p>
+          <label for="maxTicketsPerOrder">Máximo de ingressos por pedido</label>
+          <input id="maxTicketsPerOrder" type="number" min="1" max="99" value="4">
+          <label for="newAdminPassword">Nova senha do painel (mín. 6 caracteres, vazio = manter)</label>
+          <input type="password" id="newAdminPassword" autocomplete="new-password" placeholder="••••••••">
+        </div>
+      </section>
+
+      <section class="adm-panel" id="p-sales" role="tabpanel">
+        <div class="adm-card">
+          <h2>Vendas</h2>
+          <p class="hint">Dados vindos de <code>server/data/orders.json</code>. Atualize após novos pedidos.</p>
+          <button type="button" class="btn-out" id="reloadOrders">Atualizar lista</button>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Data</th>
+                  <th>Status</th>
+                  <th>Cliente</th>
+                  <th>Setor / Qtd</th>
+                  <th>Total</th>
+                  <th>IDs</th>
+                </tr>
+              </thead>
+              <tbody id="ordersBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
   </div>
-
-  <div class="card" style="margin-top:20px;">
-    <h2>Vendas</h2>
-    <button type="button" class="secondary" id="reloadOrders">Atualizar lista</button>
-    <div style="overflow-x:auto;margin-top:12px;">
-      <table>
-        <thead>
-          <tr>
-            <th>Data</th>
-            <th>Status</th>
-            <th>Cliente</th>
-            <th>Setor / Qtd</th>
-            <th>Total</th>
-            <th>IDs</th>
-          </tr>
-        </thead>
-        <tbody id="ordersBody"></tbody>
-      </table>
-    </div>
-  </div>
-
-  <p style="margin-top:32px;font-size:13px;color:#8b949e;">
-    Os pedidos são gravados em <code>server/data/orders.json</code>. Em produção use backup e HTTPS.
-  </p>
 </div>
 
 <script>
 (function () {
   let token = sessionStorage.getItem('bts_admin_t') || '';
-
   const $ = (id) => document.getElementById(id);
 
   function authHeaders() {
@@ -130,6 +218,19 @@
     $('viewApp').style.display = 'block';
   }
 
+  function bindTabs() {
+    const tabs = document.querySelectorAll('.adm-tab');
+    const panels = document.querySelectorAll('.adm-panel');
+    tabs.forEach((t) => {
+      t.addEventListener('click', () => {
+        const id = t.getAttribute('data-tab');
+        tabs.forEach((x) => { x.classList.toggle('is-active', x === t); x.setAttribute('aria-selected', x === t ? 'true' : 'false'); });
+        panels.forEach((p) => p.classList.toggle('is-active', p.id === id));
+      });
+    });
+  }
+  bindTabs();
+
   $('loginBtn').onclick = async () => {
     $('loginErr').style.display = 'none';
     try {
@@ -143,44 +244,50 @@
       token = data.token;
       sessionStorage.setItem('bts_admin_t', token);
       showApp();
-      loadCfg();
-      loadOrders();
+      loadCfg().catch(() => {
+        sessionStorage.removeItem('bts_admin_t');
+        location.reload();
+      });
+      loadOrders().catch(() => {});
     } catch (e) {
       $('loginErr').textContent = e.message;
       $('loginErr').style.display = 'block';
     }
   };
 
+  $('btnLogout').onclick = () => {
+    sessionStorage.removeItem('bts_admin_t');
+    location.reload();
+  };
+
   if (token) {
     fetch(apiUrl('/api/admin/config'), { headers: authHeaders() })
       .then((r) => (r.ok ? showApp() : null))
       .then(() => {
-        if ($('viewApp').style.display === 'block') {
-          loadCfg();
-          loadOrders();
-        }
+        if ($('viewApp').style.display !== 'block') return;
+        loadCfg().catch(() => {
+          sessionStorage.removeItem('bts_admin_t');
+          location.reload();
+        });
+        loadOrders().catch(() => {});
       });
   }
 
   async function loadCfg() {
-    try {
-      const c = await api('/api/admin/config');
-      $('quantumPublicKey').value = c.quantumPublicKey || '';
-      $('quantumApiBase').value = c.quantumApiBase || '';
-      $('platformName').value = c.platformName || '';
-      $('publicBaseUrl').value = c.publicBaseUrl || '';
-      $('ga4MeasurementId').value = c.ga4MeasurementId || '';
-      $('googleAdsConversionId').value = c.googleAdsConversionId || '';
-      $('googleAdsConversionLabel').value = c.googleAdsConversionLabel || '';
-      $('maxTicketsPerOrder').value = c.maxTicketsPerOrder || 4;
-    } catch {
-      sessionStorage.removeItem('bts_admin_t');
-      location.reload();
-    }
+    const c = await api('/api/admin/config');
+    $('quantumPublicKey').value = c.quantumPublicKey || '';
+    $('quantumApiBase').value = c.quantumApiBase || '';
+    $('platformName').value = c.platformName || '';
+    $('publicBaseUrl').value = c.publicBaseUrl || '';
+    $('ga4MeasurementId').value = c.ga4MeasurementId || '';
+    $('googleAdsConversionId').value = c.googleAdsConversionId || '';
+    $('googleAdsConversionLabel').value = c.googleAdsConversionLabel || '';
+    $('maxTicketsPerOrder').value = c.maxTicketsPerOrder || 4;
   }
 
-  $('saveCfg').onclick = async () => {
-    $('saveMsg').textContent = '';
+  async function doSave() {
+    $('saveMsgTop').textContent = '';
+    $('saveMsgTop').classList.remove('ok');
     try {
       await api('/api/admin/config', {
         method: 'PUT',
@@ -198,14 +305,17 @@
           newAdminPassword: $('newAdminPassword').value || undefined,
         }),
       });
-      $('saveMsg').textContent = 'Salvo.';
       $('quantumSecretKey').value = '';
       $('utmifyApiToken').value = '';
       $('newAdminPassword').value = '';
+      $('saveMsgTop').textContent = 'Configurações salvas.';
+      $('saveMsgTop').classList.add('ok');
     } catch (e) {
-      $('saveMsg').textContent = 'Erro: ' + e.message;
+      $('saveMsgTop').textContent = 'Erro: ' + e.message;
     }
-  };
+  }
+
+  $('saveCfgTop').onclick = () => doSave().catch(() => {});
 
   function pill(status) {
     const s = String(status);
