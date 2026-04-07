@@ -1,5 +1,4 @@
 import { btsTrace, btsTraceErr } from './bts-log.js';
-import { appendGatewayPixLog } from './gateway-log.js';
 
 const UTMIFY_URL = 'https://api.utmify.com.br/api-credentials/orders';
 
@@ -141,11 +140,12 @@ export function formatQuantumItemTitle(order, cfg, opts = {}) {
 }
 
 /**
- * Monta body da transação Quantum com amount/items coerentes (evita "valores inválidos").
- * - reais: amount e unitPrice em decimal (2 casas), alinhados ao total em centavos internos.
- * - cents: inteiros em centavos.
+ * Monta body da transação Quantum.
+ * A API usa `amount` e `items[].unitPrice` em CENTAVOS (inteiros), alinhados a `order.totalCents`.
+ * O modo antigo "reais" dividia por 100 e enviava 680 em vez de 68000 — o gateway tratava como
+ * 680 centavos (R$ 6,80) em vez de R$ 680,00.
  */
-export function buildQuantumTransactionPayload(order, unitMode, cfg = {}) {
+export function buildQuantumTransactionPayload(order, cfg = {}) {
   const totalCents = Math.round(Number(order.totalCents) || 0);
   const qty = Math.max(1, Number(order.quantity) || 1);
   const doc = String(order.customerDocument || '').replace(/\D/g, '');
@@ -175,61 +175,31 @@ export function buildQuantumTransactionPayload(order, unitMode, cfg = {}) {
     },
   };
 
-  if (unitMode === 'cents') {
-    const unitCents = Math.round(totalCents / qty);
-    const remainder = totalCents - unitCents * qty;
-    let items;
-    if (remainder !== 0) {
-      items = [
-        {
-          title: titleBundle(),
-          quantity: 1,
-          unitPrice: totalCents,
-          tangible: false,
-          externalRef: `${order.id}-item`,
-        },
-      ];
-    } else {
-      items = [
-        {
-          title: titleLine(),
-          quantity: qty,
-          unitPrice: unitCents,
-          tangible: false,
-          externalRef: `${order.id}-item`,
-        },
-      ];
-    }
-    return { ...base, amount: totalCents, items };
-  }
-
-  const amount = Number((totalCents / 100).toFixed(2));
-  const unitCentsEach = Math.floor(totalCents / qty);
-  const remainder = totalCents - unitCentsEach * qty;
+  const unitCents = Math.round(totalCents / qty);
+  const remainder = totalCents - unitCents * qty;
   let items;
   if (remainder !== 0) {
     items = [
       {
         title: titleBundle(),
         quantity: 1,
-        unitPrice: amount,
+        unitPrice: totalCents,
         tangible: false,
         externalRef: `${order.id}-item`,
       },
     ];
   } else {
-    const unitPrice = Number((unitCentsEach / 100).toFixed(2));
     items = [
       {
         title: titleLine(),
         quantity: qty,
-        unitPrice,
+        unitPrice: unitCents,
         tangible: false,
         externalRef: `${order.id}-item`,
       },
     ];
   }
-  return { ...base, amount, items };
+  return { ...base, amount: totalCents, items };
 }
 
 /** Erro da Quantum costuma vir em data.error como objeto, ex.: { postbackUrl: "..." } */
@@ -241,32 +211,6 @@ function isPostbackRelatedQuantumError(data, rawText) {
     if ('postbackUrl' in err || 'postback' in err) return true;
   }
   return false;
-}
-
-/**
- * Só tenta reais↔centavos quando há sinal claro de valor; a mensagem genérica
- * "Requisição com valores inválidos" também cobre postbackUrl inválida — não pode disparar retry.
- */
-function isLikelyInvalidAmountError(data, rawText) {
-  if (isPostbackRelatedQuantumError(data, rawText)) return false;
-  const err = data?.error;
-  if (err && typeof err === 'object' && err !== null && !Array.isArray(err)) {
-    const keys = Object.keys(err).join(' ').toLowerCase();
-    if (keys.includes('amount') || keys.includes('unitprice') || keys.includes('items') || keys.includes('price')) {
-      return true;
-    }
-  }
-  const errStr = typeof err === 'string' ? err : '';
-  const msg = `${errStr} ${data?.message || ''} ${rawText || ''}`.toLowerCase();
-  if (msg.includes('postback')) return false;
-  if (msg.includes('valores inválidos') || msg.includes('valores invalidos')) return false;
-  return (
-    ((msg.includes('valor') || msg.includes('amount')) &&
-      (msg.includes('inválid') || msg.includes('invalid'))) ||
-    msg.includes('unitprice') ||
-    msg.includes('unit price') ||
-    msg.includes('preço')
-  );
 }
 
 /**
@@ -390,121 +334,86 @@ export async function createQuantumPix(cfg, order, publicBaseUrl, logRid = '') {
     throw err;
   }
 
-  const primaryUnit = (cfg.quantumAmountUnit || 'reais').toLowerCase() === 'cents' ? 'cents' : 'reais';
-  const alternateUnit = primaryUnit === 'cents' ? 'reais' : 'cents';
+  const body = buildQuantumTransactionPayload(order, cfg);
+  body.postbackUrl = postbackUrl;
 
-  const attempts = [
-    { unit: primaryUnit, label: 'primary' },
-    { unit: alternateUnit, label: 'retry_alt_unit' },
-  ];
+  btsTrace(scope, 'request', {
+    orderId: order.id,
+    amount: body.amount,
+    items: body.items?.map((it) => ({
+      q: it.quantity,
+      unitPrice: it.unitPrice,
+      title: it.title?.slice(0, 40),
+    })),
+    postbackUrl,
+  });
 
-  for (let i = 0; i < attempts.length; i++) {
-    const { unit, label } = attempts[i];
-    const body = buildQuantumTransactionPayload(order, unit, cfg);
-    body.postbackUrl = postbackUrl;
-
-    btsTrace(scope, `request_${label}`, {
-      orderId: order.id,
-      amountUnit: unit,
-      amount: body.amount,
-      items: body.items?.map((it) => ({
-        q: it.quantity,
-        unitPrice: it.unitPrice,
-        title: it.title?.slice(0, 40),
-      })),
-      postbackUrl,
-    });
-
-    let fetchRes;
-    try {
-      fetchRes = await postQuantum(base, auth, body);
-    } catch (e) {
-      btsTraceErr(scope, 'fetch_failed', e, { attempt: label });
-      const err = new Error(
-        e?.name === 'TimeoutError'
-          ? 'Tempo esgotado ao falar com api.quantumpayments.com.br'
-          : 'Rede ao contactar Quantum: ' + (e?.message || 'falha')
-      );
-      err.code = 'quantum_network';
-      throw err;
-    }
-
-    const { res, data, text } = fetchRes;
-
-    const root = data?.data ?? data;
-    const topKeys = data && typeof data === 'object' ? Object.keys(data).slice(0, 30) : [];
-    const pixKeys =
-      root && typeof root === 'object' && root.pix && typeof root.pix === 'object'
-        ? Object.keys(root.pix)
-        : [];
-
-    if (res.ok) {
-      btsTrace(scope, 'response_ok', {
-        attempt: label,
-        amountUnit: unit,
-        httpStatus: res.status,
-        transactionId: root?.id ?? data?.id ?? null,
-        dataKeys: topKeys,
-        pixKeys,
-        hasExtractablePixCode: !!extractPixPayload(data),
-      });
-      return data;
-    }
-
-    let msg =
-      (typeof data.message === 'string' && data.message) ||
-      (typeof data.error === 'string' && data.error) ||
-      (Array.isArray(data.errors) ? JSON.stringify(data.errors).slice(0, 400) : null) ||
-      `Quantum HTTP ${res.status}`;
-
-    btsTrace(scope, 'http_error', {
-      attempt: label,
-      amountUnit: unit,
-      httpStatus: res.status,
-      responseKeys: topKeys,
-      bodySnippet: text?.slice(0, 1800),
-      postbackUrl,
-    });
-
-    const err = new Error(msg);
-    err.details = data;
-    err.status = res.status;
-    err.code = 'quantum_upstream';
-
-    if (isPostbackRelatedQuantumError(data, text)) {
-      err.code = 'quantum_postback_url';
-      const nested = data?.error;
-      const reason =
-        nested && typeof nested === 'object' && nested.postbackUrl
-          ? String(nested.postbackUrl)
-          : typeof nested === 'string'
-            ? nested
-            : '';
-      err.message = reason
-        ? `${reason} URL enviada: ${postbackUrl}`
-        : `URL de postback recusada pela Quantum. Verifique URL pública (HTTPS, domínio liberado no painel Quantum). Enviada: ${postbackUrl}`;
-    }
-
-    const shouldRetry =
-      i === 0 &&
-      isLikelyInvalidAmountError(data, text) &&
-      primaryUnit !== alternateUnit;
-
-    if (shouldRetry) {
-      appendGatewayPixLog({
-        kind: 'quantum_retry',
-        orderId: order.id,
-        rid,
-        message: `1ª tentativa (${primaryUnit}) recusada pela Quantum; em seguida tentamos ${alternateUnit}.`,
-        httpStatus: res.status,
-        gatewayMessage: msg,
-      });
-      continue;
-    }
-
-    btsTraceErr(scope, 'upstream_rejected', err, { httpStatus: res.status, attempt: label });
+  let fetchRes;
+  try {
+    fetchRes = await postQuantum(base, auth, body);
+  } catch (e) {
+    btsTraceErr(scope, 'fetch_failed', e, {});
+    const err = new Error(
+      e?.name === 'TimeoutError'
+        ? 'Tempo esgotado ao falar com api.quantumpayments.com.br'
+        : 'Rede ao contactar Quantum: ' + (e?.message || 'falha')
+    );
+    err.code = 'quantum_network';
     throw err;
   }
 
-  throw new Error('Quantum: falha após tentativas de valor.');
+  const { res, data, text } = fetchRes;
+
+  const root = data?.data ?? data;
+  const topKeys = data && typeof data === 'object' ? Object.keys(data).slice(0, 30) : [];
+  const pixKeys =
+    root && typeof root === 'object' && root.pix && typeof root.pix === 'object'
+      ? Object.keys(root.pix)
+      : [];
+
+  if (res.ok) {
+    btsTrace(scope, 'response_ok', {
+      httpStatus: res.status,
+      transactionId: root?.id ?? data?.id ?? null,
+      dataKeys: topKeys,
+      pixKeys,
+      hasExtractablePixCode: !!extractPixPayload(data),
+    });
+    return data;
+  }
+
+  let msg =
+    (typeof data.message === 'string' && data.message) ||
+    (typeof data.error === 'string' && data.error) ||
+    (Array.isArray(data.errors) ? JSON.stringify(data.errors).slice(0, 400) : null) ||
+    `Quantum HTTP ${res.status}`;
+
+  btsTrace(scope, 'http_error', {
+    httpStatus: res.status,
+    responseKeys: topKeys,
+    bodySnippet: text?.slice(0, 1800),
+    postbackUrl,
+  });
+
+  const err = new Error(msg);
+  err.details = data;
+  err.status = res.status;
+  err.code = 'quantum_upstream';
+
+  if (isPostbackRelatedQuantumError(data, text)) {
+    err.code = 'quantum_postback_url';
+    const nested = data?.error;
+    const reason =
+      nested && typeof nested === 'object' && nested.postbackUrl
+        ? String(nested.postbackUrl)
+        : typeof nested === 'string'
+          ? nested
+          : '';
+    err.message = reason
+      ? `${reason} URL enviada: ${postbackUrl}`
+      : `URL de postback recusada pela Quantum. Verifique URL pública (HTTPS, domínio liberado no painel Quantum). Enviada: ${postbackUrl}`;
+  }
+
+  btsTraceErr(scope, 'upstream_rejected', err, { httpStatus: res.status });
+  throw err;
 }

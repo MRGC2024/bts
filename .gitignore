@@ -1,8 +1,9 @@
 # Dependências
 server/node_modules/
 
-# Pedidos (dados sensíveis de clientes — não versionar)
+# Pedidos e comprovantes (dados sensíveis — não versionar)
 server/data/orders.json
+server/data/payment-proofs/
 
 # Ambiente
 .env

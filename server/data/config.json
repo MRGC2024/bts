@@ -2,7 +2,7 @@
   "quantumPublicKey": "",
   "quantumSecretKey": "",
   "quantumApiBase": "https://api.quantumpayments.com.br/v1",
-  "quantumAmountUnit": "reais",
+  "quantumAmountUnit": "cents",
   "utmifyApiToken": "",
   "ga4MeasurementId": "",
   "googleAdsConversionId": "",

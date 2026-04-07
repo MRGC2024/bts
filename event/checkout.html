@@ -47,6 +47,19 @@
     .co-pix h2 { font-size: 1.15rem; margin: 0 0 10px; color: #121212; }
     .co-pix .co-pix-note { font-size: 14px; color: #5a6a7a; margin: 0 0 18px; line-height: 1.45; }
     .co-pix img { max-width: 220px; margin: 12px auto; border-radius: 8px; box-shadow: 0 4px 16px rgba(0,0,0,0.08); }
+    .co-pix-timer {
+      font-size: 1.25rem; font-weight: 800; color: #024ddf; text-align: center; margin: 0 0 16px; padding: 12px 14px;
+      background: linear-gradient(180deg, #f0f5ff 0%, #e8f0fe 100%); border: 1px solid #d0ddee; border-radius: 10px;
+    }
+    .co-pix-timer .co-pix-timer-hint { display: block; font-size: 12px; font-weight: 600; color: #5a6a7a; margin-top: 6px; }
+    .co-pix-expired {
+      margin-top: 20px; padding: 18px; border-radius: 10px; border: 1px solid #cfd8e3; background: #fafbfd; text-align: left;
+    }
+    .co-pix-expired > p:first-child { margin: 0 0 14px; font-size: 14px; color: #2c3e50; line-height: 1.45; }
+    .co-btn-secondary {
+      background: #fff; color: #024ddf; border: 2px solid #024ddf;
+    }
+    .co-btn-secondary:hover:not(:disabled) { background: #f0f5ff; }
     .co-pix textarea {
       width: 100%; min-height: 96px; font-size: 12px; margin-top: 8px; padding: 12px; border-radius: 8px;
       border: 1px solid #cfd8e3; font-family: ui-monospace, monospace; box-sizing: border-box;
@@ -145,12 +158,33 @@
     <div class="co-pix" id="coPix">
       <h2>Pague com PIX</h2>
       <p class="co-pix-note">Abra o app do seu banco, escaneie o QR ou cole o código abaixo. A confirmação pode levar alguns instantes.</p>
+      <p class="co-pix-timer" id="coPixTimerWrap" style="display:none;" aria-live="polite">
+        <span id="coPixTimer">5:00</span>
+        <span class="co-pix-timer-hint">Tempo para pagar com este PIX nesta página (depois você pode enviar comprovante ou gerar outro código)</span>
+      </p>
       <img id="coQrImg" alt="QR Code PIX" />
       <div class="co-field" style="text-align:left;margin-top:16px;">
         <label for="coPixCode">Código copia e cola</label>
         <textarea id="coPixCode" readonly rows="4"></textarea>
       </div>
       <p class="co-ok" id="coPaid" style="display:none;">Pagamento confirmado. Abrindo seu ingresso…</p>
+      <div class="co-pix-expired" id="coPixExpired" style="display:none;">
+        <p><strong>O tempo deste PIX nesta página acabou.</strong> Se você já pagou, envie o comprovante. Caso contrário, gere um novo PIX.</p>
+        <p class="co-ok" id="coProofSent" style="display:none;margin-bottom:12px;">Comprovante enviado. Nossa equipe pode conferir manualmente. Você também pode gerar um novo PIX se precisar.</p>
+        <div id="coProofForm">
+          <div class="co-field">
+            <label for="coProofFile">Foto do comprovante</label>
+            <input type="file" id="coProofFile" accept="image/png,image/jpeg,image/webp">
+          </div>
+          <div class="co-field">
+            <label for="coProofNote">Observação (opcional se enviar imagem)</label>
+            <textarea id="coProofNote" rows="3" placeholder="Ex.: pago pelo app às 14:32"></textarea>
+          </div>
+          <button type="button" class="co-btn co-btn-secondary" id="coProofBtn">Enviar comprovante</button>
+        </div>
+        <p class="co-err" id="coProofErr" style="display:none;margin-top:12px;"></p>
+        <button type="button" class="co-btn" id="coRegenPixBtn" style="margin-top:14px;">Gerar novo PIX</button>
+      </div>
       <p style="margin-top:20px;"><a id="coTicketLink" href="#" style="display:none;color:#024ddf;font-weight:700;">Acompanhar pedido / ingresso</a></p>
       <p style="font-size:13px;color:#6b7785;margin-top:8px;display:none;" id="coTicketHint">O QR do ingresso só aparece após o pagamento confirmado.</p>
     </div>
@@ -402,10 +436,9 @@
       const th = document.getElementById('coTicketHint');
       if (th) th.style.display = 'block';
 
-      const code = data.pixQrCode || '';
-      document.getElementById('coPixCode').value = code;
-      const qrUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=' + encodeURIComponent(code);
-      document.getElementById('coQrImg').src = qrUrl;
+      applyPixPayload(data);
+      setupCheckoutPixUi(data.publicToken);
+      startCheckoutPixTimer(data.pixCheckoutEndsAt);
 
       const tlink = document.getElementById('coTicketLink');
       tlink.href = 'meu-ingresso.html?token=' + encodeURIComponent(data.publicToken);
@@ -419,12 +452,137 @@
     }
   });
 
+  let checkoutPixTimer = null;
+
+  function stopCheckoutPixTimer() {
+    if (checkoutPixTimer) {
+      clearInterval(checkoutPixTimer);
+      checkoutPixTimer = null;
+    }
+  }
+
+  function fmtMmSs(totalSec) {
+    const sec = Math.max(0, totalSec | 0);
+    const m = Math.floor(sec / 60);
+    const s = sec % 60;
+    return m + ':' + (s < 10 ? '0' : '') + s;
+  }
+
+  function applyPixPayload(data) {
+    const code = data.pixQrCode || '';
+    document.getElementById('coPixCode').value = code;
+    const qrUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=' + encodeURIComponent(code);
+    document.getElementById('coQrImg').src = qrUrl;
+  }
+
+  function startCheckoutPixTimer(pixCheckoutEndsAt) {
+    stopCheckoutPixTimer();
+    const wrap = document.getElementById('coPixTimerWrap');
+    const el = document.getElementById('coPixTimer');
+    const expired = document.getElementById('coPixExpired');
+    if (!pixCheckoutEndsAt) {
+      wrap.style.display = 'none';
+      return;
+    }
+    expired.style.display = 'none';
+    document.getElementById('coProofErr').style.display = 'none';
+    document.getElementById('coProofErr').textContent = '';
+    wrap.style.display = 'block';
+    function tick() {
+      const end = new Date(pixCheckoutEndsAt).getTime();
+      const sec = Math.max(0, Math.floor((end - Date.now()) / 1000));
+      el.textContent = fmtMmSs(sec);
+      if (sec <= 0) {
+        stopCheckoutPixTimer();
+        wrap.style.display = 'none';
+        expired.style.display = 'block';
+      }
+    }
+    tick();
+    checkoutPixTimer = setInterval(tick, 1000);
+  }
+
+  function setupCheckoutPixUi(publicToken) {
+    const proofBtn = document.getElementById('coProofBtn');
+    const regenBtn = document.getElementById('coRegenPixBtn');
+    const proofErr = document.getElementById('coProofErr');
+    const proofSent = document.getElementById('coProofSent');
+    const proofForm = document.getElementById('coProofForm');
+
+    function showProofErr(msg) {
+      proofErr.textContent = msg || '';
+      proofErr.style.display = msg ? 'block' : 'none';
+    }
+
+    if (!proofBtn || !regenBtn) return;
+
+    proofBtn.onclick = async () => {
+      showProofErr('');
+      const note = document.getElementById('coProofNote').value.trim();
+      const fileIn = document.getElementById('coProofFile');
+      let imageBase64 = null;
+      if (fileIn.files && fileIn.files[0]) {
+        imageBase64 = await new Promise((resolve, reject) => {
+          const fr = new FileReader();
+          fr.onload = () => resolve(fr.result);
+          fr.onerror = () => reject(new Error('Não foi possível ler a imagem.'));
+          fr.readAsDataURL(fileIn.files[0]);
+        });
+      }
+      proofBtn.disabled = true;
+      try {
+        const res = await fetch(
+          apiUrl('/api/order/' + encodeURIComponent(publicToken) + '/payment-proof'),
+          {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ note, imageBase64 }),
+          }
+        );
+        const out = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(out.error || 'Não foi possível enviar.');
+        proofSent.style.display = 'block';
+        if (proofForm) proofForm.style.display = 'none';
+      } catch (e) {
+        showProofErr(e.message || 'Erro ao enviar.');
+      }
+      proofBtn.disabled = false;
+    };
+
+    regenBtn.onclick = async () => {
+      showProofErr('');
+      regenBtn.disabled = true;
+      try {
+        const res = await fetch(
+          apiUrl('/api/order/' + encodeURIComponent(publicToken) + '/regenerate-pix'),
+          { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' }
+        );
+        const out = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(out.error || 'Não foi possível gerar novo PIX.');
+        applyPixPayload(out);
+        document.getElementById('coPixExpired').style.display = 'none';
+        document.getElementById('coProofSent').style.display = 'none';
+        const pf = document.getElementById('coProofForm');
+        if (pf) pf.style.display = 'block';
+        document.getElementById('coProofFile').value = '';
+        document.getElementById('coProofNote').value = '';
+        startCheckoutPixTimer(out.pixCheckoutEndsAt);
+      } catch (e) {
+        showProofErr(e.message || 'Erro.');
+      }
+      regenBtn.disabled = false;
+    };
+  }
+
   function pollPaid(token) {
     const tick = async () => {
       try {
         const r = await fetch(apiUrl('/api/order/' + encodeURIComponent(token)));
         const o = await r.json();
         if (o.status === 'paid') {
+          stopCheckoutPixTimer();
+          document.getElementById('coPixExpired').style.display = 'none';
+          document.getElementById('coPixTimerWrap').style.display = 'none';
           document.getElementById('coPaid').style.display = 'block';
           window.BtsTracking.pushPurchase({
             transaction_id: o.fakePurchaseId || o.id,
@@ -435,6 +593,15 @@
             window.location.href = 'meu-ingresso.html?token=' + encodeURIComponent(token);
           }, 1600);
           return;
+        }
+        if (o.paymentProofSubmittedAt) {
+          stopCheckoutPixTimer();
+          document.getElementById('coPixTimerWrap').style.display = 'none';
+          document.getElementById('coPixExpired').style.display = 'block';
+          const sent = document.getElementById('coProofSent');
+          const pf = document.getElementById('coProofForm');
+          if (sent) sent.style.display = 'block';
+          if (pf) pf.style.display = 'none';
         }
       } catch (_) {}
       setTimeout(tick, 4000);

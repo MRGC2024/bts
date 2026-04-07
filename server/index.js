@@ -1,5 +1,6 @@
 import 'dotenv/config';
 import express from 'express';
+import fs from 'fs';
 import path from 'path';
 import cors from 'cors';
 import bcrypt from 'bcryptjs';
@@ -24,8 +25,11 @@ import {
 import { btsTrace, btsTraceErr } from './bts-log.js';
 import { appendGatewayPixLog, loadGatewayPixLogs } from './gateway-log.js';
 import { normalizeAttendees } from './attendees.js';
+import { savePaymentProof, PAYMENT_PROOFS_DIR } from './proofs.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const PIX_CHECKOUT_MS = 5 * 60 * 1000;
+const MAX_PIX_REGENERATIONS = 5;
 const ROOT = path.resolve(__dirname, '..');
 const PORT = Number(process.env.PORT) || 3055;
 
@@ -87,6 +91,7 @@ function publicCfg(cfg) {
     googleAdsConversionLabel: cfg.googleAdsConversionLabel || '',
     maxTicketsPerOrder: Math.max(1, Math.min(99, Number(cfg.maxTicketsPerOrder) || 4)),
     platformName: cfg.platformName || 'BTSIngressos',
+    pixCheckoutSeconds: Math.round(PIX_CHECKOUT_MS / 1000),
   };
 }
 
@@ -330,7 +335,7 @@ app.post('/api/checkout/create', async (req, res) => {
                   ? ' Verifique CPF (11 dígitos).'
                   : e.code === 'quantum_postback_url'
                     ? ' Ajuste a URL pública no painel (Utmify e URL) para o mesmo HTTPS que o cliente usa; no painel da Quantum, libere/valide o domínio do postback se exigido.'
-                    : ' Se o erro for de valor, o servidor tenta reais e centavos; se for de postback, confira a URL pública e o painel Quantum.';
+                    : ' Se o erro for de valor, confira amount em centavos no log; se for de postback, confira a URL pública e o painel Quantum.';
           const errStatus =
             e.code === 'quantum_validation' || e.code === 'quantum_postback_url' ? 400 : 424;
           return res.status(errStatus).json({
@@ -378,6 +383,7 @@ app.post('/api/checkout/create', async (req, res) => {
           });
         }
 
+        const pixCheckoutEndsAt = new Date(Date.now() + PIX_CHECKOUT_MS).toISOString();
         updateOrder(order.id, {
           status: 'waiting_payment',
           quantumTransactionId: tx.id ?? quantumData.id,
@@ -385,6 +391,8 @@ app.post('/api/checkout/create', async (req, res) => {
           pixQrCode: pixCode,
           pixExpiresAt: pixObj.expirationDate || pixObj.expiresAt || null,
           gatewayFeeInCents: gatewayFeeCents,
+          pixCheckoutEndsAt,
+          pixRegenerationCount: 0,
         });
 
         const fresh = findOrderById(order.id);
@@ -399,6 +407,8 @@ app.post('/api/checkout/create', async (req, res) => {
           pixQrCode: fresh.pixQrCode,
           expiresAt: fresh.pixExpiresAt,
           amountCents: fresh.totalCents,
+          pixCheckoutEndsAt: fresh.pixCheckoutEndsAt,
+          pixCheckoutSeconds: Math.round(PIX_CHECKOUT_MS / 1000),
         });
       } catch (e) {
         btsTraceErr(`checkout:${rid}`, 'unhandled', e);
@@ -438,9 +448,147 @@ app.get('/api/order/:publicToken', (req, res) => {
     payload.attendees = null;
     payload.message =
       'O ingresso (QR e dados completos) só ficam disponíveis após a confirmação do pagamento.';
+    payload.pixCheckoutEndsAt = o.pixCheckoutEndsAt || null;
+    payload.paymentProofSubmittedAt = o.paymentProofSubmittedAt || null;
+    payload.pixRegenerationCount = o.pixRegenerationCount || 0;
   }
 
   res.json(payload);
+});
+
+app.post('/api/order/:publicToken/payment-proof', express.json({ limit: '2mb' }), (req, res) => {
+  try {
+    const o = findOrderByPublicToken(req.params.publicToken);
+    if (!o) return res.status(404).json({ error: 'Pedido não encontrado' });
+    if (o.status === 'paid' || o.status === 'approved') {
+      return res.status(400).json({ error: 'Este pedido já está pago.' });
+    }
+    const { note, imageBase64 } = req.body || {};
+    const meta = savePaymentProof(o.id, { note, imageBase64 });
+    updateOrder(o.id, {
+      paymentProofSubmittedAt: meta.submittedAt,
+      paymentProofNote: meta.note,
+      paymentProofFile: meta.imageFile,
+    });
+    return res.json({ ok: true, submittedAt: meta.submittedAt });
+  } catch (e) {
+    return res.status(400).json({ error: e.message || 'Não foi possível enviar o comprovante.' });
+  }
+});
+
+app.post('/api/order/:publicToken/regenerate-pix', async (req, res) => {
+  const rid = Math.random().toString(36).slice(2, 10);
+  try {
+    const o = findOrderByPublicToken(req.params.publicToken);
+    if (!o) return res.status(404).json({ error: 'Pedido não encontrado' });
+    if (o.status === 'paid' || o.status === 'approved') {
+      return res.status(400).json({ error: 'Pedido já pago.' });
+    }
+    if (o.status === 'gateway_error') {
+      return res.status(400).json({ error: 'Este pedido teve erro no gateway. Inicie uma nova compra.' });
+    }
+    const regCount = Number(o.pixRegenerationCount) || 0;
+    if (regCount >= MAX_PIX_REGENERATIONS) {
+      return res.status(400).json({
+        error: 'Limite de novos PIX atingido. Envie o comprovante de pagamento ou entre em contato com o suporte.',
+      });
+    }
+    const ends = o.pixCheckoutEndsAt ? new Date(o.pixCheckoutEndsAt).getTime() : 0;
+    if (ends && Date.now() < ends) {
+      return res.status(400).json({
+        error: 'Aguarde o tempo de 5 minutos expirar para gerar um novo PIX, ou envie o comprovante se já pagou.',
+      });
+    }
+
+    const cfg = loadConfig();
+    const baseUrl = getPublicBaseUrl(req, cfg);
+    const quantumData = await createQuantumPix(cfg, o, baseUrl, rid);
+    const tx = quantumData.data || quantumData;
+    const pixCode = extractPixPayload(quantumData);
+    if (!pixCode) {
+      return res.status(424).json({ error: 'O gateway não retornou um novo código PIX.' });
+    }
+    const pixObj = tx.pix || {};
+    const gatewayFeeCents =
+      tx.fee?.estimatedFee != null ? Math.round(Number(tx.fee.estimatedFee) * 100) : 0;
+    const pixCheckoutEndsAt = new Date(Date.now() + PIX_CHECKOUT_MS).toISOString();
+    updateOrder(o.id, {
+      status: 'waiting_payment',
+      quantumTransactionId: tx.id ?? quantumData.id,
+      quantumRaw: tx,
+      pixQrCode: pixCode,
+      pixExpiresAt: pixObj.expirationDate || pixObj.expiresAt || null,
+      gatewayFeeInCents: gatewayFeeCents,
+      pixCheckoutEndsAt,
+      pixRegenerationCount: regCount + 1,
+    });
+    const fresh = findOrderById(o.id);
+    return res.json({
+      pixQrCode: fresh.pixQrCode,
+      expiresAt: fresh.pixExpiresAt,
+      amountCents: fresh.totalCents,
+      pixCheckoutEndsAt: fresh.pixCheckoutEndsAt,
+      pixCheckoutSeconds: Math.round(PIX_CHECKOUT_MS / 1000),
+    });
+  } catch (e) {
+    btsTraceErr(`regen-pix:${rid}`, 'fail', e);
+    return res.status(424).json({ error: e.message || 'Falha ao gerar novo PIX.' });
+  }
+});
+
+app.get('/api/admin/dashboard', assertAdmin, (req, res) => {
+  const orders = loadOrders();
+  const stats = {
+    total: orders.length,
+    paid: 0,
+    waiting_payment: 0,
+    pending: 0,
+    gateway_error: 0,
+    refused: 0,
+    other: 0,
+    withPaymentProof: 0,
+  };
+  for (const o of orders) {
+    const s = String(o.status || '');
+    if (s === 'paid' || s === 'approved') stats.paid++;
+    else if (s === 'waiting_payment') stats.waiting_payment++;
+    else if (s === 'pending') stats.pending++;
+    else if (s === 'gateway_error') stats.gateway_error++;
+    else if (s === 'refused') stats.refused++;
+    else stats.other++;
+    if (o.paymentProofSubmittedAt) stats.withPaymentProof++;
+  }
+  const t = stats.total || 1;
+  stats.conversionOverallPct = Math.round((stats.paid / t) * 1000) / 10;
+  const pixPipeline = stats.paid + stats.waiting_payment;
+  stats.conversionPixToPaidPct =
+    pixPipeline > 0 ? Math.round((stats.paid / pixPipeline) * 1000) / 10 : 0;
+  const recentGatewayErrors = loadGatewayPixLogs().slice(0, 20);
+  const ordersWithProof = orders
+    .filter((o) => o.paymentProofSubmittedAt)
+    .slice(0, 25)
+    .map((o) => ({
+      id: o.id,
+      publicToken: o.publicToken,
+      submittedAt: o.paymentProofSubmittedAt,
+      note: o.paymentProofNote || '',
+      hasFile: !!o.paymentProofFile,
+      status: o.status,
+      customerEmail: o.customerEmail,
+      totalCents: o.totalCents,
+    }));
+  res.json({ stats, recentGatewayErrors, ordersWithProof });
+});
+
+app.get('/api/admin/payment-proof/:orderId/file', assertAdmin, (req, res) => {
+  const o = findOrderById(req.params.orderId);
+  if (!o || !o.paymentProofFile) return res.status(404).json({ error: 'Sem arquivo' });
+  const fp = path.join(PAYMENT_PROOFS_DIR, o.paymentProofFile);
+  if (!fs.existsSync(fp)) return res.status(404).json({ error: 'Arquivo não encontrado' });
+  const ext = path.extname(fp).toLowerCase();
+  const type = ext === '.png' ? 'image/png' : ext === '.webp' ? 'image/webp' : 'image/jpeg';
+  res.type(type);
+  return res.sendFile(path.resolve(fp));
 });
 
 app.post('/api/webhook/quantum', express.json({ type: '*/*' }), async (req, res) => {

@@ -86,7 +86,22 @@
     .pill.paid { background: #23863633; color: #3fb950; }
     .pill.wait { background: #d2992233; color: #e3b341; }
     .pill.err { background: #f8514933; color: #ff7b72; }
+    .pill.ok { background: #23863633; color: #56d364; }
     .mono { font-family: ui-monospace, monospace; font-size: 11px; word-break: break-all; }
+    .adm-stat-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 14px; margin-bottom: 22px;
+    }
+    .adm-stat-card {
+      background: #161b22; border: 1px solid #30363d; border-radius: 10px; padding: 16px 18px; text-align: center;
+    }
+    .adm-stat-card .val { font-size: 1.65rem; font-weight: 800; color: #f0f6fc; letter-spacing: -0.03em; line-height: 1.2; }
+    .adm-stat-card .lbl { font-size: 11px; color: #8b949e; margin-top: 8px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; }
+    .adm-stat-card.accent .val { color: #58a6ff; }
+    .adm-stat-card.ok .val { color: #3fb950; }
+    .adm-stat-card.warn .val { color: #e3b341; }
+    .adm-stat-card.bad .val { color: #ff7b72; }
+    .adm-dash-funnel { font-size: 14px; color: #adbac7; line-height: 1.65; margin-bottom: 18px; padding: 14px 16px; background: #1c2128; border-radius: 8px; border: 1px solid #30363d; }
+    .adm-dash-funnel strong { color: #79c0ff; }
     .table-wrap { overflow-x: auto; margin-top: 12px; border: 1px solid #30363d; border-radius: 8px; }
     .table-wrap table { margin: 0; }
     .table-wrap th, .table-wrap td { padding: 12px; }
@@ -166,7 +181,8 @@
         <p class="adm-side-sub">Configurações da API, PIX Quantum, Utmify e pedidos.</p>
       </div>
       <div class="adm-nav-group">Início</div>
-      <button type="button" class="adm-tab is-active" role="tab" data-tab="p-home" aria-selected="true">Visão geral</button>
+      <button type="button" class="adm-tab is-active" role="tab" data-tab="p-dash" aria-selected="true">Dashboard</button>
+      <button type="button" class="adm-tab" role="tab" data-tab="p-home" aria-selected="false">Visão geral</button>
       <div class="adm-nav-group">Integrações</div>
       <button type="button" class="adm-tab" role="tab" data-tab="p-pay" aria-selected="false">Gateway PIX</button>
       <button type="button" class="adm-tab" role="tab" data-tab="p-utm" aria-selected="false">Utmify e URL</button>
@@ -188,7 +204,31 @@
       </header>
       <div class="adm-shell">
 
-      <section class="adm-panel is-active" id="p-home" role="tabpanel">
+      <section class="adm-panel is-active" id="p-dash" role="tabpanel">
+        <div class="adm-panel-head">
+          <h2>Dashboard</h2>
+          <p>Vendas, conversão, status dos pedidos, comprovantes enviados e últimos erros do gateway PIX.</p>
+        </div>
+        <div class="adm-card">
+          <h2>Indicadores</h2>
+          <p class="hint">Atualize para ver números atualizados. <strong>Conversão geral</strong> = pagos ÷ total de pedidos. <strong>PIX → pago</strong> = pagos entre quem já gerou PIX (pago + aguardando).</p>
+          <button type="button" class="btn-out" id="reloadDashboard">Atualizar dashboard</button>
+          <div id="dashStats" class="adm-stat-grid" style="margin-top:16px;"></div>
+          <div id="dashFunnel" class="adm-dash-funnel" style="display:none;"></div>
+        </div>
+        <div class="adm-card">
+          <h2>Comprovantes enviados</h2>
+          <p class="hint">Clientes podem enviar após o timer de 5 minutos no checkout ou se o PIX expirar. Confira manualmente no banco antes de liberar ingresso.</p>
+          <div class="table-wrap"><table><thead><tr><th>Data</th><th>E-mail</th><th>Valor</th><th>Status</th><th>Comprovante</th></tr></thead><tbody id="dashProofBody"></tbody></table></div>
+        </div>
+        <div class="adm-card">
+          <h2>Últimos erros do gateway (PIX)</h2>
+          <p class="hint">Mesmo registro da aba Gateway PIX; aqui só para visão rápida.</p>
+          <pre id="dashErrPre" style="margin-top:12px;padding:14px;background:#0d1117;border:1px solid #30363d;border-radius:8px;font-size:11px;line-height:1.45;overflow:auto;max-height:240px;color:#adbac7;white-space:pre-wrap;word-break:break-word;"></pre>
+        </div>
+      </section>
+
+      <section class="adm-panel" id="p-home" role="tabpanel">
         <div class="adm-panel-head">
           <h2>Visão geral</h2>
           <p>Onde os dados ficam e como o fluxo checkout → PIX → webhook se conecta à Quantum.</p>
@@ -221,11 +261,12 @@
           <input id="quantumSecretKey" type="password" placeholder="********" autocomplete="new-password">
           <label for="quantumApiBase">Base da API (opcional)</label>
           <input id="quantumApiBase" placeholder="https://api.quantumpayments.com.br/v1">
-          <label for="quantumAmountUnit">Preferência de unidade (o servidor tenta a outra sozinho se a Quantum recusar)</label>
+          <label for="quantumAmountUnit">Formato no payload (legado)</label>
           <select id="quantumAmountUnit" class="adm-select">
-            <option value="reais">Reais (decimal) — recomendado pela Quantum Pay, ex.: R$ 680,00 → 680</option>
-            <option value="cents">Centavos (inteiro), ex.: 68000</option>
+            <option value="cents">Centavos — enviado à API (amount e unitPrice inteiros, ex. 68000 = R$ 680,00)</option>
+            <option value="reais">Reais (legado — não usar; causava PIX com 1/100 do valor)</option>
           </select>
+          <p class="hint" style="margin-top:8px">O servidor envia <strong>sempre</strong> <code>amount</code> e <code>unitPrice</code> em centavos, como a Quantum espera. R$ 680,00 → <code>68000</code>.</p>
         </div>
         <div class="adm-card" style="margin-top:18px">
           <h2>Nome do produto no gateway</h2>
@@ -314,6 +355,7 @@
                   <th>Cliente</th>
                   <th>Setor / Qtd</th>
                   <th>Total</th>
+                  <th>Comprov.</th>
                   <th>IDs</th>
                 </tr>
               </thead>
@@ -407,10 +449,27 @@
         tabs.forEach((x) => { x.classList.toggle('is-active', x === t); x.setAttribute('aria-selected', x === t ? 'true' : 'false'); });
         panels.forEach((p) => p.classList.toggle('is-active', p.id === id));
         if (id === 'p-pay') loadGatewayLog().catch(() => {});
+        if (id === 'p-dash') loadDashboard().catch(() => {});
       });
     });
   }
   bindTabs();
+
+  window.__btsOpenProof = function (orderId) {
+    fetch(apiUrl('/api/admin/payment-proof/' + encodeURIComponent(orderId) + '/file'), {
+      headers: { Authorization: 'Bearer ' + token },
+    })
+      .then((r) => {
+        if (!r.ok) throw new Error('x');
+        return r.blob();
+      })
+      .then((blob) => {
+        const u = URL.createObjectURL(blob);
+        window.open(u, '_blank', 'noopener,noreferrer');
+        setTimeout(() => URL.revokeObjectURL(u), 60000);
+      })
+      .catch(() => alert('Não foi possível abrir o comprovante.'));
+  };
 
   $('loginBtn').onclick = async () => {
     $('loginErr').style.display = 'none';
@@ -431,6 +490,7 @@
       });
       loadOrders().catch(() => {});
       loadGatewayLog().catch(() => {});
+      loadDashboard().catch(() => {});
     } catch (e) {
       $('loginErr').textContent = e.message;
       $('loginErr').style.display = 'block';
@@ -453,7 +513,93 @@
         });
         loadOrders().catch(() => {});
         loadGatewayLog().catch(() => {});
+        loadDashboard().catch(() => {});
       });
+  }
+
+  async function loadDashboard() {
+    try {
+      const d = await api('/api/admin/dashboard');
+      const s = d.stats || {};
+      const el = $('dashStats');
+      if (el) {
+        el.innerHTML =
+          '<div class="adm-stat-card"><div class="val">' +
+          (s.total || 0) +
+          '</div><div class="lbl">Pedidos</div></div>' +
+          '<div class="adm-stat-card ok"><div class="val">' +
+          (s.paid || 0) +
+          '</div><div class="lbl">Pagos</div></div>' +
+          '<div class="adm-stat-card warn"><div class="val">' +
+          (s.waiting_payment || 0) +
+          '</div><div class="lbl">Aguard. PIX</div></div>' +
+          '<div class="adm-stat-card"><div class="val">' +
+          (s.pending || 0) +
+          '</div><div class="lbl">Pendente</div></div>' +
+          '<div class="adm-stat-card bad"><div class="val">' +
+          (s.gateway_error || 0) +
+          '</div><div class="lbl">Erro gateway</div></div>' +
+          '<div class="adm-stat-card accent"><div class="val">' +
+          (s.withPaymentProof || 0) +
+          '</div><div class="lbl">Comprov. enviados</div></div>' +
+          '<div class="adm-stat-card accent"><div class="val">' +
+          (s.conversionOverallPct != null ? s.conversionOverallPct + '%' : '—') +
+          '</div><div class="lbl">Conversão geral</div></div>' +
+          '<div class="adm-stat-card accent"><div class="val">' +
+          (s.conversionPixToPaidPct != null ? s.conversionPixToPaidPct + '%' : '—') +
+          '</div><div class="lbl">PIX → pago</div></div>';
+      }
+      const fu = $('dashFunnel');
+      if (fu) {
+        fu.style.display = 'block';
+        fu.innerHTML =
+          '<strong>Conversão geral:</strong> ' +
+          (s.conversionOverallPct != null ? s.conversionOverallPct + '%' : '—') +
+          ' (pagos sobre todos os pedidos). <strong>PIX → pago:</strong> ' +
+          (s.conversionPixToPaidPct != null ? s.conversionPixToPaidPct + '%' : '—') +
+          ' (entre pedidos que chegaram ao menos ao status de PIX gerado: pago + aguardando).';
+      }
+      const pb = $('dashProofBody');
+      if (pb) {
+        const list = d.ordersWithProof || [];
+        pb.innerHTML = list.length
+          ? list
+              .map(function (o) {
+                const when = o.submittedAt ? new Date(o.submittedAt).toLocaleString('pt-BR') : '—';
+                const tot = (o.totalCents / 100).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+                const btn = o.hasFile
+                  ? '<button type="button" class="btn-out" onclick="__btsOpenProof(\'' +
+                    String(o.id).replace(/'/g, '') +
+                    '\')">Ver imagem</button>'
+                  : '—';
+                return (
+                  '<tr><td>' +
+                  when +
+                  '</td><td class="mono">' +
+                  (o.customerEmail || '') +
+                  '</td><td>' +
+                  tot +
+                  '</td><td>' +
+                  pill(o.status) +
+                  '</td><td>' +
+                  btn +
+                  '</td></tr>'
+                );
+              })
+              .join('')
+          : '<tr><td colspan="5">Nenhum comprovante ainda.</td></tr>';
+      }
+      const errEl = $('dashErrPre');
+      if (errEl) {
+        const errs = d.recentGatewayErrors || [];
+        errEl.textContent = errs.length
+          ? errs.map((e) => JSON.stringify(e, null, 2)).join('\n---\n')
+          : 'Nenhum erro registrado no log do gateway.';
+      }
+    } catch (e) {
+      const el = $('dashStats');
+      if (el) el.innerHTML = '<p style="color:#f85149">' + (e.message || 'Erro') + '</p>';
+    }
   }
 
   async function loadGatewayLog() {
@@ -538,10 +684,15 @@
       .map((o) => {
         const total = (o.totalCents / 100).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
         const when = new Date(o.createdAt).toLocaleString('pt-BR');
+        const proof = o.paymentProofSubmittedAt
+          ? '<span class="pill ok">Sim</span>'
+          : '—';
         return (
           '<tr><td>' + when + '</td><td>' + pill(o.status) + '</td><td>' +
           (o.customerName || '') + '<br><span class="mono">' + (o.customerEmail || '') + '</span></td><td>' +
-          (o.sectorLabel || '') + '<br>' + o.ticketType + ' × ' + o.quantity + '</td><td>' + total + '</td><td class="mono">' +
+          (o.sectorLabel || '') + '<br>' + o.ticketType + ' × ' + o.quantity + '</td><td>' + total + '</td><td>' +
+          proof +
+          '</td><td class="mono">' +
           'SOL: ' + (o.requestId || '') + '<br>TM: ' + (o.fakePurchaseId || '') + '<br>GW: ' + (o.quantumTransactionId || '') +
           '</td></tr>'
         );
@@ -551,6 +702,7 @@
 
   $('reloadOrders').onclick = () => loadOrders().catch((e) => alert(e.message));
   $('reloadGatewayLog').onclick = () => loadGatewayLog().catch((e) => alert(e.message));
+  $('reloadDashboard').onclick = () => loadDashboard().catch((e) => alert(e.message));
 })();
 </script>
 </body>

@@ -216,19 +216,15 @@ final class BtsIntegrations
         $amountCents = (int) ($order['totalCents'] ?? 0);
         $qty = max(1, (int) ($order['quantity'] ?? 1));
         $unitCents = (int) round($amountCents / $qty);
-        $unitFlag = strtolower((string) ($cfg['quantumAmountUnit'] ?? 'cents'));
-        if ($unitFlag === 'reais') {
-            $amountVal = round($amountCents / 100, 2);
-            $unitVal = round($unitCents / 100, 2);
-        } else {
-            $amountVal = $amountCents;
-            $unitVal = $unitCents;
-        }
+        // A API Quantum usa amount/unitPrice em CENTAVOS (inteiros). O modo "reais" dividia por 100
+        // e gerava PIX com 1/100 do valor (ex.: R$ 6,80 em vez de R$ 680,00).
+        $amountVal = $amountCents;
+        $unitVal = $unitCents;
 
         $docDigits = preg_replace('/\D/', '', (string) ($order['customerDocument'] ?? ''));
         $docMask = strlen($docDigits) > 2 ? '***' . substr($docDigits, -2) : '***';
         error_log('[BTS][quantum][request_prepare] orderId=' . ($order['id'] ?? '') . ' apiHost=' . (parse_url($base, PHP_URL_HOST) ?: $base)
-            . ' amountUnit=' . $unitFlag . ' amount=' . json_encode($amountVal, JSON_UNESCAPED_UNICODE)
+            . ' amountCents=' . json_encode($amountVal, JSON_UNESCAPED_UNICODE)
             . ' unitPrice=' . json_encode($unitVal, JSON_UNESCAPED_UNICODE) . ' qty=' . $qty
             . ' postbackUrl=' . $postbackUrl . ' documentMasked=' . $docMask);
 
