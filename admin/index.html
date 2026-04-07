@@ -221,12 +221,18 @@
           <input id="quantumSecretKey" type="password" placeholder="********" autocomplete="new-password">
           <label for="quantumApiBase">Base da API (opcional)</label>
           <input id="quantumApiBase" placeholder="https://api.quantumpayments.com.br/v1">
-          <label for="quantumAmountUnit">Valores enviados no campo <code>amount</code> / <code>unitPrice</code></label>
+          <label for="quantumAmountUnit">Preferência de unidade (o servidor tenta a outra sozinho se a Quantum recusar)</label>
           <select id="quantumAmountUnit" class="adm-select">
-            <option value="cents">Centavos (inteiro) — padrão, ex.: R$ 680,00 → 68000</option>
-            <option value="reais">Reais (decimal) — ex.: R$ 680,00 → 680</option>
+            <option value="reais">Reais (decimal) — recomendado pela Quantum Pay, ex.: R$ 680,00 → 680</option>
+            <option value="cents">Centavos (inteiro), ex.: 68000</option>
           </select>
-          <p class="hint" style="margin-top:10px">Se aparecer erro 424 no checkout com mensagem da Quantum sobre valor inválido, salve com <strong>Reais</strong>, redeploy se necessário e teste de novo.</p>
+          <p class="hint" style="margin-top:10px">Em <strong>Railway</strong>, os logs técnicos completos usam o prefixo <code>[BTS]</code> no console do serviço. Abaixo ficam só os últimos erros de PIX gravados neste servidor.</p>
+        </div>
+        <div class="adm-card" style="margin-top:18px">
+          <h2>Últimos erros do PIX (neste servidor)</h2>
+          <p class="hint">Arquivo <code>server/data/gateway-pix-log.json</code>. Atualize após um teste de checkout.</p>
+          <button type="button" class="btn-out" id="reloadGatewayLog">Atualizar log</button>
+          <pre id="gatewayPixLogPre" style="margin-top:12px;padding:14px;background:#0d1117;border:1px solid #30363d;border-radius:8px;font-size:11px;line-height:1.45;overflow:auto;max-height:320px;color:#adbac7;white-space:pre-wrap;word-break:break-word;"></pre>
         </div>
       </section>
 
@@ -389,6 +395,7 @@
         const id = t.getAttribute('data-tab');
         tabs.forEach((x) => { x.classList.toggle('is-active', x === t); x.setAttribute('aria-selected', x === t ? 'true' : 'false'); });
         panels.forEach((p) => p.classList.toggle('is-active', p.id === id));
+        if (id === 'p-pay') loadGatewayLog().catch(() => {});
       });
     });
   }
@@ -412,6 +419,7 @@
         location.reload();
       });
       loadOrders().catch(() => {});
+      loadGatewayLog().catch(() => {});
     } catch (e) {
       $('loginErr').textContent = e.message;
       $('loginErr').style.display = 'block';
@@ -433,14 +441,31 @@
           location.reload();
         });
         loadOrders().catch(() => {});
+        loadGatewayLog().catch(() => {});
       });
+  }
+
+  async function loadGatewayLog() {
+    const el = $('gatewayPixLogPre');
+    if (!el) return;
+    try {
+      const { entries } = await api('/api/admin/gateway-pix-log');
+      if (!entries || !entries.length) {
+        el.textContent =
+          'Nenhum erro registrado ainda. Se o checkout falhar, tente de novo e clique em Atualizar. Logs detalhados [BTS] ficam no console da Railway.';
+        return;
+      }
+      el.textContent = entries.map((e) => JSON.stringify(e, null, 2)).join('\n---\n');
+    } catch (e) {
+      el.textContent = 'Não foi possível carregar o log: ' + (e.message || 'erro');
+    }
   }
 
   async function loadCfg() {
     const c = await api('/api/admin/config');
     $('quantumPublicKey').value = c.quantumPublicKey || '';
     $('quantumApiBase').value = c.quantumApiBase || '';
-    $('quantumAmountUnit').value = (c.quantumAmountUnit === 'reais' ? 'reais' : 'cents');
+    $('quantumAmountUnit').value = c.quantumAmountUnit === 'cents' ? 'cents' : 'reais';
     $('platformName').value = c.platformName || '';
     $('publicBaseUrl').value = c.publicBaseUrl || '';
     $('ga4MeasurementId').value = c.ga4MeasurementId || '';
@@ -508,6 +533,7 @@
   }
 
   $('reloadOrders').onclick = () => loadOrders().catch((e) => alert(e.message));
+  $('reloadGatewayLog').onclick = () => loadGatewayLog().catch((e) => alert(e.message));
 })();
 </script>
 </body>

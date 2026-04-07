@@ -1,4 +1,5 @@
 import { btsTrace, btsTraceErr } from './bts-log.js';
+import { appendGatewayPixLog } from './gateway-log.js';
 
 const UTMIFY_URL = 'https://api.utmify.com.br/api-credentials/orders';
 
@@ -103,18 +104,98 @@ export async function sendUtmifyOrder(cfg, order, utmifyStatus) {
   return data;
 }
 
-function normalizeAmounts(cfg, order) {
-  const amountCents = Number(order.totalCents) || 0;
+/**
+ * Monta body da transação Quantum com amount/items coerentes (evita "valores inválidos").
+ * - reais: amount e unitPrice em decimal (2 casas), alinhados ao total em centavos internos.
+ * - cents: inteiros em centavos.
+ */
+export function buildQuantumTransactionPayload(order, unitMode) {
+  const totalCents = Math.round(Number(order.totalCents) || 0);
   const qty = Math.max(1, Number(order.quantity) || 1);
-  const unitCents = Math.round(amountCents / qty);
-  const unit = (cfg.quantumAmountUnit || 'cents').toLowerCase() === 'reais' ? 'reais' : 'cents';
-  if (unit === 'reais') {
-    return {
-      amount: Number((amountCents / 100).toFixed(2)),
-      unitPrice: Number((unitCents / 100).toFixed(2)),
-    };
+  const doc = String(order.customerDocument || '').replace(/\D/g, '');
+
+  const phoneRaw = String(order.customerPhone || '').replace(/\D/g, '');
+  const phone = phoneRaw.length >= 10 && phoneRaw.length <= 13 ? phoneRaw : undefined;
+
+  const base = {
+    paymentMethod: 'pix',
+    externalRef: order.id,
+    metadata: JSON.stringify({
+      orderId: order.id,
+      lote: order.lote,
+      sector: order.sectorId,
+    }),
+    customer: {
+      name: String(order.customerName || '').trim(),
+      email: String(order.customerEmail || '').trim(),
+      ...(phone ? { phone } : {}),
+      document: {
+        type: 'cpf',
+        number: doc,
+      },
+    },
+  };
+
+  if (unitMode === 'cents') {
+    const unitCents = Math.round(totalCents / qty);
+    const remainder = totalCents - unitCents * qty;
+    let items;
+    if (remainder !== 0) {
+      items = [
+        {
+          title: `${order.sectorLabel} (${order.ticketType}) · ${qty} un.`,
+          quantity: 1,
+          unitPrice: totalCents,
+          tangible: false,
+          externalRef: `${order.id}-item`,
+        },
+      ];
+    } else {
+      items = [
+        {
+          title: `${order.sectorLabel} (${order.ticketType})`,
+          quantity: qty,
+          unitPrice: unitCents,
+          tangible: false,
+          externalRef: `${order.id}-item`,
+        },
+      ];
+    }
+    return { ...base, amount: totalCents, items };
   }
-  return { amount: Math.round(amountCents), unitPrice: Math.round(unitCents) };
+
+  const amount = Number((totalCents / 100).toFixed(2));
+  const unitCentsEach = Math.floor(totalCents / qty);
+  const remainder = totalCents - unitCentsEach * qty;
+  let items;
+  if (remainder !== 0) {
+    items = [
+      {
+        title: `${order.sectorLabel} (${order.ticketType}) · ${qty} un.`,
+        quantity: 1,
+        unitPrice: amount,
+        tangible: false,
+        externalRef: `${order.id}-item`,
+      },
+    ];
+  } else {
+    const unitPrice = Number((unitCentsEach / 100).toFixed(2));
+    items = [
+      {
+        title: `${order.sectorLabel} (${order.ticketType})`,
+        quantity: qty,
+        unitPrice,
+        tangible: false,
+        externalRef: `${order.id}-item`,
+      },
+    ];
+  }
+  return { ...base, amount, items };
+}
+
+function isLikelyInvalidAmountError(data, rawText) {
+  const msg = `${data?.message || ''} ${data?.error || ''} ${rawText || ''}`.toLowerCase();
+  return msg.includes('inválid') || msg.includes('invalid') || msg.includes('valor');
 }
 
 export function extractPixPayload(quantumData) {
@@ -134,6 +215,28 @@ export function extractPixPayload(quantumData) {
   return nested ? String(nested) : null;
 }
 
+async function postQuantum(base, auth, bodyObj) {
+  const url = `${base.replace(/\/$/, '')}/transactions`;
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: {
+      Authorization: auth,
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
+    },
+    body: JSON.stringify(bodyObj),
+    signal: AbortSignal.timeout(55000),
+  });
+  const text = await res.text();
+  let data = {};
+  try {
+    data = text ? JSON.parse(text) : {};
+  } catch {
+    data = { parseError: true, raw: text?.slice(0, 800) };
+  }
+  return { res, data, text, url };
+}
+
 export async function createQuantumPix(cfg, order, publicBaseUrl, logRid = '') {
   const rid = logRid || String(order.id || '').slice(0, 8) || 'no-id';
   const scope = `quantum:${rid}`;
@@ -151,133 +254,117 @@ export async function createQuantumPix(cfg, order, publicBaseUrl, logRid = '') {
     throw err;
   }
 
+  const docDigits = String(order.customerDocument || '').replace(/\D/g, '');
+  if (docDigits.length !== 11) {
+    const err = new Error('CPF deve ter 11 dígitos para gerar o PIX.');
+    err.code = 'quantum_validation';
+    throw err;
+  }
+
   const base = (cfg.quantumApiBase || 'https://api.quantumpayments.com.br/v1').replace(/\/$/, '');
   const auth = 'Basic ' + Buffer.from(`${pub}:${sec}`).toString('base64');
   const postbackUrl = `${publicBaseUrl.replace(/\/$/, '')}/api/webhook/quantum`;
 
-  const { amount, unitPrice } = normalizeAmounts(cfg, order);
-  const amountUnit = (cfg.quantumAmountUnit || 'cents').toLowerCase() === 'reais' ? 'reais' : 'cents';
+  const primaryUnit = (cfg.quantumAmountUnit || 'reais').toLowerCase() === 'cents' ? 'cents' : 'reais';
+  const alternateUnit = primaryUnit === 'cents' ? 'reais' : 'cents';
 
-  btsTrace(scope, 'request_prepare', {
-    orderId: order.id,
-    apiHost: (() => {
-      try {
-        return new URL(base).host;
-      } catch {
-        return base;
-      }
-    })(),
-    postbackUrl,
-    amountUnit,
-    amount,
-    unitPrice,
-    quantity: order.quantity,
-    totalCents: order.totalCents,
-    paymentMethod: 'pix',
-    document: String(order.customerDocument || '').replace(/\D/g, ''),
-  });
+  const attempts = [
+    { unit: primaryUnit, label: 'primary' },
+    { unit: alternateUnit, label: 'retry_alt_unit' },
+  ];
 
-  const payload = {
-    amount,
-    paymentMethod: 'pix',
-    postbackUrl,
-    externalRef: order.id,
-    metadata: JSON.stringify({
+  for (let i = 0; i < attempts.length; i++) {
+    const { unit, label } = attempts[i];
+    const body = buildQuantumTransactionPayload(order, unit);
+    body.postbackUrl = postbackUrl;
+
+    btsTrace(scope, `request_${label}`, {
       orderId: order.id,
-      lote: order.lote,
-      sector: order.sectorId,
-    }),
-    customer: {
-      name: order.customerName,
-      email: order.customerEmail,
-      phone: String(order.customerPhone || '').replace(/\D/g, '') || undefined,
-      document: {
-        type: 'cpf',
-        number: String(order.customerDocument || '').replace(/\D/g, ''),
-      },
-    },
-    items: [
-      {
-        title: `${order.sectorLabel} (${order.ticketType})`,
-        quantity: order.quantity,
-        tangible: false,
-        unitPrice,
-        externalRef: `${order.id}-item`,
-      },
-    ],
-  };
-
-  const url = `${base}/transactions`;
-  let res;
-  try {
-    res = await fetch(url, {
-      method: 'POST',
-      headers: {
-        Authorization: auth,
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-      },
-      body: JSON.stringify(payload),
-      signal: AbortSignal.timeout(55000),
+      amountUnit: unit,
+      amount: body.amount,
+      items: body.items?.map((it) => ({
+        q: it.quantity,
+        unitPrice: it.unitPrice,
+        title: it.title?.slice(0, 40),
+      })),
+      postbackUrl,
     });
-  } catch (e) {
-    btsTraceErr(scope, 'fetch_failed', e, {
-      url,
-      name: e?.name,
-      cause: e?.cause?.message,
-    });
-    const err = new Error(
-      e?.name === 'TimeoutError'
-        ? 'Tempo esgotado ao falar com api.quantumpayments.com.br'
-        : 'Rede ao contactar Quantum: ' + (e?.message || 'falha')
-    );
-    err.code = 'quantum_network';
-    throw err;
-  }
 
-  const text = await res.text();
-  let data = {};
-  try {
-    data = text ? JSON.parse(text) : {};
-  } catch {
-    data = { parseError: true, raw: text?.slice(0, 800) };
-  }
+    let fetchRes;
+    try {
+      fetchRes = await postQuantum(base, auth, body);
+    } catch (e) {
+      btsTraceErr(scope, 'fetch_failed', e, { attempt: label });
+      const err = new Error(
+        e?.name === 'TimeoutError'
+          ? 'Tempo esgotado ao falar com api.quantumpayments.com.br'
+          : 'Rede ao contactar Quantum: ' + (e?.message || 'falha')
+      );
+      err.code = 'quantum_network';
+      throw err;
+    }
 
-  const root = data?.data ?? data;
-  const topKeys = data && typeof data === 'object' ? Object.keys(data).slice(0, 30) : [];
-  const pixKeys =
-    root && typeof root === 'object' && root.pix && typeof root.pix === 'object'
-      ? Object.keys(root.pix)
-      : [];
+    const { res, data, text } = fetchRes;
 
-  if (!res.ok) {
-    btsTrace(scope, 'http_error', {
-      httpStatus: res.status,
-      url,
-      responseKeys: topKeys,
-      bodySnippet: text?.slice(0, 1800),
-    });
+    const root = data?.data ?? data;
+    const topKeys = data && typeof data === 'object' ? Object.keys(data).slice(0, 30) : [];
+    const pixKeys =
+      root && typeof root === 'object' && root.pix && typeof root.pix === 'object'
+        ? Object.keys(root.pix)
+        : [];
+
+    if (res.ok) {
+      btsTrace(scope, 'response_ok', {
+        attempt: label,
+        amountUnit: unit,
+        httpStatus: res.status,
+        transactionId: root?.id ?? data?.id ?? null,
+        dataKeys: topKeys,
+        pixKeys,
+        hasExtractablePixCode: !!extractPixPayload(data),
+      });
+      return data;
+    }
+
     const msg =
       (typeof data.message === 'string' && data.message) ||
       (typeof data.error === 'string' && data.error) ||
       (Array.isArray(data.errors) ? JSON.stringify(data.errors).slice(0, 400) : null) ||
       `Quantum HTTP ${res.status}`;
+
+    btsTrace(scope, 'http_error', {
+      attempt: label,
+      amountUnit: unit,
+      httpStatus: res.status,
+      responseKeys: topKeys,
+      bodySnippet: text?.slice(0, 1800),
+    });
+
     const err = new Error(msg);
     err.details = data;
     err.status = res.status;
     err.code = 'quantum_upstream';
-    btsTraceErr(scope, 'upstream_rejected', err, { httpStatus: res.status });
+
+    const shouldRetry =
+      i === 0 &&
+      isLikelyInvalidAmountError(data, text) &&
+      primaryUnit !== alternateUnit;
+
+    if (shouldRetry) {
+      appendGatewayPixLog({
+        kind: 'quantum_retry',
+        orderId: order.id,
+        rid,
+        message: `1ª tentativa (${primaryUnit}) recusada pela Quantum; em seguida tentamos ${alternateUnit}.`,
+        httpStatus: res.status,
+        gatewayMessage: msg,
+      });
+      continue;
+    }
+
+    btsTraceErr(scope, 'upstream_rejected', err, { httpStatus: res.status, attempt: label });
     throw err;
   }
 
-  const hasPix = !!extractPixPayload(data);
-  btsTrace(scope, 'response_ok', {
-    httpStatus: res.status,
-    transactionId: root?.id ?? data?.id ?? null,
-    dataKeys: topKeys,
-    pixKeys,
-    hasExtractablePixCode: hasPix,
-  });
-
-  return data;
+  throw new Error('Quantum: falha após tentativas de valor.');
 }

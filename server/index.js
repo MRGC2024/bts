@@ -22,6 +22,7 @@ import {
   mapQuantumStatusToUtmify,
 } from './integrations.js';
 import { btsTrace, btsTraceErr } from './bts-log.js';
+import { appendGatewayPixLog, loadGatewayPixLogs } from './gateway-log.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -167,6 +168,10 @@ app.get('/api/admin/orders', assertAdmin, (req, res) => {
   res.json({ orders: loadOrders() });
 });
 
+app.get('/api/admin/gateway-pix-log', assertAdmin, (req, res) => {
+  res.json({ entries: loadGatewayPixLogs() });
+});
+
 function fakePurchaseId() {
   const n = Math.floor(100000 + Math.random() * 900000);
   return `TM-BR-${n}`;
@@ -206,6 +211,11 @@ app.post('/api/checkout/create', async (req, res) => {
 
         if (!customerName || !customerEmail || !customerDocument) {
           return res.status(400).json({ error: 'Preencha nome, e-mail e CPF' });
+        }
+
+        const docDigits = String(customerDocument).replace(/\D/g, '');
+        if (docDigits.length !== 11) {
+          return res.status(400).json({ error: 'CPF deve ter 11 dígitos (somente números).' });
         }
 
         const baseUrl = getPublicBaseUrl(req, cfg);
@@ -269,6 +279,15 @@ app.post('/api/checkout/create', async (req, res) => {
           quantumData = await createQuantumPix(cfg, order, baseUrl, rid);
         } catch (e) {
           btsTraceErr(`checkout:${rid}`, 'quantum_throw', e, { orderId: order.id });
+          appendGatewayPixLog({
+            kind: 'quantum_error',
+            orderId: order.id,
+            rid,
+            code: e.code || 'quantum_upstream',
+            message: e.message,
+            httpStatus: e.status,
+            details: e.details != null ? JSON.stringify(e.details).slice(0, 2000) : null,
+          });
           updateOrder(order.id, {
             status: 'gateway_error',
             gatewayError: e.message,
@@ -279,8 +298,11 @@ app.post('/api/checkout/create', async (req, res) => {
               ? ' Configure chave pública e secreta em Gateway PIX.'
               : e.code === 'quantum_network'
                 ? ' Verifique rede/DNS do servidor ou tente de novo.'
-                : ' Se o manual pedir valor em reais, altere “Valores na Quantum” no painel.';
-          return res.status(424).json({
+                : e.code === 'quantum_validation'
+                  ? ' Verifique CPF (11 dígitos).'
+                  : ' O servidor já tentou reais e centavos automaticamente; se persistir, confira o painel Quantum e os logs abaixo.';
+          const errStatus = e.code === 'quantum_validation' ? 400 : 424;
+          return res.status(errStatus).json({
             error:
               'Falha ao gerar PIX no gateway.' +
               hint +
@@ -303,6 +325,13 @@ app.post('/api/checkout/create', async (req, res) => {
             orderId: order.id,
             txKeys: tx && typeof tx === 'object' ? Object.keys(tx) : [],
             rawSnippet: JSON.stringify(tx).slice(0, 2000),
+          });
+          appendGatewayPixLog({
+            kind: 'quantum_missing_pix',
+            orderId: order.id,
+            rid,
+            message: 'Resposta OK mas sem campo de código PIX',
+            rawSnippet: JSON.stringify(tx).slice(0, 1500),
           });
           updateOrder(order.id, {
             status: 'gateway_error',
