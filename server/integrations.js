@@ -101,11 +101,42 @@ export async function sendUtmifyOrder(cfg, order, utmifyStatus) {
   return data;
 }
 
+function normalizeAmounts(cfg, order) {
+  const amountCents = Number(order.totalCents) || 0;
+  const qty = Math.max(1, Number(order.quantity) || 1);
+  const unitCents = Math.round(amountCents / qty);
+  const unit = (cfg.quantumAmountUnit || 'cents').toLowerCase() === 'reais' ? 'reais' : 'cents';
+  if (unit === 'reais') {
+    return {
+      amount: Number((amountCents / 100).toFixed(2)),
+      unitPrice: Number((unitCents / 100).toFixed(2)),
+    };
+  }
+  return { amount: Math.round(amountCents), unitPrice: Math.round(unitCents) };
+}
+
+export function extractPixPayload(quantumData) {
+  const root = quantumData?.data ?? quantumData;
+  const pix = root?.pix ?? quantumData?.pix ?? {};
+  const direct =
+    pix.qrcode ||
+    pix.qrCode ||
+    pix.qr_code ||
+    pix.copyPaste ||
+    pix.copy_paste ||
+    pix.emv ||
+    root?.pixQrCode ||
+    quantumData?.pixQrCode;
+  if (direct) return String(direct);
+  const nested = pix.dynamicQrCode?.qrcode || pix.qr?.payload || root?.brCode;
+  return nested ? String(nested) : null;
+}
+
 export async function createQuantumPix(cfg, order, publicBaseUrl) {
   const pub = (cfg.quantumPublicKey || '').trim();
   const sec = (cfg.quantumSecretKey || '').trim();
   if (!pub || !sec) {
-    const err = new Error('Quantum não configurado');
+    const err = new Error('Chaves Quantum ausentes no painel (pública e secreta).');
     err.code = 'quantum_config';
     throw err;
   }
@@ -114,12 +145,10 @@ export async function createQuantumPix(cfg, order, publicBaseUrl) {
   const auth = 'Basic ' + Buffer.from(`${pub}:${sec}`).toString('base64');
   const postbackUrl = `${publicBaseUrl.replace(/\/$/, '')}/api/webhook/quantum`;
 
-  /** Valor em centavos (padrão comum em gateways BR) */
-  const amountCents = order.totalCents;
-  const unitPerTicket = Math.round(amountCents / (order.quantity || 1));
+  const { amount, unitPrice } = normalizeAmounts(cfg, order);
 
   const payload = {
-    amount: amountCents,
+    amount,
     paymentMethod: 'pix',
     postbackUrl,
     externalRef: order.id,
@@ -142,27 +171,53 @@ export async function createQuantumPix(cfg, order, publicBaseUrl) {
         title: `${order.sectorLabel} (${order.ticketType})`,
         quantity: order.quantity,
         tangible: false,
-        unitPrice: unitPerTicket,
+        unitPrice,
         externalRef: `${order.id}-item`,
       },
     ],
   };
 
-  const res = await fetch(`${base}/transactions`, {
-    method: 'POST',
-    headers: {
-      Authorization: auth,
-      'Content-Type': 'application/json',
-      Accept: 'application/json',
-    },
-    body: JSON.stringify(payload),
-  });
+  const url = `${base}/transactions`;
+  let res;
+  try {
+    res = await fetch(url, {
+      method: 'POST',
+      headers: {
+        Authorization: auth,
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+      body: JSON.stringify(payload),
+      signal: AbortSignal.timeout(55000),
+    });
+  } catch (e) {
+    const err = new Error(
+      e?.name === 'TimeoutError'
+        ? 'Tempo esgotado ao falar com api.quantumpayments.com.br'
+        : 'Rede ao contactar Quantum: ' + (e?.message || 'falha')
+    );
+    err.code = 'quantum_network';
+    throw err;
+  }
 
-  const data = await res.json().catch(() => ({}));
+  const text = await res.text();
+  let data = {};
+  try {
+    data = text ? JSON.parse(text) : {};
+  } catch {
+    data = { raw: text?.slice(0, 800) };
+  }
   if (!res.ok) {
-    const err = new Error(data.message || data.error || `Quantum HTTP ${res.status}`);
+    const msg =
+      (typeof data.message === 'string' && data.message) ||
+      (typeof data.error === 'string' && data.error) ||
+      (Array.isArray(data.errors) ? JSON.stringify(data.errors).slice(0, 400) : null) ||
+      `Quantum HTTP ${res.status}`;
+    console.error('[Quantum] POST', url, res.status, text?.slice(0, 1200));
+    const err = new Error(msg);
     err.details = data;
     err.status = res.status;
+    err.code = 'quantum_upstream';
     throw err;
   }
 

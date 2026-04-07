@@ -26,18 +26,38 @@
       background: #21262d; border: 1px solid #30363d; color: #e6edf3; padding: 8px 14px; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer;
     }
     .adm-topbar-actions .btn-out:hover { background: #30363d; }
-    #saveMsgTop { font-size: 13px; color: #8b949e; }
+    #saveMsgTop { font-size: 13px; color: #8b949e; max-width: 280px; line-height: 1.35; }
     #saveMsgTop.ok { color: #3fb950; }
-    .adm-shell { max-width: 1120px; margin: 0 auto; padding: 20px 20px 48px; }
-    .adm-tabs { display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 20px; border-bottom: 1px solid #30363d; }
+    .adm-layout { display: flex; align-items: stretch; min-height: calc(100vh - 2px); }
+    .adm-sidebar {
+      width: 248px; flex-shrink: 0; background: #0d1117; border-right: 1px solid #30363d;
+      padding: 16px 0 24px; display: flex; flex-direction: column; gap: 8px;
+    }
+    .adm-side-brand {
+      padding: 8px 16px 20px; border-bottom: 1px solid #21262d; margin-bottom: 8px;
+    }
+    .adm-side-brand .adm-side-title { font-size: 14px; font-weight: 700; color: #f0f6fc; margin: 0 0 4px; letter-spacing: -0.02em; }
+    .adm-side-brand .adm-side-sub { font-size: 11px; color: #8b949e; line-height: 1.4; margin: 0; }
+    .adm-nav-group { padding: 8px 12px 4px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #6e7681; }
     .adm-tab {
-      padding: 10px 16px; font-size: 13px; font-weight: 600; color: #8b949e; cursor: pointer; border: 1px solid transparent;
-      border-bottom: none; background: transparent; border-radius: 6px 6px 0 0; margin-bottom: -1px;
+      display: block; text-align: left; padding: 11px 16px; margin: 0 8px; width: calc(100% - 16px);
+      font-size: 13px; font-weight: 600; color: #adbac7; cursor: pointer; border: 0; border-radius: 8px;
+      background: transparent; transition: background 0.12s, color 0.12s;
     }
     .adm-tab:hover { color: #e6edf3; background: #21262d; }
-    .adm-tab[aria-selected="true"] { color: #e6edf3; background: #161b22; border-color: #30363d; border-bottom: 1px solid #161b22; }
+    .adm-tab[aria-selected="true"] { color: #f0f6fc; background: #21262d; box-shadow: inset 3px 0 0 #58a6ff; }
+    .adm-main { flex: 1; min-width: 0; display: flex; flex-direction: column; background: #0d1117; }
+    .adm-topbar.compact { border-bottom: 1px solid #30363d; }
+    .adm-shell { max-width: 900px; margin: 0; padding: 24px 28px 56px; flex: 1; }
     .adm-panel { display: none; animation: admFade 0.2s ease; }
     .adm-panel.is-active { display: block; }
+    .adm-panel-head { margin-bottom: 20px; }
+    .adm-panel-head h2 { margin: 0; font-size: 1.35rem; font-weight: 700; color: #f0f6fc; letter-spacing: -0.02em; }
+    .adm-panel-head p { margin: 8px 0 0; font-size: 13px; color: #8b949e; line-height: 1.5; max-width: 640px; }
+    select.adm-select {
+      width: 100%; max-width: 560px; padding: 10px 12px; border-radius: 6px; border: 1px solid #30363d;
+      background: #0d1821; color: #e6edf3; font-size: 14px; cursor: pointer;
+    }
     @keyframes admFade { from { opacity: 0; } to { opacity: 1; } }
     .adm-card {
       background: #161b22; border: 1px solid #30363d; border-radius: 10px; padding: 22px 24px; margin-bottom: 18px;
@@ -70,6 +90,61 @@
     .table-wrap { overflow-x: auto; margin-top: 12px; border: 1px solid #30363d; border-radius: 8px; }
     .table-wrap table { margin: 0; }
     .table-wrap th, .table-wrap td { padding: 12px; }
+    .tm-admin-tm-footer {
+      background: #1f262d;
+      color: #fff;
+      padding: 40px 24px 48px;
+      margin-top: 0;
+      font-size: 14px;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    .tm-admin-tm-footer a { color: #fff; text-decoration: none; }
+    .tm-admin-tm-footer a:hover { text-decoration: underline; }
+    .tm-admin-tm-footer .tm-af-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 28px 24px;
+      max-width: 1120px;
+      margin: 0 auto;
+      padding-bottom: 28px;
+    }
+    .tm-admin-tm-footer h3 { font-size: 1em; font-weight: 700; margin: 0 0 15px; color: #fff; }
+    .tm-admin-tm-footer ul { list-style: none; padding: 0; margin: 0; }
+    .tm-admin-tm-footer li { margin-bottom: 10px; }
+    .tm-admin-tm-footer .tm-af-logo { max-width: 1120px; margin: 0 auto 24px; }
+    .tm-admin-tm-footer .tm-af-logo img {
+      height: auto; max-height: 36px; width: auto;
+      filter: brightness(0) invert(1); opacity: 0.95;
+    }
+    .tm-admin-tm-footer .tm-af-bottom {
+      max-width: 1120px; margin: 0 auto;
+      padding-top: 24px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex; flex-wrap: wrap; justify-content: space-between; gap: 24px; align-items: flex-start;
+    }
+    .tm-admin-tm-footer .tm-af-social a { margin-right: 20px; display: inline-block; vertical-align: middle; }
+    .tm-admin-tm-footer .tm-af-copy { font-size: 0.8em; color: rgba(255, 255, 255, 0.92); }
+    .tm-admin-tm-footer .tm-af-legal { text-align: right; font-size: 0.8em; color: rgba(255, 255, 255, 0.9); line-height: 1.5; flex: 1; min-width: 200px; }
+    .tm-admin-tm-footer .tm-af-legal ul { list-style: none; padding: 0; margin: 8px 0 0; }
+    @media (max-width: 900px) {
+      .adm-layout { flex-direction: column; }
+      .adm-sidebar {
+        width: 100%; flex-direction: row; flex-wrap: wrap; align-items: center; gap: 4px;
+        padding: 12px; border-right: 0; border-bottom: 1px solid #30363d;
+      }
+      .adm-side-brand { border: 0; margin: 0; padding: 8px 12px; flex: 1; min-width: 200px; }
+      .adm-nav-group { display: none; }
+      .adm-tab {
+        width: auto; flex: 1 1 auto; min-width: 120px; margin: 4px; text-align: center; box-shadow: none !important;
+        font-size: 12px; padding: 10px 12px;
+      }
+      .adm-tab[aria-selected="true"] { box-shadow: inset 0 -3px 0 #58a6ff !important; }
+      .adm-shell { padding: 18px 16px 40px; }
+    }
+    @media (max-width: 768px) {
+      .tm-admin-tm-footer .tm-af-grid { grid-template-columns: 1fr; }
+      .tm-admin-tm-footer .tm-af-legal { text-align: left; }
+    }
   </style>
 </head>
 <body>
@@ -83,31 +158,41 @@
 </div>
 
 <div id="viewApp" style="display:none;">
-  <header class="adm-topbar">
-    <div>
-      <h1>BTS Ingressos <span style="font-weight:500;color:#8b949e">· Painel</span></h1>
-      <span class="sub">Integrações · limites · vendas</span>
-    </div>
-    <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
-      <span id="saveMsgTop"></span>
-      <div class="adm-topbar-actions">
-        <button type="button" class="btn-save" id="saveCfgTop">Salvar configurações</button>
-        <button type="button" class="btn-out" id="btnLogout">Sair</button>
+  <div class="adm-layout">
+    <aside class="adm-sidebar" role="navigation" aria-label="Seções do painel">
+      <div class="adm-side-brand">
+        <img src="../images/46b77c52-6acd-425b-985f-c036a9dcbf90-ticketmaster.svg?w=300" alt="" width="110" height="22" style="height:22px;width:auto;display:block;filter:brightness(0) invert(1);opacity:0.9;margin-bottom:12px">
+        <p class="adm-side-title">BTS — Painel</p>
+        <p class="adm-side-sub">Configurações da API, PIX Quantum, Utmify e pedidos.</p>
       </div>
-    </div>
-  </header>
-
-  <div class="adm-shell">
-      <div class="adm-tabs" role="tablist">
-        <button type="button" class="adm-tab is-active" role="tab" data-tab="p-home">Visão geral</button>
-        <button type="button" class="adm-tab" role="tab" data-tab="p-pay">Gateway PIX</button>
-        <button type="button" class="adm-tab" role="tab" data-tab="p-utm">Utmify e URL</button>
-        <button type="button" class="adm-tab" role="tab" data-tab="p-ga">Google</button>
-        <button type="button" class="adm-tab" role="tab" data-tab="p-sec">Segurança</button>
-        <button type="button" class="adm-tab" role="tab" data-tab="p-sales">Vendas</button>
-      </div>
+      <div class="adm-nav-group">Início</div>
+      <button type="button" class="adm-tab is-active" role="tab" data-tab="p-home" aria-selected="true">Visão geral</button>
+      <div class="adm-nav-group">Integrações</div>
+      <button type="button" class="adm-tab" role="tab" data-tab="p-pay" aria-selected="false">Gateway PIX</button>
+      <button type="button" class="adm-tab" role="tab" data-tab="p-utm" aria-selected="false">Utmify e URL</button>
+      <button type="button" class="adm-tab" role="tab" data-tab="p-ga" aria-selected="false">Google (GA / Ads)</button>
+      <div class="adm-nav-group">Operação</div>
+      <button type="button" class="adm-tab" role="tab" data-tab="p-sec" aria-selected="false">Segurança e limites</button>
+      <button type="button" class="adm-tab" role="tab" data-tab="p-sales" aria-selected="false">Pedidos (somente leitura)</button>
+    </aside>
+    <div class="adm-main">
+      <header class="adm-topbar compact">
+        <div style="font-size:13px;color:#8b949e;font-weight:600">Área logada · alterações exigem <strong style="color:#e6edf3">Salvar</strong></div>
+        <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
+          <span id="saveMsgTop"></span>
+          <div class="adm-topbar-actions">
+            <button type="button" class="btn-save" id="saveCfgTop">Salvar tudo</button>
+            <button type="button" class="btn-out" id="btnLogout">Sair</button>
+          </div>
+        </div>
+      </header>
+      <div class="adm-shell">
 
       <section class="adm-panel is-active" id="p-home" role="tabpanel">
+        <div class="adm-panel-head">
+          <h2>Visão geral</h2>
+          <p>Onde os dados ficam e como o fluxo checkout → PIX → webhook se conecta à Quantum.</p>
+        </div>
         <div class="adm-callout">
           <strong>Onde os dados do painel são salvos?</strong><br><br>
           Com o <strong>Node.js</strong> (Railway ou <code>npm start</code> na pasta <code>server/</code>):<br>
@@ -117,27 +202,41 @@
           Na <strong>HostGator (PHP)</strong>, o equivalente fica na pasta <code>data/</code> na raiz do site (ver <code>api/index.php</code> / <code>lib/Store.php</code>).
         </div>
         <div class="adm-card">
-          <h2>Como usar</h2>
-          <p class="hint">Preencha as abas <em>Gateway PIX</em>, <em>Utmify e URL</em>, <em>Google</em> e <em>Segurança</em>. Depois clique em <strong>Salvar configurações</strong> no topo (grava todos os campos de uma vez). A aba <em>Vendas</em> é somente leitura da lista de pedidos.</p>
+          <h2>Checklist rápido</h2>
+          <p class="hint">1) <strong>Gateway PIX</strong> — chaves Quantum + unidade de valor (centavos/reais). 2) <strong>URL pública</strong> — igual à URL do app na Railway (webhook). 3) Utmify e Google conforme uso. 4) <strong>Salvar tudo</strong> no topo. 5) Testar checkout em aba anônima.</p>
         </div>
       </section>
 
       <section class="adm-panel" id="p-pay" role="tabpanel">
+        <div class="adm-panel-head">
+          <h2>Gateway PIX (Quantum)</h2>
+          <p>Autenticação Basic com chave pública e secreta. Se o PIX retornar erro de valor, experimente trocar a unidade abaixo conforme o PDF/manual da Quantum.</p>
+        </div>
         <div class="adm-card">
-          <h2>Quantum Payments (PIX)</h2>
-          <p class="hint">Credenciais da API Basic (chave pública e secreta no painel Quantum).</p>
+          <h2>Credenciais</h2>
+          <p class="hint">No painel Quantum, gere ou copie o par de chaves de API (Basic).</p>
           <label for="quantumPublicKey">Chave pública</label>
           <input id="quantumPublicKey" autocomplete="off">
           <label for="quantumSecretKey">Chave secreta (vazio = não alterar)</label>
           <input id="quantumSecretKey" type="password" placeholder="********" autocomplete="new-password">
           <label for="quantumApiBase">Base da API (opcional)</label>
           <input id="quantumApiBase" placeholder="https://api.quantumpayments.com.br/v1">
+          <label for="quantumAmountUnit">Valores enviados no campo <code>amount</code> / <code>unitPrice</code></label>
+          <select id="quantumAmountUnit" class="adm-select">
+            <option value="cents">Centavos (inteiro) — padrão, ex.: R$ 680,00 → 68000</option>
+            <option value="reais">Reais (decimal) — ex.: R$ 680,00 → 680</option>
+          </select>
+          <p class="hint" style="margin-top:10px">Se aparecer erro 424 no checkout com mensagem da Quantum sobre valor inválido, salve com <strong>Reais</strong>, redeploy se necessário e teste de novo.</p>
         </div>
       </section>
 
       <section class="adm-panel" id="p-utm" role="tabpanel">
-        <div class="adm-card">
+        <div class="adm-panel-head">
           <h2>Utmify e URL pública</h2>
+          <p>Webhook do PIX usa a URL base configurada aqui (deve ser a mesma que o cliente abre no navegador, ex. Railway).</p>
+        </div>
+        <div class="adm-card">
+          <h2>Credenciais e URL</h2>
           <p class="hint">Token de API da Utmify e a URL base do site para o webhook do PIX (ex.: <code>https://seu-app.up.railway.app</code>).</p>
           <label for="utmifyApiToken">Token API Utmify (x-api-token)</label>
           <input id="utmifyApiToken" type="password" autocomplete="off" placeholder="********">
@@ -149,8 +248,12 @@
       </section>
 
       <section class="adm-panel" id="p-ga" role="tabpanel">
-        <div class="adm-card">
+        <div class="adm-panel-head">
           <h2>Google Analytics e Ads</h2>
+          <p>IDs públicos injetados no front (checkout e páginas de evento) para <code>gtag</code>.</p>
+        </div>
+        <div class="adm-card">
+          <h2>IDs de medição</h2>
           <p class="hint">IDs carregados no front para <code>gtag</code>.</p>
           <label for="ga4MeasurementId">GA4 Measurement ID</label>
           <input id="ga4MeasurementId" placeholder="G-XXXXXXXXXX">
@@ -162,8 +265,12 @@
       </section>
 
       <section class="adm-panel" id="p-sec" role="tabpanel">
+        <div class="adm-panel-head">
+          <h2>Segurança e limites</h2>
+          <p>Senha deste painel e teto de ingressos por pedido (validado na API).</p>
+        </div>
         <div class="adm-card">
-          <h2>Limites e senha do painel</h2>
+          <h2>Limite por pedido e senha</h2>
           <p class="hint">O limite máximo de ingressos por pedido reduz risco de abuso e alinha com limites do gateway.</p>
           <label for="maxTicketsPerOrder">Máximo de ingressos por pedido</label>
           <input id="maxTicketsPerOrder" type="number" min="1" max="99" value="4">
@@ -173,8 +280,12 @@
       </section>
 
       <section class="adm-panel" id="p-sales" role="tabpanel">
+        <div class="adm-panel-head">
+          <h2>Pedidos</h2>
+          <p>Lista persistida no servidor (Railway: use volume em <code>server/data</code> para não perder ao redeploy).</p>
+        </div>
         <div class="adm-card">
-          <h2>Vendas</h2>
+          <h2>Vendas registradas</h2>
           <p class="hint">Dados vindos de <code>server/data/orders.json</code>. Atualize após novos pedidos.</p>
           <button type="button" class="btn-out" id="reloadOrders">Atualizar lista</button>
           <div class="table-wrap">
@@ -194,8 +305,60 @@
           </div>
         </div>
       </section>
+      </div>
+    </div>
   </div>
 </div>
+
+<footer class="tm-admin-tm-footer" role="contentinfo">
+  <div class="tm-af-grid">
+    <div>
+      <h3>Acesso Rápido</h3>
+      <ul>
+        <li><a href="../account/purchases">Minhas Compras</a></li>
+        <li><a href="../account/perfil">Meu Perfil</a></li>
+        <li><a href="https://help.ticketmaster.com.br/hc/pt-br" target="_blank" rel="noopener noreferrer">Suporte ao Fã</a></li>
+        <li><a href="https://www.ticketmaster.com.br/static/acessibilidade" target="_blank" rel="noopener noreferrer">Acessibilidade</a></li>
+      </ul>
+    </div>
+    <div>
+      <h3>Termos e Políticas</h3>
+      <ul>
+        <li><a href="../static/termos-de-uso" target="_blank" rel="noopener noreferrer">Termos de Uso</a></li>
+        <li><a href="../static/politica-de-compra" target="_blank" rel="noopener noreferrer">Política de Compra</a></li>
+        <li><a href="https://privacy.ticketmaster.com.br/pt/cookie-policy" target="_blank" rel="noopener noreferrer">Política de Cookies</a></li>
+        <li><a href="https://privacy.ticketmaster.com.br/pt/privacy-policy" target="_blank" rel="noopener noreferrer">Política de Privacidade</a></li>
+      </ul>
+    </div>
+    <div>
+      <h3>Sobre a Ticketmaster</h3>
+      <ul>
+        <li><a href="https://business.ticketmaster.com.br/pt/" target="_blank" rel="noopener noreferrer">Ticketmaster Brasil</a></li>
+        <li><a href="https://business.ticketmaster.com.br/pt/nossa-historia/" target="_blank" rel="noopener noreferrer">Ticketmaster Internacional</a></li>
+        <li><a href="https://www.linkedin.com/company/ticketmasterBR" target="_blank" rel="noopener noreferrer">Trabalhe com a gente</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="tm-af-logo">
+    <img src="../images/46b77c52-6acd-425b-985f-c036a9dcbf90-ticketmaster.svg?w=300" alt="Ticketmaster">
+  </div>
+  <div class="tm-af-bottom">
+    <div class="tm-af-social">
+      <a aria-label="Instagram" href="https://www.instagram.com/ticketmasterBR/" target="_blank" rel="noopener noreferrer"><img alt="Instagram" src="../images/1643379600508-instagram.png" style="height:16px"></a>
+      <a aria-label="Facebook" href="https://www.facebook.com/ticketmasterbr" target="_blank" rel="noopener noreferrer"><img alt="Facebook" src="../images/1643379516372-facebook.png" style="height:16px"></a>
+      <a aria-label="LinkedIn" href="https://www.linkedin.com/company/ticketmasterBR" target="_blank" rel="noopener noreferrer"><img alt="Linkedin" src="../images/1643379625842-linkedin.png" style="height:16px"></a>
+      <a href="https://www.tiktok.com/@ticketmasterbr" target="_blank" rel="noopener noreferrer"><img alt="Tiktok" src="../images/1691588331940-null-l-tiktok.png" style="height:16px"></a>
+      <a href="https://blog.ticketmaster.com.br" target="_blank" rel="noopener noreferrer"><img alt="Blog Ticketmaster" src="../images/1683574125568-null-blog.png" style="height:16px"></a>
+    </div>
+    <div class="tm-af-legal">
+      <div class="tm-af-copy">Cookie preferences · © 2026 Ticketmaster.</div>
+      <ul>
+        <li>TICKETMASTER BRASIL LTDA - CNPJ 42.789.521/0001-10</li>
+        <li>R. Bacaetava, nº 401, 7º andar, Vila Gertrudes, São Paulo/SP, CEP 04705-010</li>
+      </ul>
+    </div>
+  </div>
+</footer>
 
 <script>
 (function () {
@@ -277,6 +440,7 @@
     const c = await api('/api/admin/config');
     $('quantumPublicKey').value = c.quantumPublicKey || '';
     $('quantumApiBase').value = c.quantumApiBase || '';
+    $('quantumAmountUnit').value = (c.quantumAmountUnit === 'reais' ? 'reais' : 'cents');
     $('platformName').value = c.platformName || '';
     $('publicBaseUrl').value = c.publicBaseUrl || '';
     $('ga4MeasurementId').value = c.ga4MeasurementId || '';
@@ -295,6 +459,7 @@
           quantumPublicKey: $('quantumPublicKey').value.trim(),
           quantumSecretKey: $('quantumSecretKey').value,
           quantumApiBase: $('quantumApiBase').value.trim(),
+          quantumAmountUnit: $('quantumAmountUnit').value,
           utmifyApiToken: $('utmifyApiToken').value,
           platformName: $('platformName').value.trim(),
           publicBaseUrl: $('publicBaseUrl').value.trim(),

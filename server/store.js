@@ -11,6 +11,8 @@ const defaultConfig = {
   quantumPublicKey: '',
   quantumSecretKey: '',
   quantumApiBase: 'https://api.quantumpayments.com.br/v1',
+  /** 'cents' = integer centavos | 'reais' = decimal em reais — depende da documentação Quantum */
+  quantumAmountUnit: 'cents',
   utmifyApiToken: '',
   ga4MeasurementId: '',
   googleAdsConversionId: '',

@@ -189,7 +189,7 @@ if ($route === 'admin/config' && $method === 'PUT') {
     $next = $prev;
 
     $fields = [
-        'quantumPublicKey', 'quantumApiBase', 'utmifyApiToken',
+        'quantumPublicKey', 'quantumApiBase', 'quantumAmountUnit', 'utmifyApiToken',
         'ga4MeasurementId', 'googleAdsConversionId', 'googleAdsConversionLabel',
         'maxTicketsPerOrder', 'platformName', 'publicBaseUrl',
     ];
@@ -294,24 +294,47 @@ if ($route === 'checkout/create' && $method === 'POST') {
         try {
             $quantumData = BtsIntegrations::createQuantumPix($cfg, $order, $publicBase);
         } catch (Throwable $e) {
+            $code = (int) $e->getCode();
             BtsStore::updateOrder($order['id'], [
                 'status' => 'gateway_error',
                 'gatewayError' => $e->getMessage(),
             ]);
-            bts_json(502, [
-                'error' => 'Falha ao gerar PIX. Verifique as chaves do gateway no painel.',
-                'details' => $e->getMessage(),
+            $errKey = $code === 1001 ? 'quantum_config' : ($code === 1002 ? 'quantum_network' : 'quantum_upstream');
+            if ($errKey === 'quantum_config') {
+                $hint = ' Configure chave pública e secreta em Gateway PIX.';
+            } elseif ($errKey === 'quantum_network') {
+                $hint = ' Verifique rede/DNS do servidor.';
+            } else {
+                $hint = ' Se o manual pedir valor em reais, altere “Valores na Quantum” no painel.';
+            }
+            bts_json(424, [
+                'error' => 'Falha ao gerar PIX no gateway.' . $hint . ' Resposta: ' . $e->getMessage(),
+                'code' => $errKey,
                 'orderId' => $order['id'],
             ]);
         }
 
         $tx = $quantumData['data'] ?? $quantumData;
         $pix = is_array($tx['pix'] ?? null) ? $tx['pix'] : [];
-        $pixCode = $pix['qrcode'] ?? $pix['qrCode'] ?? ($quantumData['pix']['qrcode'] ?? null);
+        $pixCode = BtsIntegrations::extractPixCode($quantumData);
 
         $feeCent = 0;
         if (isset($tx['fee']['estimatedFee'])) {
             $feeCent = (int) round((float) $tx['fee']['estimatedFee'] * 100);
+        }
+
+        if ($pixCode === null || $pixCode === '') {
+            error_log('[Quantum] transação sem código PIX: ' . substr(json_encode($tx, JSON_UNESCAPED_UNICODE), 0, 2000));
+            BtsStore::updateOrder($order['id'], [
+                'status' => 'gateway_error',
+                'gatewayError' => 'Resposta Quantum sem qrcode/copyPaste',
+                'quantumRaw' => $tx,
+            ]);
+            bts_json(424, [
+                'error' => 'O gateway respondeu, mas não veio código PIX. Confira o formato na documentação Quantum.',
+                'code' => 'quantum_missing_pix',
+                'orderId' => $order['id'],
+            ]);
         }
 
         BtsStore::updateOrder($order['id'], [
@@ -319,7 +342,7 @@ if ($route === 'checkout/create' && $method === 'POST') {
             'quantumTransactionId' => $tx['id'] ?? $quantumData['id'] ?? null,
             'quantumRaw' => $tx,
             'pixQrCode' => $pixCode,
-            'pixExpiresAt' => $pix['expirationDate'] ?? null,
+            'pixExpiresAt' => $pix['expirationDate'] ?? $pix['expiresAt'] ?? null,
             'gatewayFeeInCents' => $feeCent,
         ]);
 

@@ -26,6 +26,7 @@ final class BtsStore
             'quantumPublicKey' => '',
             'quantumSecretKey' => '',
             'quantumApiBase' => 'https://api.quantumpayments.com.br/v1',
+            'quantumAmountUnit' => 'cents',
             'utmifyApiToken' => '',
             'ga4MeasurementId' => '',
             'googleAdsConversionId' => '',

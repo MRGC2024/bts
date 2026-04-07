@@ -27,6 +27,10 @@
   gap: 16px;
 }
 
+.tm-shell-body .navbar img.logo-unified {
+  display: block !important;
+}
+
 .tm-shell-body .tm-shell-nav-actions {
   display: flex;
   align-items: center;
@@ -60,4 +64,96 @@
   max-width: 1180px;
   margin: 0 auto;
   padding: 28px 18px 56px;
+}
+
+/* Rodapé Ticketmaster (compartilhado — mesma aparência da home) */
+footer.footer.tm-shared-footer {
+  --footer-bg: #1f262d;
+  --footer-link-color: #ffffff;
+  display: block;
+  background-color: var(--footer-bg) !important;
+  color: #fff;
+  margin-top: 0;
+  border: none;
+  padding: 40px 0 48px;
+}
+
+footer.footer.tm-shared-footer .footer-tm {
+  color: #fff;
+}
+
+footer.footer.tm-shared-footer .footer-tm h3 {
+  font-size: 1em;
+  font-weight: bold;
+  margin-bottom: 15px;
+  margin-top: 0;
+  color: #fff;
+}
+
+footer.footer.tm-shared-footer .footer-tm > .row:first-child {
+  margin-bottom: 8px;
+}
+
+footer.footer.tm-shared-footer .footer-tm ul {
+  padding: 0;
+  margin: 0 0 40px 0;
+}
+
+footer.footer.tm-shared-footer .footer-tm ul li {
+  list-style: none;
+  display: block;
+  margin-bottom: 10px;
+}
+
+footer.footer.tm-shared-footer .footer-tm ul li a {
+  color: #fff;
+  text-decoration: none;
+}
+
+footer.footer.tm-shared-footer .footer-tm ul li a:hover {
+  text-decoration: underline;
+}
+
+footer.footer.tm-shared-footer .footer-tm img.logo-footer-unified {
+  margin: 0 0 24px 0;
+  height: auto;
+  max-height: 36px;
+  width: auto;
+  filter: brightness(0) invert(1);
+  opacity: 0.95;
+}
+
+footer.footer.tm-shared-footer .footer-tm .foo-copy {
+  text-align: right;
+  font-size: 0.8em;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+footer.footer.tm-shared-footer .footer-tm .foo-copy a {
+  color: #fff;
+}
+
+footer.footer.tm-shared-footer .footer-tm .foo-social a {
+  margin-right: 20px;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+footer.footer.tm-shared-footer .footer-tm .foo-copy ul {
+  margin: 0;
+  padding: 0;
+}
+
+footer.footer.tm-shared-footer .footer-tm .foo-copy ul li {
+  list-style: none;
+  margin-bottom: 8px;
+}
+
+@media (max-width: 768px) {
+  footer.footer.tm-shared-footer .footer-tm .foo-social {
+    margin-bottom: 28px;
+  }
+  footer.footer.tm-shared-footer .footer-tm .foo-copy {
+    text-align: left;
+  }
 }

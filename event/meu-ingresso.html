@@ -7,10 +7,12 @@
   <script src="../api-base.js"></script>
   <title>Meu ingresso</title>
   <link href="../content/css/styles.295508835c.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="tm-shell.css">
   <link rel="icon" sizes="196x196" href="../images/c1ade2d9-b2d1-484a-b163-0e5509e00144-favicon-32x32.png?w=196">
   <style>
     body { font-family: Averta, "Helvetica Neue", Helvetica, Arial, sans-serif; }
     .mi-wrap { max-width: 520px; margin: 0 auto; padding: 96px 16px; }
+    body.tm-shell-body .mi-wrap { padding: 28px 16px 56px; }
     .mi-card { border: 1px solid #ddd; border-radius: 12px; padding: 24px; background: linear-gradient(180deg, #f8fbff 0%, #fff 40%); }
     .mi-card h1 { font-size: 22px; color: #024ddf; margin-top: 0; }
     .mi-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #eee; font-size: 15px; }
@@ -23,12 +25,12 @@
     nav.navbar { background: #024ddf; border: 0; }
   </style>
 </head>
-<body>
+<body class="tm-shell-body">
 <header>
   <nav class="navbar navbar-fixed-top" role="navigation">
-    <div class="horizontal-container navbar-container">
+    <div class="horizontal-container navbar-container" style="justify-content:flex-start">
       <a style="height:48px;display:flex;align-items:center" href="bts-world-tour-arirang.html">
-        <img style="height:48px" src="../images/46b77c52-6acd-425b-985f-c036a9dcbf90-ticketmaster.svg?w=300" alt="">
+        <img class="logo-unified" style="height:40px;width:auto;display:block" src="../images/46b77c52-6acd-425b-985f-c036a9dcbf90-ticketmaster.svg?w=300" alt="Ticketmaster Brasil">
       </a>
     </div>
   </nav>
@@ -45,6 +47,60 @@
     </div>
   </div>
 </main>
+
+<footer class="footer tm-shared-footer" style="display:block;margin-top:0;" role="contentinfo">
+  <div class="container">
+    <div class="footer-tm text-left">
+      <div class="row">
+        <div class="col-xs-12 col-sm-4">
+          <h3>Acesso Rápido</h3>
+          <ul>
+            <li><a href="../account/purchases">Minhas Compras</a></li>
+            <li><a href="../account/perfil">Meu Perfil</a></li>
+            <li><a aria-label="Suporte ao Fã" href="https://help.ticketmaster.com.br/hc/pt-br" target="_blank" rel="noopener noreferrer">Suporte ao Fã</a></li>
+            <li><a aria-label="Acessibilidade" href="https://www.ticketmaster.com.br/static/acessibilidade" target="_blank" rel="noopener noreferrer">Acessibilidade</a></li>
+          </ul>
+        </div>
+        <div class="col-xs-12 col-sm-4">
+          <h3>Termos e Políticas</h3>
+          <ul>
+            <li><a aria-label="Termos de Uso" href="../static/termos-de-uso" target="_blank" rel="noopener noreferrer">Termos de Uso</a></li>
+            <li><a aria-label="Política de Compra" href="../static/politica-de-compra" target="_blank" rel="noopener noreferrer">Política de Compra</a></li>
+            <li><a aria-label="Política de Cookies" href="https://privacy.ticketmaster.com.br/pt/cookie-policy" target="_blank" rel="noopener noreferrer">Política de Cookies</a></li>
+            <li><a aria-label="Política de Privacidade" href="https://privacy.ticketmaster.com.br/pt/privacy-policy" target="_blank" rel="noopener noreferrer">Política de Privacidade</a></li>
+          </ul>
+        </div>
+        <div class="col-xs-12 col-sm-4">
+          <h3>Sobre a Ticketmaster</h3>
+          <ul>
+            <li><a aria-label="Ticketmaster Brasil" href="https://business.ticketmaster.com.br/pt/" target="_blank" rel="noopener noreferrer">Ticketmaster Brasil</a></li>
+            <li><a aria-label="Ticketmaster Internacional" href="https://business.ticketmaster.com.br/pt/nossa-historia/" target="_blank" rel="noopener noreferrer">Ticketmaster Internacional</a></li>
+            <li><a aria-label="Trabalhe com a gente" href="https://www.linkedin.com/company/ticketmasterBR" target="_blank" rel="noopener noreferrer">Trabalhe com a gente</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xs-12"><img alt="Ticketmaster logo" class="logo logo-footer-unified" src="../images/46b77c52-6acd-425b-985f-c036a9dcbf90-ticketmaster.svg?w=300"></div>
+      </div>
+      <div class="row">
+        <div class="col-xs-12 col-sm-6 foo-social">
+          <a aria-label="Instagram" href="https://www.instagram.com/ticketmasterBR/" target="_blank" rel="noopener noreferrer"><img alt="Instagram" src="../images/1643379600508-instagram.png" style="height: 16px;"></a>
+          <a aria-label="Facebook" href="https://www.facebook.com/ticketmasterbr" target="_blank" rel="noopener noreferrer"><img alt="Facebook" src="../images/1643379516372-facebook.png" style="height: 16px;"></a>
+          <a aria-label="LinkedIn" href="https://www.linkedin.com/company/ticketmasterBR" target="_blank" rel="noopener noreferrer"><img alt="Linkedin" src="../images/1643379625842-linkedin.png" style="height: 16px;"></a>
+          <a href="https://www.tiktok.com/@ticketmasterbr" target="_blank" rel="noopener noreferrer"><img alt="Tiktok" aria-label="Tiktok" src="../images/1691588331940-null-l-tiktok.png" style="height: 16px;"></a>
+          <a href="https://blog.ticketmaster.com.br" target="_blank" rel="noopener noreferrer"><img alt="Blog" aria-label="Blog Ticketmaster" src="../images/1683574125568-null-blog.png" style="height: 16px;"></a>
+        </div>
+        <div class="col-xs-12 col-sm-6 foo-copy"><a class="ot-sdk-show-settings cookie-settings-btn" id="ot-sdk-btn">Cookie preferences&nbsp;&nbsp;</a>© 2026&nbsp;Ticketmaster.</div>
+        <div class="col-xs-12 col-sm-6 foo-copy">
+          <ul>
+            <li>TICKETMASTER BRASIL LTDA - CNPJ 42.789.521/0001-10</li>
+            <li>R. Bacaetava, nº 401, 7º andar, Vila Gertrudes, São Paulo/SP, CEP 04705-010</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
 
 <script src="track.js"></script>
 <script>

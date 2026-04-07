@@ -17,6 +17,7 @@ import {
 } from './store.js';
 import {
   createQuantumPix,
+  extractPixPayload,
   sendUtmifyOrder,
   mapQuantumStatusToUtmify,
 } from './integrations.js';
@@ -135,6 +136,7 @@ app.put('/api/admin/config', assertAdmin, async (req, res) => {
   const fields = [
     'quantumPublicKey',
     'quantumApiBase',
+    'quantumAmountUnit',
     'utmifyApiToken',
     'ga4MeasurementId',
     'googleAdsConversionId',
@@ -251,24 +253,53 @@ app.post('/api/checkout/create', async (req, res) => {
             gatewayError: e.message,
             gatewayDetails: e.details,
           });
-          return res.status(502).json({
-            error: 'Falha ao gerar PIX. Verifique as chaves do gateway no painel.',
-            details: e.details || e.message,
+          const hint =
+            e.code === 'quantum_config'
+              ? ' Configure chave pública e secreta em Gateway PIX.'
+              : e.code === 'quantum_network'
+                ? ' Verifique rede/DNS do servidor ou tente de novo.'
+                : ' Se o manual pedir valor em reais, altere “Valores na Quantum” no painel.';
+          return res.status(424).json({
+            error:
+              'Falha ao gerar PIX no gateway.' +
+              hint +
+              ' Resposta: ' +
+              (e.message || 'erro desconhecido'),
+            code: e.code || 'quantum_upstream',
+            details: e.details ?? null,
             orderId: order.id,
           });
         }
 
         const tx = quantumData.data || quantumData;
-        const pix = tx.pix || {};
-        const pixCode = pix.qrcode || pix.qrCode || quantumData.pix?.qrcode;
+        const pixCode = extractPixPayload(quantumData);
+        const pixObj = tx.pix || {};
+        const gatewayFeeCents =
+          tx.fee?.estimatedFee != null ? Math.round(Number(tx.fee.estimatedFee) * 100) : 0;
+
+        if (!pixCode) {
+          console.error('[Quantum] transação OK mas sem código PIX no JSON:', JSON.stringify(tx).slice(0, 2000));
+          updateOrder(order.id, {
+            status: 'gateway_error',
+            gatewayError: 'Resposta Quantum sem qrcode/copyPaste',
+            quantumRaw: tx,
+          });
+          return res.status(424).json({
+            error:
+              'O gateway respondeu, mas não veio código PIX (QR). Veja o formato na documentação e abra um chamado com a Quantum.',
+            code: 'quantum_missing_pix',
+            details: { hint: 'Confira se a API devolve pix.qrcode, copyPaste ou similar.', id: tx.id },
+            orderId: order.id,
+          });
+        }
 
         updateOrder(order.id, {
           status: 'waiting_payment',
           quantumTransactionId: tx.id ?? quantumData.id,
           quantumRaw: tx,
           pixQrCode: pixCode,
-          pixExpiresAt: pix.expirationDate || null,
-          gatewayFeeInCents: tx.fee?.estimatedFee != null ? Math.round(Number(tx.fee.estimatedFee) * 100) : 0,
+          pixExpiresAt: pixObj.expirationDate || pixObj.expiresAt || null,
+          gatewayFeeInCents: gatewayFeeCents,
         });
 
         const fresh = findOrderById(order.id);

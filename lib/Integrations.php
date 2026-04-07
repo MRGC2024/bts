@@ -129,13 +129,45 @@ final class BtsIntegrations
         return is_array($dec) ? $dec : [];
     }
 
+    /**
+     * @param array<string,mixed> $quantumData
+     */
+    public static function extractPixCode(array $quantumData): ?string
+    {
+        $root = $quantumData['data'] ?? $quantumData;
+        $pix = is_array($root['pix'] ?? null) ? $root['pix'] : [];
+        if ($pix === [] && is_array($quantumData['pix'] ?? null)) {
+            $pix = $quantumData['pix'];
+        }
+        $candidates = [
+            $pix['qrcode'] ?? null,
+            $pix['qrCode'] ?? null,
+            $pix['qr_code'] ?? null,
+            $pix['copyPaste'] ?? null,
+            $pix['copy_paste'] ?? null,
+            $pix['emv'] ?? null,
+            is_array($pix['dynamicQrCode'] ?? null) ? ($pix['dynamicQrCode']['qrcode'] ?? null) : null,
+            is_array($pix['qr'] ?? null) ? ($pix['qr']['payload'] ?? null) : null,
+            $root['pixQrCode'] ?? null,
+            $quantumData['pixQrCode'] ?? null,
+            $root['brCode'] ?? null,
+        ];
+        foreach ($candidates as $c) {
+            if (is_string($c) && $c !== '') {
+                return $c;
+            }
+        }
+
+        return null;
+    }
+
     /** @param array<string,mixed> $order */
     public static function createQuantumPix(array $cfg, array $order, string $publicBaseUrl): array
     {
         $pub = trim((string) ($cfg['quantumPublicKey'] ?? ''));
         $sec = trim((string) ($cfg['quantumSecretKey'] ?? ''));
         if ($pub === '' || $sec === '') {
-            throw new RuntimeException('Quantum não configurado');
+            throw new RuntimeException('Chaves Quantum ausentes no painel (pública e secreta).', 1001);
         }
 
         $base = rtrim((string) ($cfg['quantumApiBase'] ?? 'https://api.quantumpayments.com.br/v1'), '/');
@@ -144,10 +176,18 @@ final class BtsIntegrations
 
         $amountCents = (int) ($order['totalCents'] ?? 0);
         $qty = max(1, (int) ($order['quantity'] ?? 1));
-        $unitPerTicket = (int) round($amountCents / $qty);
+        $unitCents = (int) round($amountCents / $qty);
+        $unitFlag = strtolower((string) ($cfg['quantumAmountUnit'] ?? 'cents'));
+        if ($unitFlag === 'reais') {
+            $amountVal = round($amountCents / 100, 2);
+            $unitVal = round($unitCents / 100, 2);
+        } else {
+            $amountVal = $amountCents;
+            $unitVal = $unitCents;
+        }
 
         $payload = [
-            'amount' => $amountCents,
+            'amount' => $amountVal,
             'paymentMethod' => 'pix',
             'postbackUrl' => $postbackUrl,
             'externalRef' => $order['id'],
@@ -169,7 +209,7 @@ final class BtsIntegrations
                 'title' => ($order['sectorLabel'] ?? '') . ' (' . ($order['ticketType'] ?? '') . ')',
                 'quantity' => $qty,
                 'tangible' => false,
-                'unitPrice' => $unitPerTicket,
+                'unitPrice' => $unitVal,
                 'externalRef' => $order['id'] . '-item',
             ]],
         ];
@@ -184,22 +224,36 @@ final class BtsIntegrations
             ],
             CURLOPT_POSTFIELDS => json_encode($payload, JSON_UNESCAPED_UNICODE),
             CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_TIMEOUT => 45,
+            CURLOPT_CONNECTTIMEOUT => 15,
+            CURLOPT_TIMEOUT => 55,
         ]);
         $res = curl_exec($ch);
+        $errno = curl_errno($ch);
+        $cerr = curl_error($ch);
         $code = (int) curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close($ch);
+
+        if ($res === false || $errno !== 0) {
+            throw new RuntimeException('Rede ao contactar Quantum: ' . ($cerr ?: 'curl ' . $errno), 1002);
+        }
+
         $data = json_decode((string) $res, true);
         if (!is_array($data)) {
-            $data = ['raw' => $res];
+            $data = ['raw' => substr((string) $res, 0, 800)];
         }
         if ($code < 200 || $code >= 300) {
-            $msg = is_array($data) ? ($data['message'] ?? $data['error'] ?? 'Quantum HTTP ' . $code) : 'Quantum erro';
-            $e = new RuntimeException(is_string($msg) ? $msg : 'Quantum erro');
-            /** @phpstan-ignore-next-line */
-            $e->details = $data;
-            throw $e;
+            $msg = $data['message'] ?? $data['error'] ?? null;
+            if (!is_string($msg)) {
+                $msg = 'Quantum HTTP ' . $code;
+            }
+            error_log('[Quantum] HTTP ' . $code . ' ' . substr((string) $res, 0, 1200));
+            $extra = '';
+            if (isset($data['errors'])) {
+                $extra = ' ' . substr(json_encode($data['errors'], JSON_UNESCAPED_UNICODE), 0, 400);
+            }
+            throw new RuntimeException($msg . $extra, 1003);
         }
+
         return $data;
     }
 }

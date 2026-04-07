@@ -69,8 +69,7 @@
       <div class="horizontal-container navbar-container">
         <div class="horizontal-container">
           <a style="height:100%" href="bts-world-tour-arirang.html">
-            <img class="logo logo-dark" style="height:40px;display:none" src="../images/1664925447950-null-ticketmaster-logo-azurewithoutr.png?w=300" alt="Ticketmaster Brasil">
-            <img class="logo logo-light" style="height:40px" src="../images/46b77c52-6acd-425b-985f-c036a9dcbf90-ticketmaster.svg?w=300" alt="Ticketmaster Brasil">
+            <img class="logo logo-unified" style="height:40px;width:auto;display:block" src="../images/46b77c52-6acd-425b-985f-c036a9dcbf90-ticketmaster.svg?w=300" alt="Ticketmaster Brasil">
           </a>
         </div>
         <div class="tm-shell-nav-actions">
@@ -146,16 +145,55 @@
   </div>
 </main>
 
-<footer class="footer" style="display:block;margin-top:0;" role="contentinfo">
+<footer class="footer tm-shared-footer" style="display:block;margin-top:0;" role="contentinfo">
   <div class="container">
     <div class="footer-tm text-left">
-      <div class="row footer-pt" style="display:block;padding:20px 0 0;">
-        <div class="col-xs-12">
-          <p style="color:#8b949e;margin:0;font-size:13px;">Pagamento processado por gateway parceiro · Dados protegidos</p>
+      <div class="row">
+        <div class="col-xs-12 col-sm-4">
+          <h3>Acesso Rápido</h3>
+          <ul>
+            <li><a href="../account/purchases">Minhas Compras</a></li>
+            <li><a href="../account/perfil">Meu Perfil</a></li>
+            <li><a aria-label="Suporte ao Fã" href="https://help.ticketmaster.com.br/hc/pt-br" target="_blank" rel="noopener noreferrer">Suporte ao Fã</a></li>
+            <li><a aria-label="Acessibilidade" href="https://www.ticketmaster.com.br/static/acessibilidade" target="_blank" rel="noopener noreferrer">Acessibilidade</a></li>
+          </ul>
+        </div>
+        <div class="col-xs-12 col-sm-4">
+          <h3>Termos e Políticas</h3>
+          <ul>
+            <li><a aria-label="Termos de Uso" href="../static/termos-de-uso" target="_blank" rel="noopener noreferrer">Termos de Uso</a></li>
+            <li><a aria-label="Política de Compra" href="../static/politica-de-compra" target="_blank" rel="noopener noreferrer">Política de Compra</a></li>
+            <li><a aria-label="Política de Cookies" href="https://privacy.ticketmaster.com.br/pt/cookie-policy" target="_blank" rel="noopener noreferrer">Política de Cookies</a></li>
+            <li><a aria-label="Política de Privacidade" href="https://privacy.ticketmaster.com.br/pt/privacy-policy" target="_blank" rel="noopener noreferrer">Política de Privacidade</a></li>
+          </ul>
+        </div>
+        <div class="col-xs-12 col-sm-4">
+          <h3>Sobre a Ticketmaster</h3>
+          <ul>
+            <li><a aria-label="Ticketmaster Brasil" href="https://business.ticketmaster.com.br/pt/" target="_blank" rel="noopener noreferrer">Ticketmaster Brasil</a></li>
+            <li><a aria-label="Ticketmaster Internacional" href="https://business.ticketmaster.com.br/pt/nossa-historia/" target="_blank" rel="noopener noreferrer">Ticketmaster Internacional</a></li>
+            <li><a aria-label="Trabalhe com a gente" href="https://www.linkedin.com/company/ticketmasterBR" target="_blank" rel="noopener noreferrer">Trabalhe com a gente</a></li>
+          </ul>
         </div>
       </div>
       <div class="row">
-        <div class="col-xs-12" style="padding-bottom:24px;"><img alt="" class="logo" src="../ticketmaster/ticketmaster-logo_white.png" style="max-height:28px;opacity:0.85;"></div>
+        <div class="col-xs-12"><img alt="Ticketmaster logo" class="logo logo-footer-unified" src="../images/46b77c52-6acd-425b-985f-c036a9dcbf90-ticketmaster.svg?w=300"></div>
+      </div>
+      <div class="row">
+        <div class="col-xs-12 col-sm-6 foo-social">
+          <a aria-label="Instagram" href="https://www.instagram.com/ticketmasterBR/" target="_blank" rel="noopener noreferrer"><img alt="Instagram" src="../images/1643379600508-instagram.png" style="height: 16px;"></a>
+          <a aria-label="Facebook" href="https://www.facebook.com/ticketmasterbr" target="_blank" rel="noopener noreferrer"><img alt="Facebook" src="../images/1643379516372-facebook.png" style="height: 16px;"></a>
+          <a aria-label="LinkedIn" href="https://www.linkedin.com/company/ticketmasterBR" target="_blank" rel="noopener noreferrer"><img alt="Linkedin" src="../images/1643379625842-linkedin.png" style="height: 16px;"></a>
+          <a href="https://www.tiktok.com/@ticketmasterbr" target="_blank" rel="noopener noreferrer"><img alt="Tiktok" aria-label="Tiktok" src="../images/1691588331940-null-l-tiktok.png" style="height: 16px;"></a>
+          <a href="https://blog.ticketmaster.com.br" target="_blank" rel="noopener noreferrer"><img alt="Blog" aria-label="Blog Ticketmaster" src="../images/1683574125568-null-blog.png" style="height: 16px;"></a>
+        </div>
+        <div class="col-xs-12 col-sm-6 foo-copy"><a class="ot-sdk-show-settings cookie-settings-btn" id="ot-sdk-btn">Cookie preferences&nbsp;&nbsp;</a>© 2026&nbsp;Ticketmaster.</div>
+        <div class="col-xs-12 col-sm-6 foo-copy">
+          <ul>
+            <li>TICKETMASTER BRASIL LTDA - CNPJ 42.789.521/0001-10</li>
+            <li>R. Bacaetava, nº 401, 7º andar, Vila Gertrudes, São Paulo/SP, CEP 04705-010</li>
+          </ul>
+        </div>
       </div>
     </div>
   </div>
@@ -265,9 +303,25 @@
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body),
       });
-      const data = await res.json();
+      let data = {};
+      try {
+        data = await res.json();
+      } catch (_) {
+        data = {};
+      }
       if (!res.ok) {
-        err.textContent = data.error || 'Não foi possível gerar o PIX.';
+        let msg = data.error || 'Não foi possível gerar o PIX.';
+        if (data.details != null && typeof data.details === 'object') {
+          const d = data.details;
+          const sub = d.message || d.error || d.msg;
+          if (sub) msg += ' (' + String(sub).slice(0, 200) + ')';
+        } else if (typeof data.details === 'string' && data.details) {
+          msg += ' ' + data.details.slice(0, 300);
+        }
+        if (data.code === 'quantum_config') {
+          msg += ' Abra o painel admin → Gateway PIX e salve as chaves.';
+        }
+        err.textContent = msg;
         err.style.display = 'block';
         btn.disabled = false;
         return;
