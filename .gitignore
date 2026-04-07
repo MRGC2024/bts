@@ -1,8 +1,7 @@
 # Dependências
 server/node_modules/
 
-# Dados locais (pedidos e secrets — nunca versionar em produção real com dados)
-server/data/config.json
+# Pedidos (dados sensíveis de clientes — não versionar)
 server/data/orders.json
 
 # Ambiente

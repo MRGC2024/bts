@@ -1,0 +1,17 @@
+{
+  "quantumPublicKey": "",
+  "quantumSecretKey": "",
+  "quantumApiBase": "https://api.quantumpayments.com.br/v1",
+  "quantumAmountUnit": "reais",
+  "utmifyApiToken": "",
+  "ga4MeasurementId": "",
+  "googleAdsConversionId": "",
+  "googleAdsConversionLabel": "",
+  "maxTicketsPerOrder": 4,
+  "adminPasswordHash": "",
+  "platformName": "BTSIngressos",
+  "publicBaseUrl": "",
+  "quantumEventName": "",
+  "quantumItemTitleTemplate": "",
+  "quantumItemTitleTemplateBundle": ""
+}

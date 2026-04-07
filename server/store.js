@@ -36,10 +36,10 @@ function ensureDir() {
   if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
 }
 
-export function loadConfig() {
+/** Só o que está no disco (sem env), para merge ao salvar sem duplicar segredos do ambiente */
+function readConfigFromDisk() {
   ensureDir();
   if (!fs.existsSync(CONFIG_PATH)) {
-    fs.writeFileSync(CONFIG_PATH, JSON.stringify(defaultConfig, null, 2), 'utf8');
     return { ...defaultConfig };
   }
   try {
@@ -50,11 +50,33 @@ export function loadConfig() {
   }
 }
 
+/**
+ * Produção (ex.: Railway): variáveis de ambiente sobrescrevem o arquivo sem precisar commitar segredo.
+ * Arquivo `server/data/config.json` pode ser versionado com URLs/GA; chaves ficam vazias no Git e vêm do painel do host.
+ */
+function applyEnvOverrides(base) {
+  const o = { ...base };
+  const t = (k, env) => {
+    const v = process.env[env];
+    if (v != null && String(v).trim() !== '') o[k] = String(v).trim();
+  };
+  t('quantumPublicKey', 'QUANTUM_PUBLIC_KEY');
+  t('quantumSecretKey', 'QUANTUM_SECRET_KEY');
+  t('utmifyApiToken', 'UTMIFY_API_TOKEN');
+  t('publicBaseUrl', 'PUBLIC_BASE_URL');
+  t('quantumApiBase', 'QUANTUM_API_BASE');
+  return o;
+}
+
+export function loadConfig() {
+  return applyEnvOverrides(readConfigFromDisk());
+}
+
 export function saveConfig(cfg) {
   ensureDir();
-  const merged = { ...loadConfig(), ...cfg };
+  const merged = { ...readConfigFromDisk(), ...cfg };
   fs.writeFileSync(CONFIG_PATH, JSON.stringify(merged, null, 2), 'utf8');
-  return merged;
+  return applyEnvOverrides(merged);
 }
 
 export function loadOrders() {
