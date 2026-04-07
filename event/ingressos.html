@@ -16,10 +16,23 @@
     }
     .ing-breadcrumb a { color: #024ddf; font-weight: 600; text-decoration: none; }
     .ing-breadcrumb a:hover { text-decoration: underline; }
+    .ing-steps {
+      display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; align-items: center;
+    }
+    .ing-step {
+      font-size: 11px; font-weight: 700; padding: 8px 14px; border-radius: 999px;
+      background: #e8ecf0; color: #5a6570; letter-spacing: 0.02em;
+    }
+    .ing-step.on { background: #024ddf; color: #fff; box-shadow: 0 2px 8px rgba(2,77,223,.35); }
+    .ing-step.done { background: #e3f2fd; color: #024ddf; }
     .ing-hero {
-      background: linear-gradient(135deg, #024ddf 0%, #0035a0 100%);
-      color: #fff; border-radius: 12px; padding: 28px 32px; margin-bottom: 28px;
-      box-shadow: 0 8px 32px rgba(2, 77, 223, 0.25);
+      background: linear-gradient(145deg, #024ddf 0%, #013a9e 55%, #002a75 100%);
+      color: #fff; border-radius: 16px; padding: 22px 20px; margin-bottom: 24px;
+      box-shadow: 0 12px 40px rgba(2, 77, 223, 0.28);
+      border: 1px solid rgba(255,255,255,.12);
+    }
+    @media (min-width: 768px) {
+      .ing-hero { padding: 28px 32px; margin-bottom: 28px; }
     }
     .ing-hero .eyebrow { font-size: 11px; font-weight: 700; letter-spacing: .12em; opacity: .9; margin-bottom: 8px; }
     .ing-hero h1 { font-size: clamp(1.35rem, 2.5vw, 1.75rem); font-weight: 700; margin: 0 0 8px; line-height: 1.25; }
@@ -30,15 +43,15 @@
     @media (min-width: 992px) {
       .ing-grid-2 { grid-template-columns: 1.05fr 0.95fr; align-items: start; }
     }
+    .ing-table-wrap { overflow-x: auto; margin: 0 -4px; padding: 0 4px; -webkit-overflow-scrolling: touch; }
     .ing-card-panel {
-      background: #fff; border-radius: 12px; box-shadow: 0 2px 16px rgba(18, 24, 32, 0.08);
-      border: 1px solid rgba(0, 0, 0, 0.06); overflow: hidden;
+      background: #fff; border-radius: 14px; box-shadow: 0 4px 24px rgba(18, 24, 32, 0.07);
+      border: 1px solid rgba(0, 0, 0, 0.05); overflow: hidden;
     }
     .ing-card-panel .cap { padding: 18px 22px; border-bottom: 1px solid #eef1f4; background: #fafbfd; }
     .ing-card-panel .cap h2 { margin: 0; font-size: 1.05rem; font-weight: 700; color: #121212; }
     .ing-card-panel .cap p { margin: 6px 0 0; font-size: 13px; color: #6b7785; }
     .ing-card-panel .body { padding: 20px 22px; }
-    .ing-map-img { width: 100%; display: block; border-radius: 8px; }
     .ing-table-title { color: #024ddf; font-weight: 700; font-size: 0.95rem; text-transform: uppercase; letter-spacing: .06em; margin: 0 0 14px; }
     .ing-table { width: 100%; border-collapse: collapse; font-size: 14px; }
     .ing-table th { text-align: left; color: #024ddf; font-weight: 600; padding: 12px 14px; border-bottom: 2px solid #024ddf; background: #f8fafc; }
@@ -48,13 +61,31 @@
     .ing-sectors-head { font-size: 1rem; font-weight: 700; color: #121212; margin: 0 0 6px; }
     .ing-sectors-hint { font-size: 13px; color: #6b7785; margin: 0 0 18px; }
     .ing-sector-row {
-      display: grid; grid-template-columns: 1fr auto; gap: 16px; align-items: center;
-      padding: 18px 18px; border: 1px solid #e8ecf0; border-radius: 10px; margin-bottom: 12px;
-      background: #fff; transition: box-shadow 0.15s, border-color 0.15s;
+      display: grid; grid-template-columns: 1fr; gap: 14px; align-items: stretch;
+      padding: 18px 16px; border: 1px solid #e4e9ef; border-radius: 14px; margin-bottom: 14px;
+      background: linear-gradient(180deg, #fff 0%, #fafbfd 100%);
+      transition: box-shadow 0.2s, border-color 0.2s, transform 0.15s;
     }
-    .ing-sector-row:hover { border-color: #c5d4eb; box-shadow: 0 4px 14px rgba(2, 77, 223, 0.08); }
-    .ing-sector-row .title { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 16px; color: #121212; }
-    .ing-price-opts { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: flex-end; }
+    @media (min-width: 640px) {
+      .ing-sector-row {
+        grid-template-columns: 1fr auto;
+        align-items: center;
+        gap: 16px;
+        padding: 18px 20px;
+      }
+    }
+    .ing-sector-row:hover {
+      border-color: #b8c9e8;
+      box-shadow: 0 6px 20px rgba(2, 77, 223, 0.1);
+    }
+    .ing-sector-row .title { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 17px; color: #121212; }
+    .ing-price-opts {
+      display: flex; flex-wrap: wrap; gap: 10px; align-items: stretch;
+      justify-content: flex-start;
+    }
+    @media (min-width: 640px) {
+      .ing-price-opts { justify-content: flex-end; }
+    }
     .ing-price-opts label {
       display: inline-flex; align-items: center; gap: 8px; cursor: pointer; font-size: 14px;
       padding: 8px 14px; border-radius: 8px; border: 2px solid #e8ecf0; background: #fafbfd; font-weight: 600;
@@ -63,11 +94,21 @@
     .ing-price-opts input { accent-color: #024ddf; width: 16px; height: 16px; }
     .ing-price-opts label:has(input:checked) { border-color: #024ddf; background: #ecf2fd; color: #024ddf; }
     .ing-cta {
-      grid-column: 1 / -1; width: 100%; margin-top: 4px; padding: 14px 20px; border: none; border-radius: 8px;
-      background: #024ddf; color: #fff !important; font-weight: 700; font-size: 15px; cursor: pointer;
-      letter-spacing: 0.02em; transition: background 0.15s;
+      grid-column: 1 / -1; width: 100%; margin-top: 2px; padding: 15px 18px; border: none; border-radius: 10px;
+      background: linear-gradient(180deg, #0a5cff 0%, #024ddf 100%);
+      color: #fff !important; font-weight: 700; font-size: 15px; cursor: pointer;
+      letter-spacing: 0.02em; transition: filter 0.15s, transform 0.1s;
+      box-shadow: 0 4px 14px rgba(2, 77, 223, 0.35);
     }
-    .ing-cta:hover { background: #0035a0; }
+    .ing-cta:hover { filter: brightness(1.06); }
+    .ing-cta:active { transform: scale(0.99); }
+    .ing-map-img {
+      width: 100%; display: block; border-radius: 10px;
+      max-height: 320px; object-fit: contain; background: #f5f7fa;
+    }
+    @media (max-width: 767px) {
+      .ing-map-img { max-height: 220px; }
+    }
     .ing-price-badge { font-size: 13px; color: #6b7785; font-weight: 500; }
   </style>
 </head>
@@ -81,7 +122,7 @@
     <a title="Aumentar texto" id="increaseFontSize" role="button">A+</a>
   </div>
   <header>
-    <nav class="navbar navbar-fixed-top" role="navigation">
+    <nav class="navbar navbar-fixed-top tm-shell-nav-minimal" role="navigation">
       <div class="horizontal-container navbar-container">
         <div class="horizontal-container">
           <a class="" style="height:100%" href="bts-world-tour-arirang.html">
@@ -112,6 +153,12 @@
     <span>Ingressos</span>
   </div>
 
+  <div class="ing-steps" aria-label="Etapas da compra">
+    <span class="ing-step done">1 · Evento</span>
+    <span class="ing-step on">2 · Setor e tipo</span>
+    <span class="ing-step">3 · Pagamento</span>
+  </div>
+
   <header class="ing-hero">
     <p class="eyebrow" id="ingLoteLabel"></p>
     <h1>Escolha o setor e o tipo de ingresso</h1>
@@ -136,6 +183,7 @@
           <p>Valores por ingresso (unitário)</p>
         </div>
         <div class="body" style="padding-top:12px;">
+          <div class="ing-table-wrap">
           <table class="ing-table" aria-label="Preços por setor">
             <thead>
               <tr><th>Setor</th><th>Inteira</th><th>Meia</th></tr>
@@ -147,6 +195,7 @@
               <tr><td><span class="ing-dot" style="background:#0d47a1;"></span>Pista</td><td>R$&nbsp;1.250,00</td><td>R$&nbsp;625,00</td></tr>
             </tbody>
           </table>
+          </div>
         </div>
       </div>
 

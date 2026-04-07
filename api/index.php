@@ -285,16 +285,22 @@ if ($route === 'checkout/create' && $method === 'POST') {
 
         BtsStore::appendOrder($order);
 
+        error_log('[BTS][checkout][validated] orderId=' . $order['id'] . ' sectorId=' . $sectorId
+            . ' totalCents=' . $totalCents . ' publicBase=' . $publicBase
+            . ' quantumAmountUnit=' . ($cfg['quantumAmountUnit'] ?? 'cents')
+            . ' hasQuantumKeys=' . ((trim((string) ($cfg['quantumPublicKey'] ?? '')) !== '' && trim((string) ($cfg['quantumSecretKey'] ?? '')) !== '') ? '1' : '0'));
+
         try {
             BtsIntegrations::sendUtmifyOrder($cfg, $order, 'waiting_payment');
         } catch (Throwable $e) {
-            error_log('Utmify waiting_payment: ' . $e->getMessage());
+            error_log('[BTS][checkout][utmify] ' . $e->getMessage());
         }
 
         try {
             $quantumData = BtsIntegrations::createQuantumPix($cfg, $order, $publicBase);
         } catch (Throwable $e) {
             $code = (int) $e->getCode();
+            error_log('[BTS][checkout][quantum_throw] orderId=' . $order['id'] . ' code=' . $code . ' msg=' . $e->getMessage());
             BtsStore::updateOrder($order['id'], [
                 'status' => 'gateway_error',
                 'gatewayError' => $e->getMessage(),

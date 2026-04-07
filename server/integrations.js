@@ -1,3 +1,5 @@
+import { btsTrace, btsTraceErr } from './bts-log.js';
+
 const UTMIFY_URL = 'https://api.utmify.com.br/api-credentials/orders';
 
 export function formatUtmifyUtcDate(isoOrDate) {
@@ -132,10 +134,18 @@ export function extractPixPayload(quantumData) {
   return nested ? String(nested) : null;
 }
 
-export async function createQuantumPix(cfg, order, publicBaseUrl) {
+export async function createQuantumPix(cfg, order, publicBaseUrl, logRid = '') {
+  const rid = logRid || String(order.id || '').slice(0, 8) || 'no-id';
+  const scope = `quantum:${rid}`;
+
   const pub = (cfg.quantumPublicKey || '').trim();
   const sec = (cfg.quantumSecretKey || '').trim();
   if (!pub || !sec) {
+    btsTrace(scope, 'config_missing', {
+      hasPublic: !!pub,
+      hasSecret: !!sec,
+      orderId: order.id,
+    });
     const err = new Error('Chaves Quantum ausentes no painel (pública e secreta).');
     err.code = 'quantum_config';
     throw err;
@@ -146,6 +156,26 @@ export async function createQuantumPix(cfg, order, publicBaseUrl) {
   const postbackUrl = `${publicBaseUrl.replace(/\/$/, '')}/api/webhook/quantum`;
 
   const { amount, unitPrice } = normalizeAmounts(cfg, order);
+  const amountUnit = (cfg.quantumAmountUnit || 'cents').toLowerCase() === 'reais' ? 'reais' : 'cents';
+
+  btsTrace(scope, 'request_prepare', {
+    orderId: order.id,
+    apiHost: (() => {
+      try {
+        return new URL(base).host;
+      } catch {
+        return base;
+      }
+    })(),
+    postbackUrl,
+    amountUnit,
+    amount,
+    unitPrice,
+    quantity: order.quantity,
+    totalCents: order.totalCents,
+    paymentMethod: 'pix',
+    document: String(order.customerDocument || '').replace(/\D/g, ''),
+  });
 
   const payload = {
     amount,
@@ -191,6 +221,11 @@ export async function createQuantumPix(cfg, order, publicBaseUrl) {
       signal: AbortSignal.timeout(55000),
     });
   } catch (e) {
+    btsTraceErr(scope, 'fetch_failed', e, {
+      url,
+      name: e?.name,
+      cause: e?.cause?.message,
+    });
     const err = new Error(
       e?.name === 'TimeoutError'
         ? 'Tempo esgotado ao falar com api.quantumpayments.com.br'
@@ -205,21 +240,44 @@ export async function createQuantumPix(cfg, order, publicBaseUrl) {
   try {
     data = text ? JSON.parse(text) : {};
   } catch {
-    data = { raw: text?.slice(0, 800) };
+    data = { parseError: true, raw: text?.slice(0, 800) };
   }
+
+  const root = data?.data ?? data;
+  const topKeys = data && typeof data === 'object' ? Object.keys(data).slice(0, 30) : [];
+  const pixKeys =
+    root && typeof root === 'object' && root.pix && typeof root.pix === 'object'
+      ? Object.keys(root.pix)
+      : [];
+
   if (!res.ok) {
+    btsTrace(scope, 'http_error', {
+      httpStatus: res.status,
+      url,
+      responseKeys: topKeys,
+      bodySnippet: text?.slice(0, 1800),
+    });
     const msg =
       (typeof data.message === 'string' && data.message) ||
       (typeof data.error === 'string' && data.error) ||
       (Array.isArray(data.errors) ? JSON.stringify(data.errors).slice(0, 400) : null) ||
       `Quantum HTTP ${res.status}`;
-    console.error('[Quantum] POST', url, res.status, text?.slice(0, 1200));
     const err = new Error(msg);
     err.details = data;
     err.status = res.status;
     err.code = 'quantum_upstream';
+    btsTraceErr(scope, 'upstream_rejected', err, { httpStatus: res.status });
     throw err;
   }
+
+  const hasPix = !!extractPixPayload(data);
+  btsTrace(scope, 'response_ok', {
+    httpStatus: res.status,
+    transactionId: root?.id ?? data?.id ?? null,
+    dataKeys: topKeys,
+    pixKeys,
+    hasExtractablePixCode: hasPix,
+  });
 
   return data;
 }

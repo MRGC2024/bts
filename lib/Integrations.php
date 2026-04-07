@@ -186,6 +186,13 @@ final class BtsIntegrations
             $unitVal = $unitCents;
         }
 
+        $docDigits = preg_replace('/\D/', '', (string) ($order['customerDocument'] ?? ''));
+        $docMask = strlen($docDigits) > 2 ? '***' . substr($docDigits, -2) : '***';
+        error_log('[BTS][quantum][request_prepare] orderId=' . ($order['id'] ?? '') . ' apiHost=' . (parse_url($base, PHP_URL_HOST) ?: $base)
+            . ' amountUnit=' . $unitFlag . ' amount=' . json_encode($amountVal, JSON_UNESCAPED_UNICODE)
+            . ' unitPrice=' . json_encode($unitVal, JSON_UNESCAPED_UNICODE) . ' qty=' . $qty
+            . ' postbackUrl=' . $postbackUrl . ' documentMasked=' . $docMask);
+
         $payload = [
             'amount' => $amountVal,
             'paymentMethod' => 'pix',
@@ -246,13 +253,22 @@ final class BtsIntegrations
             if (!is_string($msg)) {
                 $msg = 'Quantum HTTP ' . $code;
             }
-            error_log('[Quantum] HTTP ' . $code . ' ' . substr((string) $res, 0, 1200));
+            error_log('[BTS][quantum][http_error] httpStatus=' . $code . ' body=' . substr((string) $res, 0, 1800));
             $extra = '';
             if (isset($data['errors'])) {
                 $extra = ' ' . substr(json_encode($data['errors'], JSON_UNESCAPED_UNICODE), 0, 400);
             }
             throw new RuntimeException($msg . $extra, 1003);
         }
+
+        $root = $data['data'] ?? $data;
+        $pix = is_array($root['pix'] ?? null) ? $root['pix'] : [];
+        $pixK = $pix !== [] ? implode(',', array_keys($pix)) : '';
+        $hasPix = self::extractPixCode($data) !== null && self::extractPixCode($data) !== '';
+        error_log('[BTS][quantum][response_ok] orderId=' . ($order['id'] ?? '') . ' httpStatus=' . $code
+            . ' txId=' . (string) ($root['id'] ?? $data['id'] ?? '')
+            . ' dataKeys=' . implode(',', array_slice(array_keys($data), 0, 20))
+            . ' pixKeys=' . $pixK . ' hasExtractablePixCode=' . ($hasPix ? '1' : '0'));
 
         return $data;
     }

@@ -21,6 +21,7 @@ import {
   sendUtmifyOrder,
   mapQuantumStatusToUtmify,
 } from './integrations.js';
+import { btsTrace, btsTraceErr } from './bts-log.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
@@ -180,6 +181,7 @@ function clientIp(req) {
 }
 
 app.post('/api/checkout/create', async (req, res) => {
+      const rid = Math.random().toString(36).slice(2, 10);
       try {
         const cfg = loadConfig();
         const maxT = publicCfg(cfg).maxTicketsPerOrder;
@@ -207,6 +209,18 @@ app.post('/api/checkout/create', async (req, res) => {
         }
 
         const baseUrl = getPublicBaseUrl(req, cfg);
+
+        btsTrace(`checkout:${rid}`, 'validated', {
+          rid,
+          sectorId,
+          lote,
+          ticketType: tt,
+          quantity: q,
+          totalCents,
+          publicBaseUrl: baseUrl,
+          quantumAmountUnit: cfg.quantumAmountUnit || 'cents',
+          hasQuantumKeys: !!(cfg.quantumPublicKey && cfg.quantumSecretKey),
+        });
 
         const order = {
           id: uuidv4(),
@@ -236,18 +250,25 @@ app.post('/api/checkout/create', async (req, res) => {
         };
 
         appendOrder(order);
+        btsTrace(`checkout:${rid}`, 'order_persisted', {
+          orderId: order.id,
+          publicToken: order.publicToken,
+        });
 
         try {
           await sendUtmifyOrder(cfg, order, 'waiting_payment');
+          btsTrace(`checkout:${rid}`, 'utmify_ok', { orderId: order.id });
         } catch (e) {
-          console.warn('Utmify waiting_payment:', e.message);
+          btsTrace(`checkout:${rid}`, 'utmify_skipped_or_err', {
+            message: e.message,
+          });
         }
 
         let quantumData;
         try {
-          quantumData = await createQuantumPix(cfg, order, baseUrl);
+          quantumData = await createQuantumPix(cfg, order, baseUrl, rid);
         } catch (e) {
-          console.error('Quantum:', e);
+          btsTraceErr(`checkout:${rid}`, 'quantum_throw', e, { orderId: order.id });
           updateOrder(order.id, {
             status: 'gateway_error',
             gatewayError: e.message,
@@ -278,7 +299,11 @@ app.post('/api/checkout/create', async (req, res) => {
           tx.fee?.estimatedFee != null ? Math.round(Number(tx.fee.estimatedFee) * 100) : 0;
 
         if (!pixCode) {
-          console.error('[Quantum] transação OK mas sem código PIX no JSON:', JSON.stringify(tx).slice(0, 2000));
+          btsTrace(`checkout:${rid}`, 'missing_pix_payload', {
+            orderId: order.id,
+            txKeys: tx && typeof tx === 'object' ? Object.keys(tx) : [],
+            rawSnippet: JSON.stringify(tx).slice(0, 2000),
+          });
           updateOrder(order.id, {
             status: 'gateway_error',
             gatewayError: 'Resposta Quantum sem qrcode/copyPaste',
@@ -303,6 +328,11 @@ app.post('/api/checkout/create', async (req, res) => {
         });
 
         const fresh = findOrderById(order.id);
+        btsTrace(`checkout:${rid}`, 'pix_ready', {
+          orderId: fresh.id,
+          quantumTransactionId: fresh.quantumTransactionId,
+          pixCodeLength: fresh.pixQrCode ? String(fresh.pixQrCode).length : 0,
+        });
         res.json({
           orderId: fresh.id,
           publicToken: fresh.publicToken,
@@ -311,7 +341,7 @@ app.post('/api/checkout/create', async (req, res) => {
           amountCents: fresh.totalCents,
         });
       } catch (e) {
-        console.error(e);
+        btsTraceErr(`checkout:${rid}`, 'unhandled', e);
         res.status(500).json({ error: e.message || 'Erro interno' });
       }
 });
