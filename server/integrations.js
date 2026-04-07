@@ -104,18 +104,57 @@ export async function sendUtmifyOrder(cfg, order, utmifyStatus) {
   return data;
 }
 
+/** Igual ao comportamento anterior: setor + tipo bruto (meia/inteira) */
+const DEFAULT_TITLE_LINE = '{sectorLabel} ({ticketType})';
+const DEFAULT_TITLE_BUNDLE = '{sectorLabel} ({ticketType}) · {quantity} un.';
+
+/**
+ * Título do item enviado ao Quantum (painel adm: templates com placeholders).
+ * @param {object} order
+ * @param {object} [cfg]
+ * @param {{ bundle?: boolean }} [opts]
+ */
+export function formatQuantumItemTitle(order, cfg, opts = {}) {
+  const bundle = !!opts.bundle;
+  const ticketTypeLabel = order.ticketType === 'meia' ? 'Meia' : 'Inteira';
+  const q = Math.max(1, Number(order.quantity) || 1);
+  const key = bundle ? 'quantumItemTitleTemplateBundle' : 'quantumItemTitleTemplate';
+  let tpl = String(cfg?.[key] || '').trim();
+  if (!tpl) {
+    tpl = bundle ? DEFAULT_TITLE_BUNDLE : DEFAULT_TITLE_LINE;
+  }
+  const eventName = String(cfg?.quantumEventName || '').trim();
+  let out = tpl
+    .replace(/\{eventName\}/g, eventName)
+    .replace(/\{sectorLabel\}/g, String(order.sectorLabel || ''))
+    .replace(/\{sectorId\}/g, String(order.sectorId || ''))
+    .replace(/\{ticketType\}/g, String(order.ticketType || ''))
+    .replace(/\{ticketTypeLabel\}/g, ticketTypeLabel)
+    .replace(/\{lote\}/g, String(order.lote || ''))
+    .replace(/\{quantity\}/g, String(q));
+  out = out.replace(/\s+/g, ' ').trim();
+  if (!out) {
+    out = `${order.sectorLabel || 'Ingresso'} (${order.ticketType || ''})`.trim();
+  }
+  if (out.length > 200) out = out.slice(0, 197) + '...';
+  return out;
+}
+
 /**
  * Monta body da transação Quantum com amount/items coerentes (evita "valores inválidos").
  * - reais: amount e unitPrice em decimal (2 casas), alinhados ao total em centavos internos.
  * - cents: inteiros em centavos.
  */
-export function buildQuantumTransactionPayload(order, unitMode) {
+export function buildQuantumTransactionPayload(order, unitMode, cfg = {}) {
   const totalCents = Math.round(Number(order.totalCents) || 0);
   const qty = Math.max(1, Number(order.quantity) || 1);
   const doc = String(order.customerDocument || '').replace(/\D/g, '');
 
   const phoneRaw = String(order.customerPhone || '').replace(/\D/g, '');
   const phone = phoneRaw.length >= 10 && phoneRaw.length <= 13 ? phoneRaw : undefined;
+
+  const titleLine = () => formatQuantumItemTitle(order, cfg, { bundle: false });
+  const titleBundle = () => formatQuantumItemTitle(order, cfg, { bundle: true });
 
   const base = {
     paymentMethod: 'pix',
@@ -143,7 +182,7 @@ export function buildQuantumTransactionPayload(order, unitMode) {
     if (remainder !== 0) {
       items = [
         {
-          title: `${order.sectorLabel} (${order.ticketType}) · ${qty} un.`,
+          title: titleBundle(),
           quantity: 1,
           unitPrice: totalCents,
           tangible: false,
@@ -153,7 +192,7 @@ export function buildQuantumTransactionPayload(order, unitMode) {
     } else {
       items = [
         {
-          title: `${order.sectorLabel} (${order.ticketType})`,
+          title: titleLine(),
           quantity: qty,
           unitPrice: unitCents,
           tangible: false,
@@ -171,7 +210,7 @@ export function buildQuantumTransactionPayload(order, unitMode) {
   if (remainder !== 0) {
     items = [
       {
-        title: `${order.sectorLabel} (${order.ticketType}) · ${qty} un.`,
+        title: titleBundle(),
         quantity: 1,
         unitPrice: amount,
         tangible: false,
@@ -182,7 +221,7 @@ export function buildQuantumTransactionPayload(order, unitMode) {
     const unitPrice = Number((unitCentsEach / 100).toFixed(2));
     items = [
       {
-        title: `${order.sectorLabel} (${order.ticketType})`,
+        title: titleLine(),
         quantity: qty,
         unitPrice,
         tangible: false,
@@ -361,7 +400,7 @@ export async function createQuantumPix(cfg, order, publicBaseUrl, logRid = '') {
 
   for (let i = 0; i < attempts.length; i++) {
     const { unit, label } = attempts[i];
-    const body = buildQuantumTransactionPayload(order, unit);
+    const body = buildQuantumTransactionPayload(order, unit, cfg);
     body.postbackUrl = postbackUrl;
 
     btsTrace(scope, `request_${label}`, {

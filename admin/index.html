@@ -226,11 +226,21 @@
             <option value="reais">Reais (decimal) — recomendado pela Quantum Pay, ex.: R$ 680,00 → 680</option>
             <option value="cents">Centavos (inteiro), ex.: 68000</option>
           </select>
-          <p class="hint" style="margin-top:10px">Em <strong>Railway</strong>, os logs técnicos completos usam o prefixo <code>[BTS]</code> no console do serviço. Abaixo ficam só os últimos erros de PIX gravados neste servidor.</p>
+        </div>
+        <div class="adm-card" style="margin-top:18px">
+          <h2>Nome do produto no gateway</h2>
+          <p class="hint">Texto exibido na coluna <strong>PRODUTO</strong> no painel Quantum. Vazio = padrão <code>{sectorLabel} ({ticketType})</code> (igual ao comportamento anterior).</p>
+          <label for="quantumEventName">Nome do evento (opcional)</label>
+          <input id="quantumEventName" placeholder="Ex.: BTS WORLD TOUR ARIRANG" autocomplete="off">
+          <label for="quantumItemTitleTemplate">Título do item (ingresso)</label>
+          <textarea id="quantumItemTitleTemplate" rows="2" placeholder="{eventName} — {sectorLabel} ({ticketTypeLabel})"></textarea>
+          <label for="quantumItemTitleTemplateBundle">Título quando o total não divide em linhas iguais (um único item no payload)</label>
+          <textarea id="quantumItemTitleTemplateBundle" rows="2" placeholder="{sectorLabel} ({ticketType}) · {quantity} un."></textarea>
+          <p class="hint" style="margin-top:10px">Placeholders: <code>{eventName}</code> · <code>{sectorLabel}</code> · <code>{sectorId}</code> · <code>{ticketType}</code> (meia/inteira) · <code>{ticketTypeLabel}</code> (Meia/Inteira) · <code>{lote}</code> · <code>{quantity}</code></p>
         </div>
         <div class="adm-card" style="margin-top:18px">
           <h2>Últimos erros do PIX (neste servidor)</h2>
-          <p class="hint">Arquivo <code>server/data/gateway-pix-log.json</code>. Atualize após um teste de checkout.</p>
+          <p class="hint">Arquivo <code>server/data/gateway-pix-log.json</code>. Atualize após um teste de checkout. Em <strong>Railway</strong>, logs técnicos <code>[BTS]</code> ficam no console do serviço.</p>
           <button type="button" class="btn-out" id="reloadGatewayLog">Atualizar log</button>
           <pre id="gatewayPixLogPre" style="margin-top:12px;padding:14px;background:#0d1117;border:1px solid #30363d;border-radius:8px;font-size:11px;line-height:1.45;overflow:auto;max-height:320px;color:#adbac7;white-space:pre-wrap;word-break:break-word;"></pre>
         </div>
@@ -467,6 +477,9 @@
     $('quantumPublicKey').value = c.quantumPublicKey || '';
     $('quantumApiBase').value = c.quantumApiBase || '';
     $('quantumAmountUnit').value = c.quantumAmountUnit === 'cents' ? 'cents' : 'reais';
+    $('quantumEventName').value = c.quantumEventName || '';
+    $('quantumItemTitleTemplate').value = c.quantumItemTitleTemplate || '';
+    $('quantumItemTitleTemplateBundle').value = c.quantumItemTitleTemplateBundle || '';
     $('platformName').value = c.platformName || '';
     $('publicBaseUrl').value = c.publicBaseUrl || '';
     $('ga4MeasurementId').value = c.ga4MeasurementId || '';
@@ -486,6 +499,9 @@
           quantumSecretKey: $('quantumSecretKey').value,
           quantumApiBase: $('quantumApiBase').value.trim(),
           quantumAmountUnit: $('quantumAmountUnit').value,
+          quantumEventName: $('quantumEventName').value.trim(),
+          quantumItemTitleTemplate: $('quantumItemTitleTemplate').value.trim(),
+          quantumItemTitleTemplateBundle: $('quantumItemTitleTemplateBundle').value.trim(),
           utmifyApiToken: $('utmifyApiToken').value,
           platformName: $('platformName').value.trim(),
           publicBaseUrl: $('publicBaseUrl').value.trim(),

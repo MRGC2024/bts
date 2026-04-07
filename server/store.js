@@ -21,6 +21,15 @@ const defaultConfig = {
   adminPasswordHash: '',
   platformName: 'BTSIngressos',
   publicBaseUrl: '',
+  /** Nome fixo opcional para usar em {eventName} no título do item Quantum */
+  quantumEventName: '',
+  /**
+   * Título da linha do produto no gateway (placeholders: {eventName} {sectorLabel} {sectorId} {ticketType} {ticketTypeLabel} {lote} {quantity})
+   * Vazio = padrão interno (equivalente a "{sectorLabel} ({ticketTypeLabel})").
+   */
+  quantumItemTitleTemplate: '',
+  /** Quando o total não divide igual por quantidade, um único item agrupado (placeholders iguais) */
+  quantumItemTitleTemplateBundle: '',
 };
 
 function ensureDir() {

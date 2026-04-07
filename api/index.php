@@ -189,7 +189,9 @@ if ($route === 'admin/config' && $method === 'PUT') {
     $next = $prev;
 
     $fields = [
-        'quantumPublicKey', 'quantumApiBase', 'quantumAmountUnit', 'utmifyApiToken',
+        'quantumPublicKey', 'quantumApiBase', 'quantumAmountUnit',
+        'quantumEventName', 'quantumItemTitleTemplate', 'quantumItemTitleTemplateBundle',
+        'utmifyApiToken',
         'ga4MeasurementId', 'googleAdsConversionId', 'googleAdsConversionLabel',
         'maxTicketsPerOrder', 'platformName', 'publicBaseUrl',
     ];

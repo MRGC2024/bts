@@ -35,6 +35,9 @@ final class BtsStore
             'adminPasswordHash' => '',
             'platformName' => 'BTSIngressos',
             'publicBaseUrl' => '',
+            'quantumEventName' => '',
+            'quantumItemTitleTemplate' => '',
+            'quantumItemTitleTemplateBundle' => '',
         ];
     }
 

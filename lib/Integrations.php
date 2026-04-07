@@ -36,6 +36,45 @@ final class BtsIntegrations
         return 'waiting_payment';
     }
 
+    /**
+     * Título do item Quantum (placeholders iguais ao Node — ver painel admin).
+     *
+     * @param array<string,mixed> $cfg
+     * @param array<string,mixed> $order
+     */
+    private static function formatQuantumItemTitle(array $cfg, array $order, bool $bundle): string
+    {
+        $ticketTypeLabel = (($order['ticketType'] ?? '') === 'meia') ? 'Meia' : 'Inteira';
+        $qty = max(1, (int) ($order['quantity'] ?? 1));
+        $key = $bundle ? 'quantumItemTitleTemplateBundle' : 'quantumItemTitleTemplate';
+        $tpl = trim((string) ($cfg[$key] ?? ''));
+        if ($tpl === '') {
+            $tpl = $bundle
+                ? '{sectorLabel} ({ticketType}) · {quantity} un.'
+                : '{sectorLabel} ({ticketType})';
+        }
+        $eventName = trim((string) ($cfg['quantumEventName'] ?? ''));
+        $repl = [
+            '{eventName}' => $eventName,
+            '{sectorLabel}' => (string) ($order['sectorLabel'] ?? ''),
+            '{sectorId}' => (string) ($order['sectorId'] ?? ''),
+            '{ticketType}' => (string) ($order['ticketType'] ?? ''),
+            '{ticketTypeLabel}' => $ticketTypeLabel,
+            '{lote}' => (string) ($order['lote'] ?? ''),
+            '{quantity}' => (string) $qty,
+        ];
+        $out = str_replace(array_keys($repl), array_values($repl), $tpl);
+        $out = preg_replace('/\s+/u', ' ', trim($out));
+        if ($out === '') {
+            $out = trim((string) ($order['sectorLabel'] ?? '')) . ' (' . (string) ($order['ticketType'] ?? '') . ')';
+        }
+        if (mb_strlen($out) > 200) {
+            $out = mb_substr($out, 0, 197) . '...';
+        }
+
+        return $out;
+    }
+
     /** @param array<string,mixed> $order */
     public static function sendUtmifyOrder(array $cfg, array $order, string $utmifyStatus): array
     {
@@ -213,7 +252,7 @@ final class BtsIntegrations
                 ],
             ],
             'items' => [[
-                'title' => ($order['sectorLabel'] ?? '') . ' (' . ($order['ticketType'] ?? '') . ')',
+                'title' => self::formatQuantumItemTitle($cfg, $order, false),
                 'quantity' => $qty,
                 'tangible' => false,
                 'unitPrice' => $unitVal,
