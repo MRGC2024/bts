@@ -226,8 +226,8 @@ Uri: https://cdn.getcrowder.com/images/4fcc7e0c-3fad-48e0-92d9-d7d3e72cc8f8-btsp
 File Name: C:\Downloaded Web Sites\www.ticketmaster.com.br\images\4fcc7e0c-3fad-48e0-92d9-d7d3e72cc8f8-btsprereserva.png
 Content Type: image/png
 
-Uri: https://cdn.getcrowder.com/images/b9865031-e0ec-42c0-8fd3-08d3c72d817d-btsdesktop.png
-File Name: C:\Downloaded Web Sites\www.ticketmaster.com.br\images\b9865031-e0ec-42c0-8fd3-08d3c72d817d-btsdesktop.png
+Uri: https://cdn.getcrowder.com/images/b9865031-e0ec-42c0-8fd3-08d3c72d817d-btsdesktop1.png
+File Name: C:\Downloaded Web Sites\www.ticketmaster.com.br\images\b9865031-e0ec-42c0-8fd3-08d3c72d817d-btsdesktop1.png
 Content Type: image/png
 
 Uri: https://cdn.getcrowder.com/images/c1ade2d9-b2d1-484a-b163-0e5509e00144-favicon-32x32.png?w=196
